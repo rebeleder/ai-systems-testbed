@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  鹈鹕骑自行车 / A pelican riding a bicycle
+  纯手写 SVG（未调用任何图像生成模型），坐标全部独立构思绘制。
+  构图：900×600，地面 y=512，两轮半径 88，鹈鹕坐于座垫、翅搭车把、蹼足踩脚踏。
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="900" height="600"
+     role="img" aria-labelledby="ttl dsc">
+  <title id="ttl">鹈鹕骑自行车</title>
+  <desc id="dsc">A pelican with a large throat pouch riding a red road bicycle: seated on the saddle, wings resting on the handlebars, webbed feet on the pedals.</desc>
+
+  <defs>
+    <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#DCEBFF"/>
+      <stop offset="1" stop-color="#F7FAFF"/>
+    </linearGradient>
+    <linearGradient id="gGround" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#CFE3C6"/>
+      <stop offset="1" stop-color="#AECBA5"/>
+    </linearGradient>
+    <linearGradient id="gBody" x1="0.15" y1="0" x2="0.85" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.6" stop-color="#F4F8FC"/>
+      <stop offset="1" stop-color="#DCE7F2"/>
+    </linearGradient>
+    <linearGradient id="gBeak" x1="0" y1="0" x2="1" y2="0.6">
+      <stop offset="0" stop-color="#FBB45C"/>
+      <stop offset="0.55" stop-color="#F1913A"/>
+      <stop offset="1" stop-color="#DD7124"/>
+    </linearGradient>
+    <linearGradient id="gPouch" x1="0" y1="0" x2="0.55" y2="1">
+      <stop offset="0" stop-color="#FCC179"/>
+      <stop offset="1" stop-color="#DF7C28"/>
+    </linearGradient>
+    <linearGradient id="gFrame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EF6A57"/>
+      <stop offset="1" stop-color="#C93C30"/>
+    </linearGradient>
+    <linearGradient id="gMetal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#DAE4ED"/>
+      <stop offset="1" stop-color="#93A3B4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ==================== 场景 ==================== -->
+  <g id="scene">
+    <rect x="0" y="0" width="900" height="600" rx="26" fill="url(#gSky)"/>
+    <circle cx="118" cy="96" r="42" fill="#FFE9AE" opacity="0.85"/>
+    <g fill="#FFFFFF" opacity="0.8">
+      <ellipse cx="748" cy="84" rx="54" ry="21"/>
+      <ellipse cx="702" cy="96" rx="34" ry="15"/>
+      <ellipse cx="452" cy="44" rx="40" ry="14"/>
+    </g>
+    <rect x="0" y="512" width="900" height="88" fill="url(#gGround)"/>
+    <line x1="0" y1="512" x2="900" y2="512" stroke="#93B38B" stroke-width="3"/>
+    <ellipse cx="450" cy="519" rx="330" ry="15" fill="#5C7A57" opacity="0.17"/>
+    <!-- 速度线 -->
+    <g stroke="#8FB0D8" stroke-width="6" stroke-linecap="round" opacity="0.7">
+      <line x1="58" y1="358" x2="130" y2="358"/>
+      <line x1="36" y1="404" x2="126" y2="404"/>
+      <line x1="64" y1="450" x2="138" y2="450"/>
+    </g>
+  </g>
+
+  <!-- ==================== 远侧腿（车身之后） ==================== -->
+  <g id="leg-far" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M336,244 L372,330 L390,382" stroke="#B8681C" stroke-width="13"/>
+    <path d="M372,376 L414,372 L410,390 L376,392 Z" fill="#C9731F" stroke="#9E5A16" stroke-width="2"/>
+  </g>
+
+  <!-- ==================== 自行车 ==================== -->
+  <g id="bicycle">
+
+    <!-- 后轮 -->
+    <g id="wheel-rear">
+      <circle cx="248" cy="424" r="81" fill="none" stroke="#2F3A46" stroke-width="15"/>
+      <circle cx="248" cy="424" r="70" fill="none" stroke="url(#gMetal)" stroke-width="5"/>
+      <g stroke="#B6C4D2" stroke-width="3" stroke-linecap="round">
+        <line x1="320" y1="424" x2="176" y2="424"/>
+        <line x1="299" y1="475" x2="197" y2="373"/>
+        <line x1="248" y1="496" x2="248" y2="352"/>
+        <line x1="197" y1="475" x2="299" y2="373"/>
+      </g>
+      <circle cx="248" cy="424" r="9" fill="#6B7A8B"/>
+    </g>
+
+    <!-- 前轮 -->
+    <g id="wheel-front">
+      <circle cx="648" cy="424" r="81" fill="none" stroke="#2F3A46" stroke-width="15"/>
+      <circle cx="648" cy="424" r="70" fill="none" stroke="url(#gMetal)" stroke-width="5"/>
+      <g stroke="#B6C4D2" stroke-width="3" stroke-linecap="round">
+        <line x1="720" y1="424" x2="576" y2="424"/>
+        <line x1="699" y1="475" x2="597" y2="373"/>
+        <line x1="648" y1="496" x2="648" y2="352"/>
+        <line x1="597" y1="475" x2="699" y2="373"/>
+      </g>
+      <circle cx="648" cy="424" r="9" fill="#6B7A8B"/>
+    </g>
+
+    <!-- 传动系统：链条 / 飞轮 / 牙盘 -->
+    <g id="drivetrain">
+      <path d="M248,402 L428,384 A40,40 0 0 1 428,464 L248,446 A22,22 0 0 1 248,402 Z"
+            fill="none" stroke="#5A6875" stroke-width="5"/>
+      <circle cx="248" cy="424" r="23" fill="none" stroke="#8D9AAA" stroke-width="5" stroke-dasharray="4 5"/>
+      <circle cx="428" cy="424" r="40" fill="#F2F6FA" stroke="#7E8D9D" stroke-width="4"/>
+      <circle cx="428" cy="424" r="45" fill="none" stroke="#9DAAB8" stroke-width="5" stroke-dasharray="4 6"/>
+      <g stroke="#9DAAB8" stroke-width="4" stroke-linecap="round">
+        <line x1="428" y1="400" x2="428" y2="448"/>
+        <line x1="404" y1="424" x2="452" y2="424"/>
+      </g>
+    </g>
+
+    <!-- 车架（钻石结构） -->
+    <g id="frame" fill="none" stroke="url(#gFrame)" stroke-width="12" stroke-linecap="round">
+      <path d="M248,424 L428,424"/>                 <!-- 后下叉 -->
+      <path d="M248,424 L352,268"/>                 <!-- 后上叉 -->
+      <path d="M428,424 L352,268"/>                 <!-- 座管 -->
+      <path d="M352,268 L592,262"/>                 <!-- 上管 -->
+      <path d="M428,424 L610,322"/>                 <!-- 下管 -->
+      <path d="M592,262 L610,322"/>                 <!-- 头管 -->
+      <path d="M610,322 Q632,368 648,424"/>         <!-- 前叉 -->
+    </g>
+
+    <!-- 曲柄 + 脚踏 -->
+    <g id="cranks">
+      <path d="M428,424 L394,396 M428,424 L462,452" stroke="#3E4C5A" stroke-width="9" stroke-linecap="round"/>
+      <circle cx="428" cy="424" r="8" fill="#3E4C5A"/>
+      <rect x="442" y="444" width="42" height="13" rx="3" fill="#4E5C6B" stroke="#2A343D" stroke-width="2"
+            transform="rotate(8 463 450)"/>
+      <rect x="374" y="388" width="40" height="12" rx="3" fill="#3E4C5A" stroke="#2A343D" stroke-width="2"
+            transform="rotate(8 394 394)"/>
+    </g>
+
+    <!-- 座垫 -->
+    <g id="saddle">
+      <path d="M304,262 C316,250 350,246 384,253 C400,256 400,266 383,268 C350,273 316,272 304,268 Z"
+            fill="#3A4753" stroke="#2A343D" stroke-width="3"/>
+      <path d="M316,259 C336,254 362,254 380,258" fill="none" stroke="#7C8B9A" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <!-- 车把 -->
+    <g id="handlebar" fill="none" stroke-linecap="round">
+      <path d="M592,262 L566,240" stroke="url(#gMetal)" stroke-width="10"/>
+      <path d="M608,246 C590,226 554,228 536,248" stroke="#3A4753" stroke-width="9"/>
+      <path d="M548,238 C543,242 539,245 537,250" stroke="#E9B949" stroke-width="12"/>
+    </g>
+  </g>
+
+  <!-- ==================== 鹈鹕 ==================== -->
+  <g id="pelican" stroke="#3D4E60" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+
+    <!-- 尾羽 -->
+    <path id="tail" d="M242,164 L158,130 L176,166 L144,172 L236,208 Z" fill="url(#gBody)"/>
+
+    <!-- 颈部（先画，被躯干压住根部，避免接缝） -->
+    <g id="neck">
+      <path d="M392,166 C378,102 424,60 486,78" fill="none" stroke="#3D4E60" stroke-width="56"/>
+      <path d="M392,166 C378,102 424,60 486,78" fill="none" stroke="url(#gBody)" stroke-width="50"/>
+    </g>
+
+    <!-- 躯干 -->
+    <g id="body">
+      <path d="M240,150 C254,106 324,88 376,110 C422,129 440,172 428,210
+               C414,252 358,272 306,264 C252,256 224,224 224,188 C224,172 230,160 240,150 Z"
+            fill="url(#gBody)"/>
+      <path d="M246,224 C276,254 344,264 404,238" fill="none" stroke="#C7D5E4" stroke-width="4"/>
+      <path d="M264,240 C294,261 352,264 396,249" fill="none" stroke="#E4EBF4" stroke-width="7"/>
+      <!-- 肩部覆羽 -->
+      <path d="M262,136 C292,110 344,102 384,116 C346,124 306,142 282,168 C268,162 260,150 262,136 Z"
+            fill="#EAF1F8"/>
+    </g>
+
+    <!-- 头 + 冠羽 -->
+    <g id="head">
+      <circle cx="500" cy="82" r="35" fill="url(#gBody)"/>
+      <path d="M474,54 C464,38 472,20 488,14 C484,29 488,42 498,50 Z" fill="#EAF1F8"/>
+    </g>
+
+    <!-- 喙：上 + 喉囊 -->
+    <g id="bill">
+      <path d="M518,58 C572,56 642,74 682,100 C662,110 620,108 578,102
+               C550,98 528,90 516,84 Z" fill="url(#gBeak)"/>
+      <path d="M516,84 C520,122 550,154 598,162 C642,169 674,140 682,100
+               C660,112 618,112 576,105 C548,101 526,94 516,84 Z" fill="url(#gPouch)"/>
+      <g fill="none" stroke="#C9691D" stroke-width="3" opacity="0.7">
+        <path d="M534,104 C548,132 572,150 602,155"/>
+        <path d="M558,105 C570,127 590,142 618,148"/>
+      </g>
+      <ellipse cx="560" cy="79" rx="6" ry="3" fill="#A06A2C" stroke="none" opacity="0.65"/>
+    </g>
+
+    <!-- 眼睛 -->
+    <g id="eye">
+      <circle cx="510" cy="72" r="9.5" fill="#FFFFFF"/>
+      <circle cx="512" cy="72" r="5.5" fill="#26313B" stroke="none"/>
+      <circle cx="510" cy="70" r="1.9" fill="#FFFFFF" stroke="none"/>
+      <path d="M498,58 C506,52 518,52 526,58" fill="none" stroke="#3D4E60" stroke-width="3"/>
+    </g>
+
+    <!-- 近侧翅：向前搭在车把上 -->
+    <g id="wing-near">
+      <path d="M366,146 C420,142 464,170 494,202 C516,225 538,242 556,248
+               C566,256 558,268 545,265 C507,258 466,236 438,210 C408,182 384,168 356,166 Z"
+            fill="url(#gBody)"/>
+      <g fill="none" stroke="#C7D5E4" stroke-width="4">
+        <path d="M414,180 C436,196 458,214 480,228"/>
+        <path d="M442,206 C462,220 484,236 506,246"/>
+        <path d="M474,230 C492,240 512,250 530,254"/>
+      </g>
+      <!-- 翅尖包住把套 -->
+      <path d="M540,240 C552,232 566,236 568,246 C570,256 556,262 545,256 Z" fill="#EDF3F9"/>
+    </g>
+  </g>
+
+  <!-- ==================== 近侧腿（车架之前） ==================== -->
+  <g id="leg-near" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M352,246 L424,342 L456,432" stroke="#3D4E60" stroke-width="20"/>
+    <path d="M352,246 L424,342 L456,432" stroke="url(#gBeak)" stroke-width="15"/>
+    <circle cx="424" cy="342" r="9" fill="#E8863C" stroke="#3D4E60" stroke-width="3"/>
+    <!-- 蹼足踩在前方的脚踏上 -->
+    <path d="M436,420 L488,416 L486,440 L440,444 Z" fill="#EE9440" stroke="#3D4E60" stroke-width="3"/>
+    <g stroke="#C9691D" stroke-width="2.5">
+      <line x1="452" y1="419" x2="452" y2="441"/>
+      <line x1="468" y1="418" x2="468" y2="439"/>
+    </g>
+  </g>
+</svg>

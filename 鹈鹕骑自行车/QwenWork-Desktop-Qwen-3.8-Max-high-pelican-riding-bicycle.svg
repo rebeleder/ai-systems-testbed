@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 900 620" width="900" height="620">
+  <title>Pelican riding a bicycle</title>
+  <desc>A cartoon pelican with a big orange bill sits on a red city bicycle, wings on the handlebars, feet on the pedals.</desc>
+
+  <defs>
+    <!-- 天空渐变 -->
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#edf5f8"/>
+      <stop offset="1" stop-color="#fdf6e7"/>
+    </linearGradient>
+    <!-- 车轮（复用） -->
+    <g id="wheel">
+      <circle r="85" fill="#fcfaf5" stroke="#35302b" stroke-width="13"/>
+      <circle r="71" fill="none" stroke="#c2c7cc" stroke-width="5"/>
+      <g stroke="#c2c7cc" stroke-width="3">
+        <line x1="0" y1="-71" x2="0" y2="71"/>
+        <line x1="0" y1="-71" x2="0" y2="71" transform="rotate(45)"/>
+        <line x1="0" y1="-71" x2="0" y2="71" transform="rotate(90)"/>
+        <line x1="0" y1="-71" x2="0" y2="71" transform="rotate(135)"/>
+      </g>
+      <circle r="8" fill="#7c8288"/>
+    </g>
+  </defs>
+
+  <!-- ===== 背景 ===== -->
+  <rect x="0" y="0" width="900" height="620" fill="url(#sky)"/>
+  <circle cx="112" cy="104" r="58" fill="#ffd489" opacity="0.3"/>
+  <circle cx="112" cy="104" r="42" fill="#ffd489"/>
+  <g fill="#ffffff" opacity="0.85">
+    <ellipse cx="690" cy="86" rx="42" ry="16"/>
+    <ellipse cx="722" cy="74" rx="30" ry="14"/>
+    <ellipse cx="660" cy="76" rx="26" ry="12"/>
+  </g>
+  <g fill="#ffffff" opacity="0.6">
+    <ellipse cx="806" cy="142" rx="34" ry="12"/>
+    <ellipse cx="832" cy="132" rx="22" ry="10"/>
+  </g>
+
+  <!-- ===== 地面 ===== -->
+  <rect x="0" y="520" width="900" height="100" fill="#e8dcbc"/>
+  <line x1="0" y1="520" x2="900" y2="520" stroke="#c9b489" stroke-width="3"/>
+  <g fill="#d9c9a2">
+    <ellipse cx="140" cy="548" rx="14" ry="4"/>
+    <ellipse cx="500" cy="562" rx="18" ry="5"/>
+    <ellipse cx="792" cy="546" rx="12" ry="4"/>
+  </g>
+  <!-- 车影 -->
+  <ellipse cx="255" cy="523" rx="92" ry="8" fill="#1f1a14" opacity="0.09"/>
+  <ellipse cx="655" cy="523" rx="92" ry="8" fill="#1f1a14" opacity="0.09"/>
+  <!-- 速度线（向右骑行） -->
+  <g stroke="#c8bda2" stroke-width="6" stroke-linecap="round">
+    <path d="M84,378 h52"/>
+    <path d="M64,414 h72"/>
+    <path d="M92,450 h46"/>
+  </g>
+
+  <!-- ===== 自行车 ===== -->
+  <!-- 远侧曲柄与踏板（在车架后方） -->
+  <line x1="430" y1="445" x2="396" y2="417" stroke="#4a453e" stroke-width="6" stroke-linecap="round"/>
+  <rect x="381" y="413" width="30" height="8" rx="2" fill="#3a332c"/>
+
+  <!-- 远侧腿与蹼足（伸向远侧踏板） -->
+  <path d="M352,214 Q388,300 392,318 Q398,372 396,412" fill="none" stroke="#d9812a" stroke-width="13" stroke-linecap="round"/>
+  <path d="M376,416 q20,-9 40,-3 q9,5 4,10 q-23,8 -45,1 q-7,-5 1,-8 z" fill="#d9812a"/>
+
+  <!-- 车轮 -->
+  <use xlink:href="#wheel" href="#wheel" transform="translate(255,435)"/>
+  <use xlink:href="#wheel" href="#wheel" transform="translate(655,435)"/>
+
+  <!-- 车架（红色） -->
+  <path d="M255,435 L430,445 M430,445 L393,258 M255,435 L393,258 M430,445 L612,274 M393,258 L618,262 M618,262 L612,274 M612,274 L655,435"
+        fill="none" stroke="#d94f30" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 前叉立管与车把 -->
+  <line x1="618" y1="262" x2="636" y2="232" stroke="#8a8f94" stroke-width="7" stroke-linecap="round"/>
+  <path d="M636,232 C634,216 620,206 602,212" fill="none" stroke="#3a332c" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="602" cy="212" r="6" fill="#2f2a24"/>
+  <!-- 座管与车座 -->
+  <line x1="393" y1="258" x2="386" y2="226" stroke="#8a8f94" stroke-width="7" stroke-linecap="round"/>
+  <path d="M348,226 Q386,206 420,222 Q388,240 348,226 Z" fill="#4a3326" stroke="#33231a" stroke-width="1.5"/>
+
+  <!-- 链条与牙盘 -->
+  <circle cx="255" cy="435" r="11" fill="none" stroke="#55504a" stroke-width="4"/>
+  <path d="M430,418 L255,424 M430,472 L255,446" stroke="#55504a" stroke-width="3.5" stroke-dasharray="7 4" fill="none"/>
+  <circle cx="430" cy="445" r="27" fill="none" stroke="#55504a" stroke-width="5"/>
+  <!-- 近侧曲柄与踏板 -->
+  <line x1="430" y1="445" x2="464" y2="472" stroke="#35302b" stroke-width="7" stroke-linecap="round"/>
+  <rect x="451" y="469" width="30" height="9" rx="2" fill="#35302b"/>
+  <circle cx="430" cy="445" r="9" fill="#35302b"/>
+
+  <!-- ===== 鹈鹕 ===== -->
+  <!-- 尾羽 -->
+  <path d="M270,176 Q228,150 220,126 Q254,132 280,150 Z" fill="#e9dfc7" stroke="#3a332c" stroke-width="2" stroke-linejoin="round"/>
+  <!-- 颈部（先画颈部，躯干随后覆盖根部，避免接缝） -->
+  <path d="M382,158 Q424,102 476,80" fill="none" stroke="#3a332c" stroke-width="34" stroke-linecap="round"/>
+  <path d="M382,158 Q424,102 476,80" fill="none" stroke="#f7f1e3" stroke-width="30" stroke-linecap="round"/>
+  <!-- 头部 -->
+  <circle cx="478" cy="78" r="27" fill="#f7f1e3" stroke="#3a332c" stroke-width="2.5"/>
+  <!-- 头顶小羽冠 -->
+  <path d="M468,52 q2,-12 12,-16 q0,10 6,12 q-10,2 -18,4 z" fill="#e9dfc7" stroke="#3a332c" stroke-width="1.5"/>
+  <!-- 大喙：上喙 + 喉囊 -->
+  <path d="M496,62 Q566,66 630,88 Q633,94 626,95 Q566,90 500,88 Z" fill="#f2a53c" stroke="#b06a12" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M500,88 Q566,90 624,95 Q600,138 548,128 Q512,114 500,88 Z" fill="#e8912d" stroke="#b06a12" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M522,74 q10,1 20,4" fill="none" stroke="#b06a12" stroke-width="2"/>
+  <!-- 眼睛 -->
+  <circle cx="486" cy="68" r="5" fill="#2f2a24"/>
+  <circle cx="488" cy="66" r="1.6" fill="#ffffff"/>
+  <!-- 躯干（覆盖颈部根部） -->
+  <ellipse cx="350" cy="172" rx="82" ry="60" transform="rotate(-12 350 172)"
+           fill="#f7f1e3" stroke="#3a332c" stroke-width="2.5"/>
+  <ellipse cx="352" cy="196" rx="60" ry="30" transform="rotate(-12 352 196)" fill="#eadfc6" opacity="0.8"/>
+  <!-- 收拢的翅膀 -->
+  <path d="M300,160 Q356,132 408,156 Q356,182 300,160 Z" fill="#eee4cb" stroke="#cbbfa2" stroke-width="1.5"/>
+
+  <!-- 近侧腿与蹼足（踩在近侧踏板上） -->
+  <path d="M372,214 Q424,302 434,334 Q450,404 460,464" fill="none" stroke="#ef8f2f" stroke-width="14" stroke-linecap="round"/>
+  <path d="M444,470 q20,-10 42,-4 q10,5 5,11 q-25,9 -48,2 q-8,-5 1,-9 z" fill="#ef8f2f" stroke="#b06a12" stroke-width="1.5"/>
+  <path d="M458,468 l16,-3 M462,474 l18,-2" stroke="#b06a12" stroke-width="1.5"/>
+
+  <!-- 近侧翅膀伸向车把，翅尖包住把套 -->
+  <path d="M378,130 Q488,140 592,202 Q604,210 598,220 Q560,220 522,202 Q446,166 376,154 Z"
+        fill="#f3ecd9" stroke="#3a332c" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M520,186 q22,12 40,18 M540,198 q18,9 34,14" fill="none" stroke="#d8cbb0" stroke-width="2"/>
+  <path d="M586,200 q16,-2 18,10 q-2,10 -14,10 q-12,-2 -14,-10 q4,-8 10,-10 z"
+        fill="#ecdfc2" stroke="#3a332c" stroke-width="2"/>
+</svg>

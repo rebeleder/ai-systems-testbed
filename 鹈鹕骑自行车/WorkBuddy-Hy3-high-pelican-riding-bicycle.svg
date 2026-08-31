@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" width="400" height="320" role="img" aria-label="A pelican riding a bicycle">
+  <title>Pelican Riding a Bicycle</title>
+
+  <!-- ===== Background ===== -->
+  <rect width="400" height="320" fill="#eaf4fb"/>
+  <circle cx="340" cy="58" r="28" fill="#ffe08a"/>
+  <line x1="0" y1="288" x2="400" y2="288" stroke="#bcd6c8" stroke-width="3"/>
+
+  <!-- ===== Bicycle ===== -->
+  <g id="bicycle" stroke="#2c2c2c" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- rear wheel -->
+    <circle cx="115" cy="240" r="45"/>
+    <!-- front wheel -->
+    <circle cx="300" cy="240" r="45"/>
+
+    <!-- spokes (rear) -->
+    <g stroke="#9aa0a6" stroke-width="1.5">
+      <line x1="115" y1="240" x2="160" y2="240"/>
+      <line x1="115" y1="240" x2="146.8" y2="271.8"/>
+      <line x1="115" y1="240" x2="115" y2="285"/>
+      <line x1="115" y1="240" x2="83.2" y2="271.8"/>
+      <line x1="115" y1="240" x2="70" y2="240"/>
+      <line x1="115" y1="240" x2="83.2" y2="208.2"/>
+      <line x1="115" y1="240" x2="115" y2="195"/>
+      <line x1="115" y1="240" x2="146.8" y2="208.2"/>
+    </g>
+    <!-- spokes (front) -->
+    <g stroke="#9aa0a6" stroke-width="1.5">
+      <line x1="300" y1="240" x2="345" y2="240"/>
+      <line x1="300" y1="240" x2="331.8" y2="271.8"/>
+      <line x1="300" y1="240" x2="300" y2="285"/>
+      <line x1="300" y1="240" x2="268.2" y2="271.8"/>
+      <line x1="300" y1="240" x2="255" y2="240"/>
+      <line x1="300" y1="240" x2="268.2" y2="208.2"/>
+      <line x1="300" y1="240" x2="300" y2="195"/>
+      <line x1="300" y1="240" x2="331.8" y2="208.2"/>
+    </g>
+
+    <!-- frame: bottom bracket(200,240) rear hub(115,240) front hub(300,240)
+         seat top(185,165) head top(270,150) -->
+    <path d="M115 240 L200 240"/>            <!-- chain stay -->
+    <path d="M185 165 L115 240"/>            <!-- seat stay -->
+    <path d="M185 165 L200 240"/>            <!-- seat tube -->
+    <path d="M185 165 L270 150"/>            <!-- top tube -->
+    <path d="M200 240 L270 150"/>            <!-- down tube -->
+    <path d="M270 150 L300 240"/>            <!-- fork -->
+
+    <!-- seat -->
+    <path d="M168 163 L202 163" stroke-width="7" stroke="#7a4a2b"/>
+    <!-- handlebar -->
+    <path d="M270 150 L282 132 L300 133" stroke-width="5"/>
+    <!-- crank + pedal -->
+    <circle cx="200" cy="240" r="6" fill="#2c2c2c"/>
+    <path d="M200 240 L214 258" stroke-width="4"/>
+    <path d="M208 258 L222 258" stroke-width="5" stroke="#7a4a2b"/>
+  </g>
+
+  <!-- ===== Pelican ===== -->
+  <g id="pelican">
+    <!-- legs (orange, reaching pedal) -->
+    <g stroke="#f08a24" stroke-width="6" stroke-linecap="round" fill="none">
+      <path d="M196 178 L204 240"/>          <!-- left leg to crank -->
+      <path d="M214 178 L214 258"/>          <!-- right leg to pedal -->
+    </g>
+    <!-- webbed feet -->
+    <path d="M198 240 q10 6 16 -1 q-7 5 -16 1" fill="#f08a24"/>
+    <path d="M206 258 l16 -2 l-2 8 z" fill="#f08a24"/>
+
+    <!-- body -->
+    <ellipse cx="196" cy="138" rx="40" ry="44" fill="#fbfbfb" stroke="#cfd6dc" stroke-width="2"/>
+    <!-- tail -->
+    <path d="M158 150 q-26 6 -30 22 q22 -6 34 -14 z" fill="#eef1f4" stroke="#cfd6dc" stroke-width="2"/>
+
+    <!-- neck + head -->
+    <path d="M214 110 q22 -22 34 -14 q-4 18 -22 26 z" fill="#fbfbfb" stroke="#cfd6dc" stroke-width="2"/>
+    <circle cx="240" cy="96" r="22" fill="#fbfbfb" stroke="#cfd6dc" stroke-width="2"/>
+
+    <!-- eye -->
+    <circle cx="246" cy="90" r="3.2" fill="#2c2c2c"/>
+
+    <!-- beak: long upper mandible + pouch -->
+    <path d="M258 90 L322 104 L260 108 Z" fill="#f5a623" stroke="#d9860f" stroke-width="2"/>
+    <path d="M260 108 Q288 150 322 104 Q300 132 260 108 Z" fill="#ffcf7a" stroke="#d9860f" stroke-width="2"/>
+
+    <!-- wing reaching toward handlebar -->
+    <path d="M196 128 Q236 120 270 138 Q250 158 210 156 Q198 146 196 128 Z"
+          fill="#eef1f4" stroke="#cfd6dc" stroke-width="2"/>
+    <!-- wing feather lines -->
+    <g stroke="#cfd6dc" stroke-width="1.5" fill="none">
+      <path d="M214 138 Q240 134 262 144"/>
+      <path d="M210 148 Q236 146 258 152"/>
+    </g>
+
+    <!-- little scarf for charm -->
+    <path d="M214 116 q14 8 30 4 l-3 10 q-16 4 -28 -2 z" fill="#e8554e"/>
+  </g>
+
+  <!-- ===== Motion lines ===== -->
+  <g stroke="#9ec5e0" stroke-width="3" stroke-linecap="round">
+    <line x1="40" y1="200" x2="72" y2="200"/>
+    <line x1="34" y1="220" x2="74" y2="220"/>
+    <line x1="44" y1="240" x2="70" y2="240"/>
+  </g>
+</svg>

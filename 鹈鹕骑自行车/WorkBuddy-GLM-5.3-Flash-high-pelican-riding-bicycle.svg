@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 480" width="680" height="480">
+  <!-- 背景 -->
+  <rect width="680" height="480" fill="#e8f4f8"/>
+  <circle cx="580" cy="80" r="45" fill="#ffd54f"/>
+  <!-- 地面 -->
+  <rect y="400" width="680" height="80" fill="#a5d6a7"/>
+  <line x1="0" y1="400" x2="680" y2="400" stroke="#81c784" stroke-width="3"/>
+
+  <!-- 自行车 -->
+  <!-- 后轮 -->
+  <circle cx="220" cy="370" r="62" fill="none" stroke="#37474f" stroke-width="8"/>
+  <circle cx="220" cy="370" r="8" fill="#37474f"/>
+  <g stroke="#90a4ae" stroke-width="2">
+    <line x1="220" y1="308" x2="220" y2="432"/>
+    <line x1="158" y1="370" x2="282" y2="370"/>
+    <line x1="176" y1="326" x2="264" y2="414"/>
+    <line x1="264" y1="326" x2="176" y2="414"/>
+  </g>
+  <!-- 前轮 -->
+  <circle cx="470" cy="370" r="62" fill="none" stroke="#37474f" stroke-width="8"/>
+  <circle cx="470" cy="370" r="8" fill="#37474f"/>
+  <g stroke="#90a4ae" stroke-width="2">
+    <line x1="470" y1="308" x2="470" y2="432"/>
+    <line x1="408" y1="370" x2="532" y2="370"/>
+    <line x1="426" y1="326" x2="514" y2="414"/>
+    <line x1="514" y1="326" x2="426" y2="414"/>
+  </g>
+  <!-- 车架 -->
+  <g stroke="#e53935" stroke-width="9" fill="none" stroke-linecap="round">
+    <line x1="220" y1="370" x2="310" y2="270"/> <!-- 后轴到五通上 -->
+    <line x1="220" y1="370" x2="345" y2="365"/> <!-- 后轴到五通 -->
+    <line x1="345" y1="365" x2="310" y2="270"/> <!-- 五通到座管顶 -->
+    <line x1="345" y1="365" x2="440" y2="270"/> <!-- 五通到头管下 -->
+    <line x1="310" y1="270" x2="440" y2="270"/> <!-- 上管 -->
+    <line x1="440" y1="270" x2="470" y2="370"/> <!-- 前叉 -->
+    <line x1="440" y1="270" x2="452" y2="235"/> <!-- 头管立管 -->
+  </g>
+  <!-- 车把 -->
+  <path d="M452 235 q 20 -12 38 -2" fill="none" stroke="#37474f" stroke-width="7" stroke-linecap="round"/>
+  <!-- 座椅 -->
+  <path d="M290 262 h44 q8 0 6 8 h-56 q-2 -8 6 -8" fill="#263238"/>
+  <!-- 脚踏曲柄与踏板 -->
+  <circle cx="345" cy="365" r="14" fill="#455a64"/>
+  <line x1="345" y1="365" x2="372" y2="392" stroke="#37474f" stroke-width="6"/>
+  <line x1="345" y1="365" x2="318" y2="338" stroke="#37474f" stroke-width="6"/>
+  <rect x="364" y="390" width="20" height="7" rx="2" fill="#263238"/>
+  <rect x="306" y="332" width="20" height="7" rx="2" fill="#263238"/>
+
+  <!-- 鹈鹕 -->
+  <!-- 身体 -->
+  <ellipse cx="330" cy="200" rx="62" ry="46" fill="#fafafa" stroke="#b0bec5" stroke-width="2"/>
+  <!-- 尾羽 -->
+  <path d="M270 195 q-28 -6 -36 8 q14 10 36 4" fill="#e0e0e0" stroke="#b0bec5" stroke-width="1.5"/>
+  <!-- 腿：一条伸向下方踏板 -->
+  <path d="M330 240 q-8 60 -22 92" fill="none" stroke="#f9a825" stroke-width="7" stroke-linecap="round"/>
+  <path d="M308 332 l16 4 l-18 6 z" fill="#f9a825"/>
+  <!-- 另一条腿蹬上前踏板 -->
+  <path d="M345 235 q10 60 28 100" fill="none" stroke="#f9a825" stroke-width="7" stroke-linecap="round"/>
+  <path d="M373 335 l-16 6 l18 5 z" fill="#f9a825"/>
+  <!-- 翅膀（搭在车把方向） -->
+  <path d="M340 185 q55 -18 100 -30 q-40 34 -95 44 z" fill="#eceff1" stroke="#b0bec5" stroke-width="2"/>
+  <!-- 脖子 -->
+  <path d="M370 175 q30 -35 18 -70 q-4 -14 8 -20" fill="none" stroke="#fafafa" stroke-width="18" stroke-linecap="round"/>
+  <path d="M370 175 q30 -35 18 -70 q-4 -14 8 -20" fill="none" stroke="#b0bec5" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  <!-- 头 -->
+  <circle cx="398" cy="82" r="22" fill="#fafafa" stroke="#b0bec5" stroke-width="2"/>
+  <!-- 眼睛 -->
+  <circle cx="406" cy="74" r="4" fill="#263238"/>
+  <circle cx="407.5" cy="72.5" r="1.3" fill="#ffffff"/>
+  <!-- 大喙与喉囊 -->
+  <path d="M414 86 l70 14 q-6 8 -14 8 l-56 -6 z" fill="#ffb300" stroke="#f57f17" stroke-width="1.5"/>
+  <path d="M416 96 q30 26 54 14 q-20 12 -54 -2 z" fill="#ffcc80"/>
+  <!-- 翅膀尖扶把细节 -->
+  <circle cx="440" cy="155" r="4" fill="#cfd8dc"/>
+</svg>

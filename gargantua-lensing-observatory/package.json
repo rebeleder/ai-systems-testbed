@@ -1,0 +1,24 @@
+{
+  "name": "gargantua-observer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "build:single": "vite build --config vite.single.config.ts",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vgpu/wgsl": "^0.3.1",
+    "@vitejs/plugin-react": "latest",
+    "@webgpu/types": "^0.1.72",
+    "react": "latest",
+    "react-dom": "latest",
+    "typescript": "latest",
+    "vgpu": "^0.3.1",
+    "vite": "latest"
+  }
+}

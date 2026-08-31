@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <!-- Sky gradient -->
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#87CEEB"/>
+      <stop offset="100%" stop-color="#E0F6FF"/>
+    </linearGradient>
+    <!-- Ground gradient -->
+    <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#90EE90"/>
+      <stop offset="100%" stop-color="#228B22"/>
+    </linearGradient>
+  </defs>
+
+  <!-- === Background === -->
+  <rect width="800" height="450" fill="url(#skyGrad)"/>
+  <rect y="450" width="800" height="150" fill="url(#groundGrad)"/>
+
+  <!-- Sun -->
+  <circle cx="680" cy="80" r="45" fill="#FFD700" opacity="0.9"/>
+
+  <!-- Clouds -->
+  <g fill="#FFF" opacity="0.85">
+    <ellipse cx="150" cy="100" rx="50" ry="25"/>
+    <ellipse cx="190" cy="110" rx="40" ry="22"/>
+    <ellipse cx="110" cy="110" rx="35" ry="20"/>
+
+    <ellipse cx="550" cy="140" rx="55" ry="28"/>
+    <ellipse cx="600" cy="150" rx="45" ry="24"/>
+    <ellipse cx="510" cy="150" rx="38" ry="21"/>
+  </g>
+
+  <!-- === Bicycle === -->
+  <g transform="translate(160, 120)">
+    <!-- Back wheel -->
+    <g transform="translate(120, 320)">
+      <circle r="70" fill="none" stroke="#333" stroke-width="6"/>
+      <circle r="62" fill="none" stroke="#CCC" stroke-width="2"/>
+      <!-- Spokes -->
+      <g stroke="#BBB" stroke-width="1.5">
+        <line x1="0" y1="-62" x2="0" y2="62"/>
+        <line x1="-54" y1="-31" x2="54" y2="31"/>
+        <line x1="-54" y1="31" x2="54" y2="-31"/>
+        <line x1="-31" y1="-54" x2="31" y2="54"/>
+        <line x1="-31" y1="54" x2="31" y2="-54"/>
+      </g>
+      <circle r="8" fill="#555"/>
+    </g>
+
+    <!-- Front wheel -->
+    <g transform="translate(420, 320)">
+      <circle r="70" fill="none" stroke="#333" stroke-width="6"/>
+      <circle r="62" fill="none" stroke="#CCC" stroke-width="2"/>
+      <g stroke="#BBB" stroke-width="1.5">
+        <line x1="0" y1="-62" x2="0" y2="62"/>
+        <line x1="-54" y1="-31" x2="54" y2="31"/>
+        <line x1="-54" y1="31" x2="54" y2="-31"/>
+        <line x1="-31" y1="-54" x2="31" y2="54"/>
+        <line x1="-31" y1="54" x2="31" y2="-54"/>
+      </g>
+      <circle r="8" fill="#555"/>
+    </g>
+
+    <!-- Chainstay and seat stay -->
+    <line x1="120" y1="320" x2="270" y2="320" stroke="#555" stroke-width="5"/>
+    <line x1="120" y1="320" x2="250" y2="200" stroke="#555" stroke-width="4"/>
+
+    <!-- Seat tube -->
+    <line x1="270" y1="320" x2="250" y2="200" stroke="#D32F2F" stroke-width="6"/>
+
+    <!-- Down tube -->
+    <line x1="250" y1="200" x2="390" y2="260" stroke="#D32F2F" stroke-width="6"/>
+
+    <!-- Top tube -->
+    <line x1="250" y1="200" x2="380" y2="210" stroke="#D32F2F" stroke-width="5"/>
+
+    <!-- Head tube -->
+    <line x1="380" y1="210" x2="390" y2="260" stroke="#555" stroke-width="6"/>
+
+    <!-- Fork -->
+    <line x1="390" y1="260" x2="420" y2="320" stroke="#555" stroke-width="5"/>
+
+    <!-- Handlebar stem -->
+    <line x1="385" y1="190" x2="380" y2="210" stroke="#777" stroke-width="5"/>
+
+    <!-- Handlebar -->
+    <path d="M 360 190 Q 385 175 410 190" fill="none" stroke="#333" stroke-width="5" stroke-linecap="round"/>
+
+    <!-- Seat -->
+    <path d="M 235 200 Q 255 195 275 200 L 270 210 Q 250 205 230 210 Z" fill="#8B4513"/>
+    <line x1="250" y1="210" x2="250" y2="200" stroke="#555" stroke-width="4"/>
+
+    <!-- Pedal crank -->
+    <g transform="translate(270, 320)">
+      <circle r="14" fill="#444"/>
+      <line x1="0" y1="0" x2="0" y2="35" stroke="#666" stroke-width="5"/>
+      <!-- Pedal -->
+      <rect x="-12" y="32" width="24" height="10" rx="3" fill="#222"/>
+    </g>
+
+    <!-- Chain ring -->
+    <circle cx="270" cy="320" r="28" fill="none" stroke="#888" stroke-width="3"/>
+  </g>
+
+  <!-- === Pelican === -->
+  <g transform="translate(160, 120)">
+    <!-- Right leg (behind) -->
+    <path d="M 260 220 Q 275 260 270 320" fill="none" stroke="#E67E22" stroke-width="10" stroke-linecap="round"/>
+    <ellipse cx="270" cy="325" rx="10" ry="6" fill="#FF8C00"/>
+
+    <!-- Body -->
+    <ellipse cx="280" cy="190" rx="55" ry="40" fill="#FFF"/>
+    <ellipse cx="280" cy="190" rx="55" ry="40" fill="none" stroke="#DDD" stroke-width="1"/>
+
+    <!-- Wing (folded, on handlebar side) -->
+    <path d="M 260 170 Q 310 160 340 185 Q 320 200 280 195 Z" fill="#F5F5F5" stroke="#DDD" stroke-width="1"/>
+    <!-- Wing feather lines -->
+    <path d="M 280 175 Q 310 170 330 185" fill="none" stroke="#CCC" stroke-width="1.5"/>
+    <path d="M 285 182 Q 310 178 325 190" fill="none" stroke="#CCC" stroke-width="1.5"/>
+
+    <!-- Tail -->
+    <path d="M 225 190 Q 200 200 210 215 Q 230 205 235 200 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
+
+    <!-- Neck -->
+    <path d="M 325 170 Q 350 140 360 110 Q 365 95 355 85" fill="none" stroke="#FFF" stroke-width="22" stroke-linecap="round"/>
+
+    <!-- Head -->
+    <ellipse cx="355" cy="80" rx="22" ry="18" fill="#FFF"/>
+
+    <!-- Eye -->
+    <circle cx="362" cy="75" r="4" fill="#111"/>
+    <circle cx="363" cy="74" r="1.5" fill="#FFF"/>
+
+    <!-- Beak (upper) -->
+    <path d="M 370 72 Q 430 65 450 85 Q 430 95 375 85 Z" fill="#FFB347"/>
+    <!-- Beak tip color -->
+    <path d="M 440 78 Q 450 85 445 90 Q 435 88 435 82 Z" fill="#E74C3C"/>
+
+    <!-- Beak (lower) -->
+    <path d="M 375 85 Q 410 90 430 100 Q 410 105 372 92 Z" fill="#FFA07A"/>
+
+    <!-- Throat pouch -->
+    <path d="M 375 85 Q 390 115 380 130 Q 365 115 372 92 Z" fill="#FFDAB9" opacity="0.7"/>
+
+    <!-- Left leg (front, on pedal) -->
+    <path d="M 270 220 Q 260 270 270 320" fill="none" stroke="#FF8C00" stroke-width="10" stroke-linecap="round"/>
+    <ellipse cx="270" cy="325" rx="10" ry="6" fill="#FF8C00"/>
+
+    <!-- Wing tip detail -->
+    <path d="M 335 180 Q 345 175 350 185" fill="none" stroke="#CCC" stroke-width="1"/>
+  </g>
+
+  <!-- === Shadow === -->
+  <ellipse cx="420" cy="445" rx="200" ry="12" fill="#000" opacity="0.15"/>
+
+  <!-- === Foreground details === -->
+  <g fill="#32CD32">
+    <ellipse cx="80" cy="460" rx="25" ry="8"/>
+    <ellipse cx="120" cy="465" rx="20" ry="6"/>
+    <ellipse cx="700" cy="455" rx="30" ry="9"/>
+    <ellipse cx="740" cy="460" rx="22" ry="7"/>
+  </g>
+</svg>

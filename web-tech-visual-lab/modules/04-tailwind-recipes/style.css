@@ -1,0 +1,317 @@
+﻿/* ==========================================================================
+   MODULE 04: TAILWIND RECIPES - CLEAN WORKBENCH STYLES
+   ========================================================================== */
+
+/* Utility Builder */
+.tw-builder-arena {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.tw-dynamic-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.tw-dynamic-card.rounded-2xl {
+  border-radius: var(--radius-lg);
+}
+
+.tw-dynamic-card.bg-gradient-to-r {
+  background: var(--bg-card-inner);
+}
+
+.tw-dynamic-card.shadow-2xl {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.tw-dynamic-card.hover-scale:hover {
+  transform: scale(1.03);
+}
+
+.tw-card-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.tw-heading {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.tw-body-text {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.tw-code-pill {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: var(--bg-code);
+  color: var(--text-code);
+  padding: 6px 10px;
+  border-radius: var(--radius-xs);
+}
+
+/* Group & Peer */
+.tw-group-pane {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tw-group-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.tw-group-box:hover {
+  border-color: var(--border-strong);
+}
+
+.group-icon-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-xs);
+  background: var(--bg-card-inner);
+  border: 1px solid var(--border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.group-arrow {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  transition: transform 0.15s ease;
+}
+
+.tw-group-box:hover .group-arrow {
+  transform: translateX(4px);
+  color: var(--text-primary);
+}
+
+.group-heading {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.group-subtext {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.peer-input-wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.peer-input-wrapper input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-xs);
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  outline: none;
+}
+
+.peer-input-wrapper input:focus {
+  border-color: var(--text-primary);
+}
+
+.peer-label {
+  position: absolute;
+  left: 12px;
+  top: 11px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: all 0.15s ease;
+  background: var(--bg-card);
+  padding: 0 4px;
+}
+
+.peer-input-wrapper input:focus ~ .peer-label,
+.peer-input-wrapper input:not(:placeholder-shown) ~ .peer-label {
+  top: -8px;
+  font-size: 0.68rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Recipes */
+.recipe-grid-showcase {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 16px;
+}
+
+@media (max-width: 1100px) {
+  .recipe-grid-showcase {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .recipe-grid-showcase {
+    grid-template-columns: 1fr;
+  }
+}
+
+.recipe-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.recipe-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 6px;
+}
+
+.recipe-demo-box {
+  min-height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.recipe-snippet {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  background: var(--bg-card-inner);
+  padding: 3px 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tw-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.tw-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.tw-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: var(--border-medium);
+  transition: 0.2s;
+  border-radius: 24px;
+}
+
+.tw-toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.2s;
+  border-radius: 50%;
+}
+
+.tw-toggle-switch input:checked + .tw-toggle-slider {
+  background-color: var(--text-primary);
+}
+
+.tw-toggle-switch input:checked + .tw-toggle-slider:before {
+  transform: translateX(20px);
+}
+
+.tw-shimmer-btn {
+  background: #18181b;
+  color: #fff;
+  border: 1px solid #3f3f46;
+  padding: 8px 14px;
+  border-radius: var(--radius-xs);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.tw-metric-box {
+  text-align: center;
+}
+
+.metric-num {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.metric-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.tw-avatar-stack {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-card);
+  margin-left: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: #27272a;
+  color: #fff;
+}
+
+.avatar-circle:first-child {
+  margin-left: 0;
+}

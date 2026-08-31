@@ -1,0 +1,210 @@
+﻿<div class="module-container">
+  
+  <header class="module-doc-header">
+    <div class="doc-tag-row">
+      <span class="doc-spec-badge">SPEC 09 / FRONTEND REACTIVITY PARADIGMS</span>
+    </div>
+    <h1 class="doc-title">现代前端响应式内核与通信架构</h1>
+    <p class="doc-lead">
+      主流前端框架核心更新机制横向对决（Signals 细粒度更新 vs Vue3 Proxy 依赖收集 vs React VDOM Diffing）与原生跨标签页通信。
+    </p>
+
+  </header>
+
+    <div class="doc-toc-bar">
+      <span class="toc-label">INDEX:</span>
+      <a href="#sec-09-reactivity" class="toc-pill">§ 09.01 响应式内核大对决</a>
+      <a href="#sec-09-broadcast" class="toc-pill">§ 09.02 BroadcastChannel 通信</a>
+      <a href="#sec-09-cheatsheet" class="toc-pill">§ 09.03 响应式机制速查</a>
+    </div>
+
+  <div class="spec-stream">
+
+    <!-- Section 1: Reactivity Paradigms Arena -->
+    <section class="spec-section" id="sec-09-reactivity">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 09.01</span>
+          <h2 class="spec-title">响应式内核大对决：Signals vs Vue3 Proxy vs React VDOM</h2>
+        </div>
+        <span class="spec-meta-tag">Reactivity Core Comparison</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <button class="btn-interactive" id="btn-reactivity-tick">
+              触发统一状态自增 (+1 Count)
+            </button>
+            <span class="badge" id="reactivity-tick-counter">Tick: 0</span>
+          </div>
+
+          <div class="spec-interactive-stage reactivity-stage">
+            <div class="reactivity-grid-compare">
+              
+              <!-- 1. React VDOM 模式 -->
+              <div class="paradigm-card" id="card-mode-react">
+                <span class="paradigm-badge">React (VDOM Diff)</span>
+                <div class="paradigm-stat">组件重执行次数: <strong id="stat-react-renders">0</strong></div>
+                <div class="paradigm-desc">整树组件函数重新执行，生成新 VDOM 树进行 Diff 调和</div>
+              </div>
+
+              <!-- 2. Vue3 Proxy 模式 -->
+              <div class="paradigm-card" id="card-mode-vue">
+                <span class="paradigm-badge">Vue 3 (Proxy Track/Trigger)</span>
+                <div class="paradigm-stat">Effect 触发: <strong id="stat-vue-effects">0</strong></div>
+                <div class="paradigm-desc">属性被修改触发 setter，精准触发订阅该属性的 Render Effect</div>
+              </div>
+
+              <!-- 3. SolidJS / Signals 模式 -->
+              <div class="paradigm-card" id="card-mode-signals">
+                <span class="paradigm-badge">SolidJS (Fine-Grained Signal)</span>
+                <div class="paradigm-stat">DOM Text 节点直更: <strong id="stat-signals-updates">0</strong></div>
+                <div class="paradigm-desc">组件函数只执行 1 次！Signal 自动订阅单个 Text 节点直接写入</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>CORE MECHANISMS & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>心智模型差异：</strong>
+              React 是“自顶向下的粗粒度重计算”；Vue 是“组件级的依赖收集”；Signals 是“细粒度到单一 DOM 节点的原子订阅”。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript (Signals 原理)</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>// 极简 Signal 核心实现
+function createSignal(value) {
+  const subscriptions = new Set();
+  const read = () => {
+    if (currentEffect) subscriptions.add(currentEffect);
+    return value;
+  };
+  const write = (newVal) => {
+    value = newVal;
+    subscriptions.forEach(fn => fn());
+  };
+  return [read, write];
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: BroadcastChannel -->
+    <section class="spec-section" id="sec-09-broadcast">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 09.02</span>
+          <h2 class="spec-title">跨标签页原生通信：BroadcastChannel API</h2>
+        </div>
+        <span class="spec-meta-tag">HTML5 Channel Messaging</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <input type="text" id="broadcast-input-msg" value="Hello Multi-Tab!" class="custom-input" style="width: 160px;">
+              <button class="btn-interactive" id="btn-send-broadcast">
+                向所有标签页广播消息
+              </button>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage broadcast-stage">
+            <div class="broadcast-console-box">
+              <div class="b-console-header">BroadcastChannel: lab-sync-channel</div>
+              <div class="b-console-logs" id="broadcast-logs">
+                <div class="b-log-line">&gt; 可以在浏览器另开一个标签页打开本站，在此处发送消息，另一个标签页即可毫秒级同步接收！</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>零服务器同源通信：</strong>
+              <code>BroadcastChannel</code> 允许同源下的所有浏览器标签页、iframe、Web Worker 之间建立点对多广播通道，无需 WebSocket 后端中转。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>const channel = new BroadcastChannel('app-sync');
+
+// 发送广播
+channel.postMessage({ type: 'LOGIN', user: 'Alice' });
+
+// 接收广播
+channel.onmessage = (event) => {
+  console.log('接收到其他标签页消息:', event.data);
+};</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Cheatsheet Table -->
+    <section class="spec-reference-section" id="sec-09-cheatsheet">
+      <h3 class="spec-ref-title">§ 09.03 前端响应式机制与通信模型速查</h3>
+      <div class="cheatsheet-table-wrap">
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th>响应式范式</th>
+              <th>更新触发机制</th>
+              <th>运行时开销</th>
+              <th>代表框架</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Virtual DOM Diffing</strong></td>
+              <td>State 变更 $\to$ 重执行组件树 $\to$ VDOM Diff 调和</td>
+              <td>中等（需维护内存中的两棵 VDOM 树）</td>
+              <td>React</td>
+            </tr>
+            <tr>
+              <td><strong>Proxy 依赖收集</strong></td>
+              <td>Getter 收集依赖 (track) $\to$ Setter 派发更新 (trigger)</td>
+              <td>低（组件级精确更新）</td>
+              <td>Vue 3, MobX</td>
+            </tr>
+            <tr>
+              <td><strong>Fine-Grained Signals</strong></td>
+              <td>原子信号订阅，组件只执行一次，直接更新 Text 节点</td>
+              <td>极低（零 VDOM，零全树重算）</td>
+              <td>SolidJS, Angular Signals</td>
+            </tr>
+            <tr>
+              <td><strong>编译期静态生成</strong></td>
+              <td>在编译时将赋值语句转换为原生 DOM 修改代码</td>
+              <td>零额外运行时（Zero Runtime）</td>
+              <td>Svelte</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+

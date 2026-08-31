@@ -1,0 +1,142 @@
+﻿/* ==========================================================================
+   MODULE 05: WEB COMPONENTS - CLEAN WORKBENCH STYLES
+   ========================================================================== */
+
+/* Custom Elements */
+.custom-element-pane {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+tech-counter {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+}
+
+.counter-component-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.counter-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.counter-value-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--bg-card-inner);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Shadow DOM */
+.shadow-dom-pane {
+  padding: 14px;
+}
+
+.shadow-compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.dom-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.box-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.test-heading {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dom-box p {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.pollution-active #normal-dom-target .test-heading {
+  color: var(--accent-danger) !important;
+  text-decoration: line-through;
+}
+
+.pollution-active #normal-dom-target {
+  border-color: var(--accent-danger) !important;
+}
+
+/* Template & Slot */
+.template-sandbox-area {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.template-render-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.cloned-profile-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+}
+
+.profile-info h4 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.profile-info span {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.profile-bio {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}

@@ -1,0 +1,16 @@
+﻿{
+  "name": "Web Tech Visual Lab",
+  "short_name": "WebVisualLab",
+  "description": "现代 Web 技术全景规范与交互工作台",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

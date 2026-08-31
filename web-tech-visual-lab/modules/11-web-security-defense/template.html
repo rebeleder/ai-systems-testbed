@@ -1,0 +1,270 @@
+﻿<div class="module-container">
+  
+  <header class="module-doc-header">
+    <div class="doc-tag-row">
+      <span class="doc-spec-badge">SPEC 11 / WEB SECURITY & DEFENSE MECHANISMS</span>
+    </div>
+    <h1 class="doc-title">现代 Web 安全与客户端防御体系</h1>
+    <p class="doc-lead">
+      浏览器内核级防御：CSP 内容安全策略（XSS 终结者）、CORS 跨域预检请求（OPTIONS Preflight）与 Cookie 安全属性防御矩阵。
+    </p>
+
+  </header>
+
+    <div class="doc-toc-bar">
+      <span class="toc-label">INDEX:</span>
+      <a href="#sec-11-csp" class="toc-pill">§ 11.01 CSP 拦截 XSS 实验台</a>
+      <a href="#sec-11-cors" class="toc-pill">§ 11.02 CORS 预检请求时序</a>
+      <a href="#sec-11-cookie" class="toc-pill">§ 11.03 Cookie 安全属性矩阵</a>
+      <a href="#sec-11-cheatsheet" class="toc-pill">§ 11.04 安全规范速查</a>
+    </div>
+
+  <div class="spec-stream">
+
+    <!-- Section 1: CSP -->
+    <section class="spec-section" id="sec-11-csp">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 11.01</span>
+          <h2 class="spec-title">CSP 内容安全策略：XSS 脚本注入实时拦截实验台</h2>
+        </div>
+        <span class="spec-meta-tag">W3C Content Security Policy</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <label class="custom-checkbox-label">
+                <input type="checkbox" id="chk-enable-csp" checked>
+                <span>启用 CSP (default-src 'self')</span>
+              </label>
+              <button class="btn-interactive btn-secondary" id="btn-inject-xss" style="color: var(--accent-danger);">
+                模拟注入恶意内联脚本 (&lt;script&gt;)
+              </button>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage csp-stage">
+            <div class="csp-sandbox-card">
+              <div class="csp-browser-bar">
+                <span class="csp-url-badge">https://secure.lab.dev</span>
+                <span class="csp-shield-badge" id="csp-shield-indicator">CSP Shield: ACTIVE</span>
+              </div>
+              <div class="csp-render-area" id="csp-render-area">
+                <p>受 CSP 保护的用户评论渲染区：</p>
+                <div class="user-comment-box" id="user-comment-box">
+                  欢迎体验安全沙盒环境。
+                </div>
+              </div>
+              <div class="csp-security-log" id="csp-security-log">
+                [CSP 引擎就绪] 未检测到策略违规。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SECURITY POLICY & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box" id="csp-notes-box">
+              <strong>CSP 防御机制：</strong>
+              通过 HTTP 响应头 <code>Content-Security-Policy: default-src 'self'</code>，浏览器在内核层禁止执行任何未授权内联脚本与未知外部源请求，即使攻击者成功注入 HTML 字符串亦无法执行 JS 代码。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <div class="code-flavor-tabs">
+                  <button class="flavor-tab active">HTTP Header</button>
+                  <button class="flavor-tab">HTML Meta</button>
+                </div>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code># 生产环境推荐 CSP 响应头
+Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-2726c7fbe44a'; object-src 'none';</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: CORS Preflight -->
+    <section class="spec-section" id="sec-11-cors">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 11.02</span>
+          <h2 class="spec-title">CORS 跨域资源共享：简单请求 vs OPTIONS 预检请求时序</h2>
+        </div>
+        <span class="spec-meta-tag">Fetch CORS Standard</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <button class="btn-interactive btn-secondary" id="btn-fire-simple-req">简单请求 (GET)</button>
+              <button class="btn-interactive" id="btn-fire-preflight-req">复杂请求 (PUT + Auth Header)</button>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage cors-stage">
+            <div class="cors-waterfall-card">
+              <div class="cors-swimlane" id="cors-swimlane">
+                <div class="swimlane-node client-node">Browser Client</div>
+                <div class="swimlane-arrow" id="cors-arrow-options">
+                  <span class="arrow-label">1. OPTIONS /api (预检握手)</span>
+                </div>
+                <div class="swimlane-node server-node">API Server</div>
+                <div class="swimlane-arrow" id="cors-arrow-actual">
+                  <span class="arrow-label">2. PUT /api (真实业务请求)</span>
+                </div>
+              </div>
+              <div class="cors-log-display" id="cors-log-display">
+                点击上方按钮，观察浏览器在跨域复杂请求下自动触发的 OPTIONS 预检时序...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>PREFLIGHT SPECS & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>预检请求判定准则：</strong>
+              若请求方法为 <code>PUT / DELETE</code>，或携带自定义 Header（如 <code>Authorization</code>），浏览器必须先发 <code>OPTIONS</code> 请求验证服务器的 <code>Access-Control-Allow-Methods</code> 与 <code>Access-Control-Allow-Headers</code>。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">HTTP</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code># 服务器 OPTIONS 预检响应头
+HTTP/1.1 204 No Content
+Access-Control-Allow-Origin: https://app.example.com
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE
+Access-Control-Allow-Headers: Authorization, Content-Type
+Access-Control-Max-Age: 86400</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Cookie Matrix -->
+    <section class="spec-section" id="sec-11-cookie">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 11.03</span>
+          <h2 class="spec-title">Cookie 核心安全属性防御矩阵 (HttpOnly / SameSite / Secure)</h2>
+        </div>
+        <span class="spec-meta-tag">HTTP State Management</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <span style="font-size: 0.78rem; color: var(--text-secondary);">勾选安全属性，查看攻击防御结果：</span>
+          </div>
+
+          <div class="spec-interactive-stage cookie-stage">
+            <div class="cookie-defense-matrix" style="width: 100%; max-width: 480px;">
+              <div class="cookie-flag-row">
+                <label class="custom-checkbox-label">
+                  <input type="checkbox" id="chk-httponly" checked>
+                  <span>HttpOnly</span>
+                </label>
+                <span class="defense-status pass" id="stat-httponly">🛡️ 防御 XSS 盗取 Cookie (document.cookie 无法访问)</span>
+              </div>
+
+              <div class="cookie-flag-row">
+                <label class="custom-checkbox-label">
+                  <input type="checkbox" id="chk-samesite" checked>
+                  <span>SameSite=Strict</span>
+                </label>
+                <span class="defense-status pass" id="stat-samesite">🛡️ 彻底阻断跨站 CSRF 伪造请求携带 Cookie</span>
+              </div>
+
+              <div class="cookie-flag-row">
+                <label class="custom-checkbox-label">
+                  <input type="checkbox" id="chk-secure" checked>
+                  <span>Secure</span>
+                </label>
+                <span class="defense-status pass" id="stat-secure">🛡️ 仅通过 HTTPS 加密信道传输，防中间人窃听</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SET-COOKIE SPEC & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>生产标准 Cookie 头：</strong>
+              存储鉴权 Token 或 SessionId 的 Cookie 必须同时声明 <code>HttpOnly; Secure; SameSite=Lax (或 Strict)</code>。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">HTTP</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content" id="cookie-header-code"><code>Set-Cookie: session_id=0xFA89BC; Path=/; Secure; HttpOnly; SameSite=Strict; Partitioned;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Cheatsheet Table -->
+    <section class="spec-reference-section" id="sec-11-cheatsheet">
+      <h3 class="spec-ref-title">§ 11.04 现代 Web 安全与防御规范速查表</h3>
+      <div class="cheatsheet-table-wrap">
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th>防御机制</th>
+              <th>防御威胁类型</th>
+              <th>关键指令 / 属性</th>
+              <th>底层拦截层级</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Content Security Policy (CSP)</strong></td>
+              <td>XSS (跨站脚本攻击)、数据窃取</td>
+              <td><code>default-src 'self'; script-src 'nonce-...'</code></td>
+              <td>浏览器内核资源加载器</td>
+            </tr>
+            <tr>
+              <td><strong>CORS Preflight</strong></td>
+              <td>未授权跨站数据篡改</td>
+              <td><code>OPTIONS</code> 握手, <code>Access-Control-Allow-Origin</code></td>
+              <td>浏览器网络栈请求分发前</td>
+            </tr>
+            <tr>
+              <td><strong>HttpOnly Cookie</strong></td>
+              <td>XSS 窃取用户登录态 Token</td>
+              <td><code>Set-Cookie: ...; HttpOnly</code></td>
+              <td>DOM JS 运行时内存隔离</td>
+            </tr>
+            <tr>
+              <td><strong>SameSite Cookie</strong></td>
+              <td>CSRF (跨站请求伪造攻击)</td>
+              <td><code>SameSite=Strict / Lax / None</code></td>
+              <td>浏览器请求自动携带策略</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+

@@ -1,0 +1,243 @@
+﻿<div class="module-container">
+  
+  <header class="module-doc-header">
+    <div class="doc-tag-row">
+      <span class="doc-spec-badge">SPEC 05 / W3C WEB COMPONENTS STANDARD</span>
+    </div>
+    <h1 class="doc-title">Web Components 原生组件化规范</h1>
+    <p class="doc-lead">
+      无需任何前端框架的浏览器原生组件标准。Custom Elements 自定义标签、Shadow DOM 样式作用域隔离与 &lt;template&gt; 惰性模板。
+    </p>
+
+  </header>
+
+    <div class="doc-toc-bar">
+      <span class="toc-label">INDEX:</span>
+      <a href="#sec-05-shadow" class="toc-pill">§ 05.01 Shadow DOM 作用域隔离</a>
+      <a href="#sec-05-custom" class="toc-pill">§ 05.02 Custom Elements 生命周期</a>
+      <a href="#sec-05-template" class="toc-pill">§ 05.03 &lt;template&gt; 惰性模板</a>
+      <a href="#sec-05-cheatsheet" class="toc-pill">§ 05.04 规范速查</a>
+    </div>
+
+  <div class="spec-stream">
+
+    <!-- Section 1: Shadow DOM -->
+    <section class="spec-section" id="sec-05-shadow">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 05.01</span>
+          <h2 class="spec-title">Shadow DOM 样式作用域强隔离工作台</h2>
+        </div>
+        <span class="spec-meta-tag">DOM Shadow Root</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <button class="btn-interactive btn-secondary" id="btn-toggle-pollution" style="color: var(--accent-danger);">
+              注入全局恶性样式 (h4 { color: red !important })
+            </button>
+            <span class="badge" id="shadow-dom-badge">Default Scope</span>
+          </div>
+
+          <div class="spec-interactive-stage shadow-dom-pane">
+            <div class="shadow-compare-grid" style="width: 100%; max-width: 500px;">
+              <div class="dom-box normal-dom" id="normal-dom-target">
+                <span class="box-tag">Light DOM (普通 DOM - 无隔离)</span>
+                <h4 class="test-heading">组件标题</h4>
+                <p>全局 CSS 样式可直接入侵并修改此区域。</p>
+              </div>
+
+              <div class="dom-box shadow-host" id="shadow-dom-host">
+                <!-- Shadow Root 挂载点 -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>沙盒隔离机制：</strong>
+              <code>attachShadow({ mode: 'open' })</code> 建立独立的 CSS 作用域。外部全局选择器无法穿透 Shadow Root，内部样式亦不会污染全局宿主。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>const shadow = host.attachShadow({ mode: 'open' });
+
+shadow.innerHTML = `
+  &lt;style&gt;
+    h4 { color: #38bdf8; font-weight: 600; }
+  &lt;/style&gt;
+  &lt;h4&gt;受保护组件&lt;/h4&gt;
+`;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Custom Elements -->
+    <section class="spec-section" id="sec-05-custom">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 05.02</span>
+          <h2 class="spec-title">原生自定义元素（Custom Elements）与生命周期</h2>
+        </div>
+        <span class="spec-meta-tag">HTML5 Custom Elements</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <button class="btn-interactive" id="btn-custom-inc">+1 属性自增</button>
+              <button class="btn-interactive btn-secondary" id="btn-custom-reset">重置</button>
+            </div>
+            <span class="badge" id="custom-elem-stat">Connected</span>
+          </div>
+
+          <div class="spec-interactive-stage custom-element-pane">
+            <div id="custom-element-host">
+              <tech-counter count="0"></tech-counter>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>命名铁律与生命周期：</strong>
+              自定义标签名必须包含短横线（如 <code>&lt;tech-counter&gt;</code>）。通过 <code>observedAttributes</code> 监听属性变化并自动调用 <code>attributeChangedCallback</code>。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>class TechCounter extends HTMLElement {
+  static get observedAttributes() { return ['count']; }
+  attributeChangedCallback() { this.render(); }
+  render() {
+    this.innerHTML = `&lt;span&gt;${this.getAttribute('count')}&lt;/span&gt;`;
+  }
+}
+customElements.define('tech-counter', TechCounter);</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Template & Slot -->
+    <section class="spec-section" id="sec-05-template">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 05.03</span>
+          <h2 class="spec-title">模板骨架与具名插槽（Template & Slot）投射</h2>
+        </div>
+        <span class="spec-meta-tag">HTML5 Templates</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <button class="btn-interactive" id="btn-clone-template">
+              从 &lt;template&gt; 克隆实例
+            </button>
+            <span class="badge">惰性模板克隆</span>
+          </div>
+
+          <div class="spec-interactive-stage template-sandbox-area">
+            <template id="tmpl-profile-card">
+              <div class="cloned-profile-card">
+                <div class="profile-header">
+                  <div class="profile-info">
+                    <h4 class="slot-name-target">默认成员</h4>
+                    <span class="slot-role-target">前端架构师</span>
+                  </div>
+                </div>
+                <p class="profile-bio">通过 template.content.cloneNode(true) 深度克隆生成的独立实例。</p>
+              </div>
+            </template>
+
+            <div class="template-render-wall" id="template-render-wall" style="width: 100%; max-width: 480px;"></div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>惰性与性能：</strong>
+              <code>&lt;template&gt;</code> 内的图片、视频或脚本在未被 <code>cloneNode(true)</code> 真正插入文档前，浏览器绝不发起网络下载或执行计算。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>const template = document.getElementById('tmpl-profile-card');
+const clone = template.content.cloneNode(true);
+clone.querySelector('.slot-name-target').textContent = 'Alice';
+container.appendChild(clone);</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Cheatsheet Table -->
+    <section class="spec-reference-section" id="sec-05-cheatsheet">
+      <h3 class="spec-ref-title">§ 05.04 Web Components 规范全家桶速查</h3>
+      <div class="cheatsheet-table-wrap">
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th>技术规范</th>
+              <th>核心 API</th>
+              <th>生命周期钩子</th>
+              <th>关键特性</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Custom Elements</strong></td>
+              <td><code>customElements.define()</code></td>
+              <td><code>connectedCallback()</code>, <code>attributeChangedCallback()</code></td>
+              <td>原生自定义标签，属性双向监听</td>
+            </tr>
+            <tr>
+              <td><strong>Shadow DOM</strong></td>
+              <td><code>element.attachShadow()</code></td>
+              <td>无</td>
+              <td>真正的 CSS 作用域物理隔离，微前端基础</td>
+            </tr>
+            <tr>
+              <td><strong>HTML Templates</strong></td>
+              <td><code>template.content.cloneNode()</code></td>
+              <td>无</td>
+              <td>惰性 DOM 片段，不发起网络请求</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+

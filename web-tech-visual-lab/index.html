@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Tech Visual Lab · 现代 Web 技术规范工作台</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="modules/01-html-semantics/style.css">
+</head>
+<body class="app-body">
+  <div class="app-layout">
+    
+    <!-- 侧边栏导航 -->
+    <aside class="app-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-group">
+          <div class="logo-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <span class="logo-title">WEB VISUAL LAB</span>
+        </div>
+      </div>
+
+      <!-- 全局复习掌握进度条 -->
+      <div class="sidebar-progress-box">
+        <div class="progress-header">
+          <span>全站掌握进度:</span>
+          <strong id="global-progress-text">0 / 40 (0%)</strong>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill-bar" id="global-progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- 模块导航列表 (5 大技术体系，13 大核心规范) -->
+      <nav class="sidebar-nav">
+        
+        <div class="nav-section-title">一、内核、管线与安全</div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item active" data-module="01-html-semantics">
+              <div class="nav-info">
+                <span class="nav-label">HTML5 原生交互与语义</span>
+                <span class="nav-desc">Top Layer / 约束校验 / 媒体</span>
+              </div>
+              <span class="badge">01</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-module="06-browser-pipeline">
+              <div class="nav-info">
+                <span class="nav-label">关键渲染路径与管线</span>
+                <span class="nav-desc">重排重绘 / Script时序 / Popover</span>
+              </div>
+              <span class="badge">06</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-module="11-web-security-defense">
+              <div class="nav-info">
+                <span class="nav-label">Web 安全与防御体系</span>
+                <span class="nav-desc">CSP / CORS预检 / Cookie矩阵</span>
+              </div>
+              <span class="badge">11</span>
+            </button>
+          </li>
+        </ul>
+
+        <div class="nav-section-title">二、现代 CSS 与视效排版</div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item" data-module="02-css-selectors">
+              <div class="nav-info">
+                <span class="nav-label">CSS 选择器与现代布局</span>
+                <span class="nav-desc">:has / Flex / Grid / @container</span>
+              </div>
+              <span class="badge">02</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-module="07-css-next-animations">
+              <div class="nav-info">
+                <span class="nav-label">下一代 CSS 动画与色彩</span>
+                <span class="nav-desc">Scroll-Driven / ViewTransitions</span>
+              </div>
+              <span class="badge">07</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-module="12-css-math-typography">
+              <div class="nav-info">
+                <span class="nav-label">CSS 数学函数与流体排版</span>
+                <span class="nav-desc">clamp / Subgrid / text-wrap</span>
+              </div>
+              <span class="badge">12</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-module="04-tailwind-recipes">
+              <div class="nav-info">
+                <span class="nav-label">Tailwind CSS 原子化实战</span>
+                <span class="nav-desc">Utility / Group / 组件模式</span>
+              </div>
+              <span class="badge">04</span>
+            </button>
+          </li>
+        </ul>
+
+        <div class="nav-section-title">三、JS 运行时、线程与网络</div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item" data-module="03-js-runtime">
+              <div class="nav-info">
+                <span class="nav-label">JavaScript 运行时与内核</span>
+                <span class="nav-desc">Event Loop / Proxy / Observer</span>
+              </div>
+              <span class="badge">03</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-module="08-advanced-web-apis">
+              <div class="nav-info">
+                <span class="nav-label">高级 Web API 与多线程</span>
+                <span class="nav-desc">Workers / Streams / 存储矩阵</span>
+              </div>
+              <span class="badge">08</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-module="13-async-concurrency-net">
+              <div class="nav-info">
+                <span class="nav-label">异步并发调度与网络传输</span>
+                <span class="nav-desc">Promise 6大API / SSE / WS</span>
+              </div>
+              <span class="badge">13</span>
+            </button>
+          </li>
+        </ul>
+
+        <div class="nav-section-title">四、框架内核与组件规范</div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item" data-module="05-native-components">
+              <div class="nav-info">
+                <span class="nav-label">Web Components 原生组件</span>
+                <span class="nav-desc">Custom Elements / Shadow DOM</span>
+              </div>
+              <span class="badge">05</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-module="09-framework-paradigms">
+              <div class="nav-info">
+                <span class="nav-label">响应式内核大对决</span>
+                <span class="nav-desc">Signals / Proxy / VDOM / 跨标签</span>
+              </div>
+              <span class="badge">09</span>
+            </button>
+          </li>
+        </ul>
+
+        <div class="nav-section-title">五、纯前端极限视听</div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item" data-module="10-web-graphics-audio">
+              <div class="nav-info">
+                <span class="nav-label">图像滤镜与音频合成</span>
+                <span class="nav-desc">Canvas 卷积 / Web Audio 合成</span>
+              </div>
+              <span class="badge">10</span>
+            </button>
+          </li>
+        </ul>
+
+      </nav>
+    </aside>
+
+    <!-- 主视口区域 -->
+    <div class="app-main-wrapper">
+      
+      <!-- 顶栏导航 -->
+      <header class="app-header">
+        <div class="header-left">
+          <button class="sidebar-toggle-btn" id="menu-toggle" aria-label="切换侧边栏" title="展开/收起侧边栏">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          
+          <div class="breadcrumb" id="breadcrumb">
+            <span class="breadcrumb-root">Spec</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current" id="current-module-title">HTML5 原生交互与语义</span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- DevTools HUD 触发器 -->
+          <button class="hud-trigger-btn" id="hud-trigger-btn" title="打开性能与特异性雷达">
+            <span class="fps-dot" id="hud-fps-dot"></span>
+            <span id="hud-fps-val">60 FPS</span>
+          </button>
+
+          <button class="search-trigger" id="search-trigger" aria-label="搜索技术特性">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span class="search-placeholder">检索 13 大核心规范...</span>
+            <kbd class="kbd-shortcut">Ctrl K</kbd>
+          </button>
+
+          <button class="icon-btn theme-toggle" id="theme-toggle" title="切换深色/浅色模式" aria-label="切换主题">
+            <svg class="sun-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- 主模块内容视口（首屏直接内联加载流式章节） -->
+      <main class="app-content" id="app-viewport">
+        <div class="module-container">
+          
+          <header class="module-doc-header">
+            <div class="doc-tag-row">
+              <span class="doc-spec-badge">SPEC 01 / HTML5 LIVING STANDARD</span>
+            </div>
+            <h1 class="doc-title">HTML5 原生交互与现代语义体系</h1>
+            <p class="doc-lead">
+              浏览器内核级 Top Layer 顶层渲染、零 JS 声明式折叠、客户端约束验证与自适应媒体规范。
+            </p>
+          </header>
+
+          <div class="doc-toc-bar">
+            <span class="toc-label">INDEX:</span>
+            <a href="#sec-01-dialog" class="toc-pill">§ 01.01 &lt;dialog&gt; Top Layer 渲染</a>
+            <a href="#sec-01-details" class="toc-pill">§ 01.02 &lt;details&gt; 互斥折叠</a>
+            <a href="#sec-01-validation" class="toc-pill">§ 01.03 表单约束验证</a>
+            <a href="#sec-01-picture" class="toc-pill">§ 01.04 &lt;picture&gt; 视口裁切</a>
+            <a href="#sec-01-cheatsheet" class="toc-pill">§ 01.05 规范速查</a>
+          </div>
+
+          <div class="spec-stream">
+
+            <!-- Section 1: Dialog -->
+            <section class="spec-section" id="sec-01-dialog">
+              <div class="spec-section-header">
+                <div class="spec-section-title-wrap">
+                  <span class="spec-number">§ 01.01</span>
+                  <h2 class="spec-title">&lt;dialog&gt; 原生模态对话框与 Top Layer 顶层渲染</h2>
+                </div>
+                <span class="spec-meta-tag">HTML5 Top Layer API</span>
+              </div>
+
+              <div class="spec-workbench-split">
+                <div class="spec-canvas-col">
+                  <div class="spec-controls-bar">
+                    <div class="control-group">
+                      <button class="btn-interactive" id="btn-open-modal">showModal() 唤起模态</button>
+                      <button class="btn-interactive btn-secondary" id="btn-open-nonmodal">show() 非模态</button>
+                    </div>
+                    <div class="control-group">
+                      <label for="backdrop-blur-slider" style="color: var(--text-secondary); font-size: 0.76rem;">Backdrop 模糊:</label>
+                      <input type="range" id="backdrop-blur-slider" min="0" max="16" value="6" style="width: 70px;">
+                      <span id="blur-val-display" style="font-family: var(--font-mono); font-size: 0.72rem;">6px</span>
+                    </div>
+                  </div>
+
+                  <div class="spec-interactive-stage dialog-sandbox-bg">
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">点击左上角按钮测试原生模态唤起</span>
+
+                    <dialog class="demo-native-dialog" id="demo-dialog">
+                      <div class="dialog-inner">
+                        <h3>原生 &lt;dialog&gt; 模态框</h3>
+                        <p>当前元素处于浏览器内核 Top Layer 顶层（高于任意 z-index）。支持按 <kbd class="kbd-shortcut">ESC</kbd> 退出或按 <kbd class="kbd-shortcut">TAB</kbd> 测试焦点锁定。</p>
+                        <div class="dialog-actions">
+                          <button class="btn-interactive btn-secondary" id="btn-dialog-cancel">取消</button>
+                          <button class="btn-interactive" id="btn-dialog-confirm">确定</button>
+                        </div>
+                      </div>
+                    </dialog>
+                  </div>
+                </div>
+
+                <div class="spec-inspector-col">
+                  <div class="inspector-header">
+                    <span>SPECIFICATION & CODE</span>
+                  </div>
+                  <div class="inspector-body">
+                    <div class="spec-notes-box">
+                      <strong>Top Layer 机制：</strong>
+                      使用 <code>showModal()</code> 激活时，浏览器将其移入独立于根 DOM 树的顶层堆叠上下文，自带全屏遮罩，彻底杜绝父容器 <code>overflow: hidden</code> 裁剪问题。
+                    </div>
+
+                    <div class="code-preview-pane">
+                      <div class="code-header">
+                        <span class="code-lang">HTML & CSS</span>
+                        <button class="copy-btn">复制</button>
+                      </div>
+                      <pre class="code-content" id="dialog-code-snippet"><code>const dialog = document.querySelector('dialog');
+dialog.showModal(); // 激活顶层模态
+
+/* 遮罩样式定制 */
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+}</code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Section 2: Details & Summary -->
+            <section class="spec-section" id="sec-01-details">
+              <div class="spec-section-header">
+                <div class="spec-section-title-wrap">
+                  <span class="spec-number">§ 01.02</span>
+                  <h2 class="spec-title">&lt;details&gt; 与 &lt;summary&gt; 零 JS 原生互斥手风琴</h2>
+                </div>
+                <span class="spec-meta-tag">HTML5 Interactive</span>
+              </div>
+
+              <div class="spec-workbench-split">
+                <div class="spec-canvas-col">
+                  <div class="spec-controls-bar">
+                    <span style="font-size: 0.78rem; color: var(--text-secondary);">点击展开项测试互斥状态：</span>
+                  </div>
+
+                  <div class="spec-interactive-stage details-preview-box">
+                    <div class="accordion-group" style="width: 100%; max-width: 480px;">
+                      <details class="custom-details" name="faq-group" open>
+                        <summary class="custom-summary">
+                          <span>01 / 语义标签与 A11y 支持</span>
+                          <span class="accordion-arrow">›</span>
+                        </summary>
+                        <div class="details-content">
+                          自带键盘可访问性（Enter / Space 切换展开），屏幕阅读器天然识别。
+                        </div>
+                      </details>
+
+                      <details class="custom-details" name="faq-group">
+                        <summary class="custom-summary">
+                          <span>02 / 为什么放弃 JS 手写折叠？</span>
+                          <span class="accordion-arrow">›</span>
+                        </summary>
+                        <div class="details-content">
+                          0 运行时代价，完全由浏览器内核驱动渲染，无布局抖动。
+                        </div>
+                      </details>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="spec-inspector-col">
+                  <div class="inspector-header">
+                    <span>SPECIFICATION & CODE</span>
+                  </div>
+                  <div class="inspector-body">
+                    <div class="spec-notes-box">
+                      <strong>互斥机制：</strong>
+                      多个 <code>&lt;details&gt;</code> 标签添加相同 <code>name="group"</code> 属性即可原生实现互斥折叠，无需任何 JS 事件监听。
+                    </div>
+
+                    <div class="code-preview-pane">
+                      <div class="code-header">
+                        <span class="code-lang">HTML</span>
+                        <button class="copy-btn">复制</button>
+                      </div>
+                      <pre class="code-content"><code>&lt;details name="faq-group" open&gt;
+  &lt;summary&gt;标题&lt;/summary&gt;
+  &lt;p&gt;展开内容&lt;/p&gt;
+&lt;/details&gt;</code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Section 3: Form Validation -->
+            <section class="spec-section" id="sec-01-validation">
+              <div class="spec-section-header">
+                <div class="spec-section-title-wrap">
+                  <span class="spec-number">§ 01.03</span>
+                  <h2 class="spec-title">表单约束验证 API 与 :user-invalid 防误报校验</h2>
+                </div>
+                <span class="spec-meta-tag">Form Constraint API</span>
+              </div>
+
+              <div class="spec-workbench-split">
+                <div class="spec-canvas-col">
+                  <div class="spec-controls-bar">
+                    <span style="font-size: 0.78rem; color: var(--text-secondary);">输入字符并失焦测试校验效果：</span>
+                  </div>
+
+                  <div class="spec-interactive-stage form-preview-box">
+                    <form class="demo-form" id="demo-validation-form" onsubmit="event.preventDefault(); window.LabCore.showToast('表单验证通过');" style="width: 100%; max-width: 440px;">
+                      <div class="form-group">
+                        <label for="input-license">
+                          <span>许可证代码 (3位字母 - 4位数字):</span>
+                          <span class="form-hint">pattern="[A-Z]{3}-[0-9]{4}"</span>
+                        </label>
+                        <input type="text" id="input-license" required pattern="[A-Z]{3}-[0-9]{4}" placeholder="例如: LAB-2026" class="custom-input">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="input-framework">
+                          <span>输入自动联想 (&lt;datalist&gt;):</span>
+                        </label>
+                        <input type="text" id="input-framework" list="tech-options" placeholder="输入 W 或 T 体验建议..." class="custom-input">
+                        <datalist id="tech-options">
+                          <option value="Web Components"></option>
+                          <option value="Tailwind CSS"></option>
+                          <option value="Progressive Web App"></option>
+                        </datalist>
+                      </div>
+
+                      <button type="submit" class="btn-interactive" style="width: 100%; justify-content: center; margin-top: 4px;">提交验证</button>
+                    </form>
+                  </div>
+                </div>
+
+                <div class="spec-inspector-col">
+                  <div class="inspector-header">
+                    <span>SPECIFICATION & CODE</span>
+                  </div>
+                  <div class="inspector-body">
+                    <div class="spec-notes-box">
+                      <strong>:user-invalid 优势：</strong>
+                      区别于传统的 <code>:invalid</code>，<code>:user-invalid</code> 仅在用户产生实际交互并失焦后才触发红框，杜绝页面首屏即全红的缺陷。
+                    </div>
+
+                    <div class="code-preview-pane">
+                      <div class="code-header">
+                        <span class="code-lang">CSS</span>
+                        <button class="copy-btn">复制</button>
+                      </div>
+                      <pre class="code-content"><code>/* 仅在失焦产生脏数据后高亮错误 */
+input:user-invalid {
+  border-color: var(--accent-danger);
+}</code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Section 4: Picture -->
+            <section class="spec-section" id="sec-01-picture">
+              <div class="spec-section-header">
+                <div class="spec-section-title-wrap">
+                  <span class="spec-number">§ 01.04</span>
+                  <h2 class="spec-title">&lt;picture&gt; 响应式媒体与视口艺术指导 (Art Direction)</h2>
+                </div>
+                <span class="spec-meta-tag">HTML5 Responsive Media</span>
+              </div>
+
+              <div class="spec-workbench-split">
+                <div class="spec-canvas-col">
+                  <div class="spec-controls-bar">
+                    <div class="control-group">
+                      <label for="picture-resizer" style="color: var(--text-secondary); font-size: 0.78rem;">模拟容器宽度:</label>
+                      <input type="range" id="picture-resizer" min="300" max="850" value="700" style="width: 120px;">
+                      <span id="picture-width-val" style="font-family: var(--font-mono); font-size: 0.72rem;">700px</span>
+                    </div>
+                    <span class="badge" id="current-picture-mode">宽屏横幅模式 (16:9)</span>
+                  </div>
+
+                  <div class="spec-interactive-stage picture-preview-canvas">
+                    <div class="dynamic-viewport-box" id="dynamic-viewport-box" style="width: 600px;">
+                      <div class="mock-picture-frame">
+                        <div class="mock-art-direction wide-view">
+                          <span class="art-badge">source media="(min-width: 600px)"</span>
+                          <div class="art-content-wide">
+                            <div class="horizon-line"></div>
+                            <span class="view-tag">16:9 全景横幅图</span>
+                          </div>
+                        </div>
+                        <div class="mock-art-direction mobile-view">
+                          <span class="art-badge">img (默认窄屏)</span>
+                          <div class="art-content-mobile">
+                            <span class="view-tag">1:1 正方形主体特写</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="spec-inspector-col">
+                  <div class="inspector-header">
+                    <span>SPECIFICATION & CODE</span>
+                  </div>
+                  <div class="inspector-body">
+                    <div class="spec-notes-box">
+                      <strong>网络层按需拉取：</strong>
+                      浏览器在预解析阶段依据视口条件与 AVIF / WebP 格式支持只下载匹配的一张图片，彻底杜绝浪费带宽。
+                    </div>
+
+                    <div class="code-preview-pane">
+                      <div class="code-header">
+                        <span class="code-lang">HTML</span>
+                        <button class="copy-btn">复制</button>
+                      </div>
+                      <pre class="code-content"><code>&lt;picture&gt;
+  &lt;source media="(min-width: 800px)" srcset="banner.avif" type="image/avif"&gt;
+  &lt;source media="(min-width: 800px)" srcset="banner.jpg"&gt;
+  &lt;img src="cover-square.jpg" alt="封面" loading="lazy"&gt;
+&lt;/picture&gt;</code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Section 5: Cheatsheet Table -->
+            <section class="spec-reference-section" id="sec-01-cheatsheet">
+              <h3 class="spec-ref-title">§ 01.05 HTML5 原生交互标签与 API 规范速查</h3>
+              <div class="cheatsheet-table-wrap">
+                <table class="cheatsheet-table">
+                  <thead>
+                    <tr>
+                      <th>标签 / 伪类 / API</th>
+                      <th>核心能力</th>
+                      <th>关键属性 / 方法</th>
+                      <th>推荐使用场景</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>&lt;dialog&gt;</code></td>
+                      <td>Top Layer 顶层模态渲染</td>
+                      <td><code>showModal()</code>, <code>close()</code>, <code>::backdrop</code></td>
+                      <td>全屏弹窗、确认提示框、全局搜索框</td>
+                    </tr>
+                    <tr>
+                      <td><code>&lt;details&gt;</code></td>
+                      <td>零 JS 声明式折叠手风琴</td>
+                      <td><code>open</code>, <code>name="group"</code></td>
+                      <td>FAQ 问答、侧边栏折叠菜单、代码折叠</td>
+                    </tr>
+                    <tr>
+                      <td><code>:user-invalid</code></td>
+                      <td>交互后表单约束校验</td>
+                      <td><code>required</code>, <code>pattern="..."</code></td>
+                      <td>密码校验、邮箱格式、手机号表单</td>
+                    </tr>
+                    <tr>
+                      <td><code>&lt;picture&gt;</code></td>
+                      <td>格式降级与视口艺术指导</td>
+                      <td><code>&lt;source media="..." srcset="..."&gt;</code></td>
+                      <td>响应式 Banner、下一代图片格式 (AVIF/WebP)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- DevTools HUD 浮动抽屉 -->
+  <div class="devtools-hud-drawer" id="devtools-hud-drawer">
+    <div class="hud-header">
+      <span>DEVTOOLS RADAR HUD</span>
+      <button class="hud-close-btn" id="hud-close-btn" aria-label="关闭">✕</button>
+    </div>
+    <div class="hud-body">
+      <div class="hud-metric-row">
+        <span>实时渲染帧率:</span>
+        <strong id="hud-fps-text" style="color: var(--accent-success);">60 FPS</strong>
+      </div>
+      <div class="hud-metric-row">
+        <span>当前页面 DOM 节点数:</span>
+        <strong id="hud-dom-count">0</strong>
+      </div>
+      <div class="hud-spec-calc-wrap">
+        <span style="font-size: 0.72rem; color: var(--text-muted);">CSS Specificity (特异性) 计算器:</span>
+        <input type="text" id="hud-spec-input" placeholder="输入选择器，如 .card:has(#chk) ..." class="custom-input">
+        <div class="hud-spec-score-display" id="hud-spec-score">Specificity: (0, 0, 0)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 全局搜索弹窗 (Ctrl + K) -->
+  <div class="search-modal-backdrop" id="search-modal">
+    <div class="search-modal-card">
+      <div class="search-input-wrapper">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="global-search-input" placeholder="检索 13 大核心规范..." autocomplete="off">
+        <kbd class="kbd-shortcut">ESC</kbd>
+      </div>
+      <div class="search-results-list" id="search-results"></div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="modules/01-html-semantics/script.js"></script>
+  <script src="assets/js/core.js"></script>
+</body>
+</html>

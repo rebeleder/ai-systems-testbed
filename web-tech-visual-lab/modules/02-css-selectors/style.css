@@ -1,0 +1,337 @@
+﻿/* ==========================================================================
+   MODULE 02: MODERN CSS SELECTORS & LAYOUT - CLEAN WORKBENCH STYLES
+   ========================================================================== */
+
+/* :has() Styles */
+.has-sandbox-area {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.smart-task-card {
+  width: 100%;
+  max-width: 500px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.task-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.task-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  background: var(--bg-card-inner);
+  color: var(--text-muted);
+}
+
+.task-state-indicator {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.task-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.task-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.task-controls-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bg-card-inner);
+  border-radius: var(--radius-sm);
+}
+
+.custom-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.task-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 10px;
+}
+
+.task-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* :has() Native Rules */
+.smart-task-card:has(#chk-urgent:checked) {
+  border-color: var(--accent-warning);
+  background: var(--bg-card);
+}
+
+.smart-task-card:has(#chk-urgent:checked) .task-badge {
+  color: var(--accent-warning);
+}
+
+.smart-task-card:has(#chk-danger:checked) {
+  border-color: var(--accent-danger) !important;
+}
+
+.smart-task-card:has(#chk-danger:checked) .task-badge {
+  color: var(--accent-danger);
+}
+
+.smart-task-card:has(#chk-danger:checked) .task-btn {
+  background: var(--accent-danger) !important;
+  color: #fff;
+}
+
+/* Specificity Arena */
+.specificity-arena {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 14px;
+}
+
+.spec-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.spec-label {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.demo-spec-btn {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+}
+
+:where(.where-target) {
+  background: #3f3f46;
+  color: #fff;
+  border: 1px solid #52525b;
+}
+
+:is(.is-target) {
+  background: #3f3f46;
+  color: #fff;
+  border: 1px solid #52525b;
+}
+
+.override-active .where-target {
+  background: var(--accent-success) !important;
+  color: #fff;
+  border-color: var(--accent-success);
+}
+
+.override-active .is-target {
+  background: #6366f1;
+  color: #fff;
+  border-color: #6366f1;
+}
+
+.spec-status {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+/* Flexbox */
+.flex-canvas {
+  padding: 16px;
+  min-height: 140px;
+}
+
+.flex-sandbox-container {
+  width: 100%;
+  min-height: 110px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.flex-box-item {
+  min-width: 80px;
+  padding: 10px;
+  border-radius: var(--radius-xs);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: #fff;
+  background: #27272a;
+  border: 1px solid #3f3f46;
+}
+
+.flex-box-item.item-2 {
+  background: #3f3f46;
+}
+
+.item-id {
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.item-stat {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+/* Grid */
+.grid-canvas-preview {
+  padding: 14px;
+}
+
+.grid-demo-wall {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.grid-card-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-xs);
+  padding: 16px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Container Queries */
+.container-query-sandbox {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+}
+
+.morph-container-wrapper {
+  container-type: inline-size;
+  container-name: cardMorph;
+  border: 1px dashed var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  background: var(--bg-card);
+  transition: width 0.15s ease;
+  min-width: 280px;
+  max-width: 100%;
+}
+
+.cq-adaptive-card {
+  width: 100%;
+  background: var(--bg-card-inner);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cq-avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-xs);
+  background: var(--text-primary);
+  color: var(--bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.cq-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.cq-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cq-summary {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.cq-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+@container cardMorph (min-width: 480px) {
+  .cq-adaptive-card {
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 14px;
+  }
+}
+
+@container cardMorph (min-width: 650px) {
+  .cq-adaptive-card {
+    padding: 20px;
+    gap: 18px;
+  }
+  .cq-title {
+    font-size: 1.1rem;
+  }
+}

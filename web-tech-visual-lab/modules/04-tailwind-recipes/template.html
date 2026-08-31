@@ -1,0 +1,294 @@
+﻿<div class="module-container">
+  
+  <header class="module-doc-header">
+    <div class="doc-tag-row">
+      <span class="doc-spec-badge">SPEC 04 / UTILITY-FIRST CSS FRAMEWORK</span>
+    </div>
+    <h1 class="doc-title">Tailwind CSS 原子化模式与组件配方</h1>
+    <p class="doc-lead">
+      Utility-First 设计令牌、任意值语法、状态修饰符矩阵（group / peer）与生产级组件模式。
+    </p>
+
+  </header>
+
+    <div class="doc-toc-bar">
+      <span class="toc-label">INDEX:</span>
+      <a href="#sec-04-utility" class="toc-pill">§ 04.01 Utility 拼装工作台</a>
+      <a href="#sec-04-group-peer" class="toc-pill">§ 04.02 group & peer 联动</a>
+      <a href="#sec-04-recipes" class="toc-pill">§ 04.03 生产级组件配方</a>
+      <a href="#sec-04-cheatsheet" class="toc-pill">§ 04.04 规范速查</a>
+    </div>
+
+  <div class="spec-stream">
+
+    <!-- Section 1: Utility Builder -->
+    <section class="spec-section" id="sec-04-utility">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 04.01</span>
+          <h2 class="spec-title">Utility-First 原子积木与任意值拼装工作台</h2>
+        </div>
+        <span class="spec-meta-tag">Tailwind JIT Engine</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <label class="custom-checkbox-label">
+                <input type="checkbox" id="tw-opt-rounded" checked>
+                <span>rounded-xl</span>
+              </label>
+              <label class="custom-checkbox-label">
+                <input type="checkbox" id="tw-opt-gradient" checked>
+                <span>bg-gradient</span>
+              </label>
+              <label class="custom-checkbox-label">
+                <input type="checkbox" id="tw-opt-shadow" checked>
+                <span>shadow-lg</span>
+              </label>
+              <label class="custom-checkbox-label">
+                <input type="checkbox" id="tw-opt-hover">
+                <span>hover:scale-105</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage tw-builder-arena">
+            <div class="tw-dynamic-card rounded-2xl bg-gradient-to-r shadow-2xl" id="tw-dynamic-card" style="width: 100%; max-width: 440px;">
+              <span class="tw-card-badge">LIVE UTILITY COMPONENT</span>
+              <h4 class="tw-heading">原子化组件实例</h4>
+              <p class="tw-body-text">通过上方选项动态装载 Tailwind 原子类名并查看生成的类名声明。</p>
+              <div class="tw-code-pill" id="tw-generated-class">
+                class="p-6 rounded-xl bg-gradient shadow-lg transition"
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SYNCHRONIZED CLASS TOKENS</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>特异性平铺：</strong>
+              Tailwind 所有 Utility 类名权重平铺在单类名（0,1,0），彻底杜绝了深层嵌套选择器带来的覆写死锁问题。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">HTML</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>&lt;div class="p-6 rounded-xl bg-slate-900 border border-white/10 shadow-lg hover:scale-105 transition"&gt;
+  &lt;h4 class="text-base font-semibold text-white"&gt;标题&lt;/h4&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: group & peer -->
+    <section class="spec-section" id="sec-04-group-peer">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 04.02</span>
+          <h2 class="spec-title">跨层级状态修饰符 group 与 peer 联动</h2>
+        </div>
+        <span class="spec-meta-tag">Tailwind State Modifiers</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <span style="font-size: 0.78rem; color: var(--text-secondary);">悬停上方卡片或聚焦下方输入框：</span>
+          </div>
+
+          <div class="spec-interactive-stage tw-group-pane">
+            <div style="width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 12px;">
+              <div class="tw-group-box group">
+                <div class="group-icon-circle">
+                  <span class="group-arrow">→</span>
+                </div>
+                <div class="group-text-wrap">
+                  <h4 class="group-heading">group-hover 联动</h4>
+                  <p class="group-subtext">鼠标悬停整卡触发内部箭头平移</p>
+                </div>
+              </div>
+
+              <div class="peer-input-wrapper">
+                <input type="text" id="peer-demo-input" class="peer" placeholder=" " autocomplete="off">
+                <label for="peer-demo-input" class="peer-label">peer-focus 浮动标签</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>兄弟位置前置法则：</strong>
+              <code>peer</code> 类名必须声明在兄弟元素的前面，后方的元素使用 <code>peer-focus:</code> 或 <code>peer-checked:</code> 才能触发响应。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">Tailwind</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>&lt;!-- group 联动 --&gt;
+&lt;div class="group p-4"&gt;
+  &lt;span class="group-hover:translate-x-1 transition"&gt;→&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;!-- peer 浮动标签 --&gt;
+&lt;input class="peer" placeholder=" " /&gt;
+&lt;label class="peer-focus:-top-4 text-xs"&gt;Label&lt;/label&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Recipes -->
+    <section class="spec-section" id="sec-04-recipes">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 04.03</span>
+          <h2 class="spec-title">生产级精工 UI 组件配方库</h2>
+        </div>
+        <span class="spec-meta-tag">Tailwind Component Recipes</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <span style="font-size: 0.78rem; color: var(--text-secondary);">生产标准件交互演示：</span>
+          </div>
+
+          <div class="spec-interactive-stage recipe-grid-showcase" style="grid-template-columns: repeat(2, 1fr); width: 100%; max-width: 520px;">
+            <div class="recipe-card">
+              <span class="recipe-tag">纯 CSS Toggle 开关</span>
+              <div class="recipe-demo-box">
+                <label class="tw-toggle-switch">
+                  <input type="checkbox" id="recipe-chk-toggle" checked>
+                  <span class="tw-toggle-slider"></span>
+                </label>
+                <span id="toggle-state-label" style="font-size: 0.74rem; font-weight: 500; color: var(--accent-success);">启用</span>
+              </div>
+              <span class="recipe-snippet">peer-checked:after:translate-x-full</span>
+            </div>
+
+            <div class="recipe-card">
+              <span class="recipe-tag">微光流光按钮</span>
+              <div class="recipe-demo-box">
+                <button class="tw-shimmer-btn" onclick="window.LabCore.showToast('按钮已点击')">
+                  <span class="shimmer-content">Shimmer Button</span>
+                </button>
+              </div>
+              <span class="recipe-snippet">bg-gradient-to-r relative overflow-hidden</span>
+            </div>
+
+            <div class="recipe-card">
+              <span class="recipe-tag">指标统计卡片</span>
+              <div class="recipe-demo-box">
+                <div class="tw-metric-box">
+                  <div class="metric-num">99.98%</div>
+                  <div class="metric-label">Uptime SLA</div>
+                </div>
+              </div>
+              <span class="recipe-snippet">text-2xl font-bold tracking-tight</span>
+            </div>
+
+            <div class="recipe-card">
+              <span class="recipe-tag">头像重叠堆叠</span>
+              <div class="recipe-demo-box">
+                <div class="tw-avatar-stack">
+                  <div class="avatar-circle av-1">A</div>
+                  <div class="avatar-circle av-2">B</div>
+                  <div class="avatar-circle av-3">C</div>
+                  <div class="avatar-circle av-more">+8</div>
+                </div>
+              </div>
+              <span class="recipe-snippet">-space-x-2 rounded-full border-2</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>组件模式封装：</strong>
+              通过负外边距（<code>-space-x-2</code>）、伪元素（<code>after:translate-x-full</code>）和遮罩实现纯 CSS 无 JS 动画。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">HTML & Tailwind</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>&lt;!-- 纯 CSS 开关 --&gt;
+&lt;label class="relative inline-flex items-center cursor-pointer"&gt;
+  &lt;input type="checkbox" class="sr-only peer" checked /&gt;
+  &lt;div class="w-10 h-5 bg-zinc-700 peer-checked:bg-blue-600 rounded-full peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"&gt;&lt;/div&gt;
+&lt;/label&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Cheatsheet Table -->
+    <section class="spec-reference-section" id="sec-04-cheatsheet">
+      <h3 class="spec-ref-title">§ 04.04 Tailwind 核心修饰符与模式速查</h3>
+      <div class="cheatsheet-table-wrap">
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th>修饰符前缀</th>
+              <th>底层 CSS 机制</th>
+              <th>示例用法</th>
+              <th>典型应用</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>has-[:checked]:*</code></td>
+              <td><code>:has(:checked)</code> 关系伪类</td>
+              <td><code>has-[:checked]:border-blue-500</code></td>
+              <td>表单选中时父卡片高亮</td>
+            </tr>
+            <tr>
+              <td><code>group-hover:*</code></td>
+              <td>父子选择器组合</td>
+              <td><code>group-hover:translate-x-1</code></td>
+              <td>悬停外部卡片驱动内部图标动效</td>
+            </tr>
+            <tr>
+              <td><code>peer-focus:*</code></td>
+              <td>相邻兄弟选择器 (<code>+</code> / <code>~</code>)</td>
+              <td><code>peer-focus:-top-4</code></td>
+              <td>浮动标签 Material 风格输入框</td>
+            </tr>
+            <tr>
+              <td><code>w-[calc(...)]</code></td>
+              <td>任意值 JIT 编译器</td>
+              <td><code>w-[calc(100%-2rem)]</code></td>
+              <td>精准像素计算与非预设尺寸覆盖</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+

@@ -1,0 +1,260 @@
+﻿<div class="module-container">
+  
+  <header class="module-doc-header">
+    <div class="doc-tag-row">
+      <span class="doc-spec-badge">SPEC 12 / CSS VALUES, MATH & TYPOGRAPHY</span>
+    </div>
+    <h1 class="doc-title">现代 CSS 数学函数与流体排版工程</h1>
+    <p class="doc-lead">
+      无阶梯流体排版数学函数 clamp()、跨层级子网格 Subgrid 像素对齐与现代排版断行平衡 text-wrap: balance。
+    </p>
+
+  </header>
+
+    <div class="doc-toc-bar">
+      <span class="toc-label">INDEX:</span>
+      <a href="#sec-12-clamp" class="toc-pill">§ 12.01 clamp() 流体数学曲线</a>
+      <a href="#sec-12-subgrid" class="toc-pill">§ 12.02 Subgrid 跨层级对齐</a>
+      <a href="#sec-12-text-wrap" class="toc-pill">§ 12.03 text-wrap 文本平衡</a>
+      <a href="#sec-12-cheatsheet" class="toc-pill">§ 12.04 现代 CSS 数学速查</a>
+    </div>
+
+  <div class="spec-stream">
+
+    <!-- Section 1: clamp() -->
+    <section class="spec-section" id="sec-12-clamp">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 12.01</span>
+          <h2 class="spec-title">流体排版数学函数：clamp(MIN, VAL, MAX) 动态演算</h2>
+        </div>
+        <span class="spec-meta-tag">CSS Values & Units Level 4</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <label for="clamp-resizer" style="color: var(--text-secondary); font-size: 0.76rem;">拖动模拟视口宽:</label>
+              <input type="range" id="clamp-resizer" min="320" max="800" value="500" style="width: 120px;">
+              <span id="clamp-width-display" style="font-family: var(--font-mono); font-size: 0.72rem;">500px</span>
+            </div>
+            <span class="badge" id="clamp-computed-font">实时字号: 24px</span>
+          </div>
+
+          <div class="spec-interactive-stage clamp-stage">
+            <div class="clamp-fluid-container" id="clamp-fluid-container" style="width: 500px;">
+              <h2 class="clamp-fluid-title" id="clamp-fluid-title">Fluid Typography</h2>
+              <p style="font-size: 0.8rem; color: var(--text-secondary);">
+                无需繁琐的 @media 断点切换，字号随着容器宽度在 16px 到 36px 之间平滑线形演算。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>MATH FORMULA & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>clamp() 数学逻辑：</strong>
+              等价于 <code>max(MIN, min(VAL, MAX))</code>。中间值声明为基于视口或容器的百分比（如 <code>4cqi</code> 或 <code>3vw</code>），实现真正无断点阶梯感的流体 UI。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">CSS</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>/* 黄金流体标题公式 */
+h1 {
+  font-size: clamp(1.25rem, 1rem + 3vw, 2.5rem);
+  line-height: 1.15;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Subgrid -->
+    <section class="spec-section" id="sec-12-subgrid">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 12.02</span>
+          <h2 class="spec-title">CSS Grid 进阶：Subgrid 跨层级子网格像素对齐</h2>
+        </div>
+        <span class="spec-meta-tag">CSS Grid Level 2 (Subgrid)</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <button class="btn-interactive" id="btn-toggle-subgrid">
+              切换: 开启 Subgrid 子网格对齐
+            </button>
+            <span class="badge" id="subgrid-state-badge">Subgrid: OFF (按钮参差不齐)</span>
+          </div>
+
+          <div class="spec-interactive-stage subgrid-stage">
+            <div class="subgrid-parent-grid" id="subgrid-parent-grid">
+              
+              <!-- Card 1 (短文本) -->
+              <div class="subgrid-card">
+                <h4 class="card-item-title">标准方案</h4>
+                <p class="card-item-desc">简短描述文本。</p>
+                <button class="btn-interactive btn-secondary card-item-action">立即订购</button>
+              </div>
+
+              <!-- Card 2 (长文本) -->
+              <div class="subgrid-card">
+                <h4 class="card-item-title">企业级多架构高可用方案</h4>
+                <p class="card-item-desc">包含多区域集群灾备、全球低延迟加速、7x24小时专属工程师对接。</p>
+                <button class="btn-interactive card-item-action">立即订购</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>终结高度割裂：</strong>
+              子卡片声明 <code>grid-template-rows: subgrid</code> 能够直接继承父级 Grid 的行轨道，彻底解决多卡片内标题、正文、底部按钮高低不一对不齐的顽疾。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">CSS</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>.parent-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto 1fr auto;
+}
+
+.card {
+  grid-row: span 3;
+  display: grid;
+  grid-template-rows: subgrid; /* 继承父行 */
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: text-wrap -->
+    <section class="spec-section" id="sec-12-text-wrap">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 12.03</span>
+          <h2 class="spec-title">现代文字排版控制：text-wrap: balance vs pretty</h2>
+        </div>
+        <span class="spec-meta-tag">CSS Text Level 4</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <label for="select-text-wrap" style="color: var(--text-secondary); font-size: 0.76rem;">排版模式:</label>
+              <select id="select-text-wrap" class="custom-input">
+                <option value="auto">auto (传统默认：单字孤立下坠)</option>
+                <option value="balance" selected>balance (现代平衡：各行长度均分)</option>
+                <option value="pretty">pretty (防孤字：避免末行单独一个字)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage text-wrap-stage">
+            <div class="text-wrap-sample-card" id="text-wrap-target-card" style="width: 290px;">
+              <h3 class="wrap-heading balance-mode" id="wrap-heading-target">
+                探索现代 Web 标准在高性能工程中的极限应用实践
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>标题平衡排版：</strong>
+              <code>text-wrap: balance</code> 让浏览器排版引擎自动计算各行词长，避免标题换行后第二行仅剩一个词的难看视觉缺陷。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">CSS</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>/* 优雅标题自动平衡 */
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+/* 长段落末行防孤字 */
+p {
+  text-wrap: pretty;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Cheatsheet Table -->
+    <section class="spec-reference-section" id="sec-12-cheatsheet">
+      <h3 class="spec-ref-title">§ 12.04 现代 CSS 数学函数与文字排版速查表</h3>
+      <div class="cheatsheet-table-wrap">
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th>属性 / 函数</th>
+              <th>规范分类</th>
+              <th>语法示例</th>
+              <th>核心价值</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>clamp()</code></td>
+              <td>CSS Values 4</td>
+              <td><code>clamp(1rem, 2vw, 3rem)</code></td>
+              <td>流体响应式区间约束，无需大量媒体查询</td>
+            </tr>
+            <tr>
+              <td><code>subgrid</code></td>
+              <td>CSS Grid 2</td>
+              <td><code>grid-template-rows: subgrid;</code></td>
+              <td>跨层级子元素像素级网格轨道对齐</td>
+            </tr>
+            <tr>
+              <td><code>text-wrap: balance</code></td>
+              <td>CSS Text 4</td>
+              <td><code>text-wrap: balance;</code></td>
+              <td>标题各行长度平衡，消灭末行孤立单词</td>
+            </tr>
+            <tr>
+              <td><code>round(), mod(), rem()</code></td>
+              <td>CSS Values 4</td>
+              <td><code>round(to-zero, 5.7px, 2px)</code></td>
+              <td>纯 CSS 原生执行取整与求模运算</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+

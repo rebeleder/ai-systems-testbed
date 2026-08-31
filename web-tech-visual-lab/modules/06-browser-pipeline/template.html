@@ -1,0 +1,266 @@
+﻿<div class="module-container">
+  
+  <header class="module-doc-header">
+    <div class="doc-tag-row">
+      <span class="doc-spec-badge">SPEC 06 / BROWSER RENDERING PIPELINE</span>
+    </div>
+    <h1 class="doc-title">关键渲染路径与浏览器管线</h1>
+    <p class="doc-lead">
+      浏览器内核从 HTML/CSS 解析到像素上屏的关键路径（CRP）、重排与重绘开销分析、脚本加载阻塞时序与现代 Popover API。
+    </p>
+
+  </header>
+
+    <div class="doc-toc-bar">
+      <span class="toc-label">INDEX:</span>
+      <a href="#sec-06-crp" class="toc-pill">§ 06.01 重排 / 重绘 / 合成管线</a>
+      <a href="#sec-06-script" class="toc-pill">§ 06.02 Script 加载时序</a>
+      <a href="#sec-06-popover" class="toc-pill">§ 06.03 Popover API 轻量弹出层</a>
+      <a href="#sec-06-cheatsheet" class="toc-pill">§ 06.04 渲染管线速查</a>
+    </div>
+
+  <div class="spec-stream">
+
+    <!-- Section 1: CRP Reflow / Repaint / Composite -->
+    <section class="spec-section" id="sec-06-crp">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 06.01</span>
+          <h2 class="spec-title">关键渲染路径：重排 (Reflow)、重绘 (Repaint) 与 GPU 合成</h2>
+        </div>
+        <span class="spec-meta-tag">Browser Rendering Pipeline</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <button class="btn-interactive" id="btn-trigger-reflow">修改 width (重排+重绘+合成)</button>
+              <button class="btn-interactive btn-secondary" id="btn-trigger-repaint">修改 color (仅重绘+合成)</button>
+              <button class="btn-interactive btn-secondary" id="btn-trigger-composite">修改 transform (仅 GPU 合成)</button>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage crp-sandbox-stage">
+            <div class="crp-pipeline-visualizer">
+              <div class="crp-step-node" id="crp-step-layout">
+                <span class="step-badge">1. Layout</span>
+                <span class="step-name">重排 (Reflow)</span>
+                <span class="step-status">计算几何位置</span>
+              </div>
+              <span class="crp-arrow">→</span>
+              <div class="crp-step-node" id="crp-step-paint">
+                <span class="step-badge">2. Paint</span>
+                <span class="step-name">重绘 (Repaint)</span>
+                <span class="step-status">栅格化像素填充</span>
+              </div>
+              <span class="crp-arrow">→</span>
+              <div class="crp-step-node" id="crp-step-composite">
+                <span class="step-badge">3. Composite</span>
+                <span class="step-name">合成 (Composite)</span>
+                <span class="step-status">GPU 图层合成</span>
+              </div>
+            </div>
+
+            <div class="crp-test-target" id="crp-test-box">
+              <span>渲染测试节点</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>PIPELINE COST & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box" id="crp-cost-feedback">
+              <strong>管线耗时法则：</strong>
+              修改几何属性（<code>width/height/margin/top</code>）会导致浏览器重新计算整个渲染树的几何布局（Reflow），开销最大；使用 <code>transform</code> 和 <code>opacity</code> 可在独立合成层由 GPU 线程处理，完全跳过重排与重绘，保持 60fps 丝滑。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">CSS 性能规则</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>/* 🔴 昂贵操作：触发主线程重排 (Reflow) */
+.box { width: 200px; left: 50px; }
+
+/* 🟢 廉价操作：仅触发 GPU 合成 (Composite) */
+.box { transform: translate3d(50px, 0, 0); }</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Script Loading Timelines -->
+    <section class="spec-section" id="sec-06-script">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 06.02</span>
+          <h2 class="spec-title">脚本加载时序：&lt;script&gt; vs defer vs async vs type="module"</h2>
+        </div>
+        <span class="spec-meta-tag">HTML Script Lifecycle</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <label for="script-strategy-select" style="color: var(--text-secondary); font-size: 0.76rem;">加载策略:</label>
+              <select id="script-strategy-select" class="custom-input">
+                <option value="normal" selected>普通 &lt;script&gt; (阻塞解析)</option>
+                <option value="defer">defer (异步下载，DOMReady 后顺序执行)</option>
+                <option value="async">async (异步下载，下载完立即执行)</option>
+                <option value="module">type="module" (默认具备 defer 行为)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage script-timeline-stage">
+            <div class="timeline-visual-card" id="timeline-visual-card">
+              <div class="timeline-row">
+                <span class="timeline-track-label">HTML 解析:</span>
+                <div class="timeline-bar html-bar" id="timeline-html-bar"></div>
+              </div>
+              <div class="timeline-row">
+                <span class="timeline-track-label">JS 下载:</span>
+                <div class="timeline-bar fetch-bar" id="timeline-fetch-bar"></div>
+              </div>
+              <div class="timeline-row">
+                <span class="timeline-track-label">JS 执行:</span>
+                <div class="timeline-bar exec-bar" id="timeline-exec-bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box" id="script-strategy-notes">
+              <strong>普通 &lt;script&gt; 行为：</strong>
+              浏览器遇到普通 script 标签时，立即停止 HTML 解析，直到脚本下载并执行完毕后才继续。现代工程推荐对依赖 DOM 的脚本使用 <code>defer</code>。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">HTML</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content" id="script-code-display"><code>&lt;!-- 默认阻塞解析 --&gt;
+&lt;script src="app.js"&gt;&lt;/script&gt;
+
+&lt;!-- 异步下载，在 DOMContentLoaded 前按顺序执行 --&gt;
+&lt;script defer src="app.js"&gt;&lt;/script&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Popover API -->
+    <section class="spec-section" id="sec-06-popover">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 06.03</span>
+          <h2 class="spec-title">现代轻量弹出层：Popover API（原生 Light Dismiss）</h2>
+        </div>
+        <span class="spec-meta-tag">HTML Popover Standard</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <button class="btn-interactive" popovertarget="demo-popover-menu">
+              唤起 Popover 弹出菜单 (popovertarget)
+            </button>
+          </div>
+
+          <div class="spec-interactive-stage popover-stage">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">点击按钮唤起气泡层，点击页面任意空白处原生自动收起 (Light Dismiss)</span>
+
+            <!-- 原生 Popover 元素 -->
+            <div id="demo-popover-menu" popover class="demo-popover-card">
+              <h4 style="font-size: 0.88rem; font-weight: 600; margin-bottom: 6px;">原生 Popover 弹出菜单</h4>
+              <p style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.45;">
+                使用 HTML 原生 <code>popover="auto"</code>。无需写一行 JS 事件监听即可享受 ESC 退出与外部点击轻触收起（Light Dismiss）。
+              </p>
+              <div style="margin-top: 10px; display: flex; gap: 8px;">
+                <button class="btn-interactive btn-secondary" popovertarget="demo-popover-menu" popovertargetaction="hide" style="font-size: 0.74rem;">关闭</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>Popover vs Dialog 区别：</strong>
+              <code>&lt;dialog&gt;</code> 适用于强阻断模态框；<code>popover</code> 适用于非阻断式的轻量气泡卡片、操作菜单与 Toast，同样享有 Top Layer 顶层能力。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">HTML</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>&lt;!-- 触发按钮 --&gt;
+&lt;button popovertarget="my-menu"&gt;打开菜单&lt;/button&gt;
+
+&lt;!-- 原生 Popover 容器 --&gt;
+&lt;div id="my-menu" popover&gt;
+  &lt;p&gt;点击外部自动关闭 (Light Dismiss)&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Cheatsheet Table -->
+    <section class="spec-reference-section" id="sec-06-cheatsheet">
+      <h3 class="spec-ref-title">§ 06.04 浏览器渲染管线触发阶段速查表</h3>
+      <div class="cheatsheet-table-wrap">
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th>修改属性</th>
+              <th>触发管线阶段</th>
+              <th>主线程占用</th>
+              <th>优化建议</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>width, height, margin, top, left, font-size</code></td>
+              <td>Layout (重排) $\to$ Paint (重绘) $\to$ Composite</td>
+              <td>🔴 极高（计算几何树与全局流式排版）</td>
+              <td>避免在动画帧循环中频繁修改</td>
+            </tr>
+            <tr>
+              <td><code>color, background-color, box-shadow, visibility</code></td>
+              <td>Paint (重绘) $\to$ Composite</td>
+              <td>🟡 中等（像素栅格化着色）</td>
+              <td>尽量限定局部区域</td>
+            </tr>
+            <tr>
+              <td><code>transform (translate/scale/rotate), opacity</code></td>
+              <td>Composite (仅 GPU 合成)</td>
+              <td>🟢 极低（独立合成层，由 GPU 直接变换）</td>
+              <td>现代高频动画与拖拽的黄金首选</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+

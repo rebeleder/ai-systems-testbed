@@ -1,0 +1,361 @@
+﻿<div class="module-container">
+  
+  <header class="module-doc-header">
+    <div class="doc-tag-row">
+      <span class="doc-spec-badge">SPEC 03 / ECMASCRIPT & WEB APIS</span>
+    </div>
+    <h1 class="doc-title">JavaScript 现代运行时与核心 API</h1>
+    <p class="doc-lead">
+      浏览器事件循环任务队列、Proxy 响应式代理拦截与 DOM 异步观察器规范。
+    </p>
+
+  </header>
+
+    <div class="doc-toc-bar">
+      <span class="toc-label">INDEX:</span>
+      <a href="#sec-03-loop" class="toc-pill">§ 03.01 Event Loop 任务调度</a>
+      <a href="#sec-03-proxy" class="toc-pill">§ 03.02 Proxy 响应式代理</a>
+      <a href="#sec-03-observer" class="toc-pill">§ 03.03 IntersectionObserver 视口</a>
+      <a href="#sec-03-abort" class="toc-pill">§ 03.04 AbortController 异步中止</a>
+      <a href="#sec-03-cheatsheet" class="toc-pill">§ 03.05 规范速查</a>
+    </div>
+
+  <div class="spec-stream">
+
+    <!-- Section 1: Event Loop -->
+    <section class="spec-section" id="sec-03-loop">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 03.01</span>
+          <h2 class="spec-title">事件循环（Event Loop）与任务调度队列</h2>
+        </div>
+        <span class="spec-meta-tag">JS Engine Event Loop</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <button class="btn-interactive" id="btn-run-event-loop">单步执行混排测试</button>
+              <button class="btn-interactive btn-secondary" id="btn-reset-loop">重置日志</button>
+            </div>
+            <span class="badge" id="loop-step-indicator">Idle</span>
+          </div>
+
+          <div class="spec-interactive-stage event-loop-arena">
+            <div class="loop-queues-grid" style="width: 100%;">
+              <div class="queue-card">
+                <div class="queue-header">
+                  <span class="queue-title">Call Stack</span>
+                  <span class="queue-badge" id="stack-badge">栈空</span>
+                </div>
+                <div class="queue-body" id="call-stack-view">
+                  <span class="queue-empty-text">当前无执行帧</span>
+                </div>
+              </div>
+
+              <div class="queue-card">
+                <div class="queue-header">
+                  <span class="queue-title">Microtask Queue</span>
+                  <span class="queue-badge" style="color: var(--accent-blue);">优先清空</span>
+                </div>
+                <div class="queue-body" id="microtask-queue-view">
+                  <span class="queue-empty-text">队列为空</span>
+                </div>
+              </div>
+
+              <div class="queue-card">
+                <div class="queue-header">
+                  <span class="queue-title">Macrotask Queue</span>
+                  <span class="queue-badge">下一轮轮询</span>
+                </div>
+                <div class="queue-body" id="macrotask-queue-view">
+                  <span class="queue-empty-text">队列为空</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>LIVE CONSOLE & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="loop-console-pane">
+              <div class="console-title">Console Output:</div>
+              <div class="console-output" id="loop-console-logs">
+                <div class="log-line text-muted">&gt; 点击左侧按钮开始执行...</div>
+              </div>
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>console.log('1. 同步开始');
+setTimeout(() => console.log('4. 宏任务'), 0);
+Promise.resolve().then(() => console.log('3. 微任务'));
+console.log('2. 同步结束');
+// 严格输出顺序: 1 -> 2 -> 3 -> 4</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Proxy -->
+    <section class="spec-section" id="sec-03-proxy">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 03.02</span>
+          <h2 class="spec-title">响应式代理 Proxy 与 Reflect 拦截内核</h2>
+        </div>
+        <span class="spec-meta-tag">ES6+ Proxy</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <span style="font-size: 0.78rem; color: var(--text-secondary);">实时修改响应式对象属性：</span>
+          </div>
+
+          <div class="spec-interactive-stage proxy-sandbox-pane">
+            <div style="width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 12px;">
+              <div class="proxy-form-group">
+                <label for="proxy-input-user">state.username:</label>
+                <input type="text" id="proxy-input-user" value="Antigravity" class="custom-input">
+              </div>
+
+              <div class="proxy-form-group">
+                <label for="proxy-input-count">state.score:</label>
+                <div style="display: flex; gap: 6px;">
+                  <input type="number" id="proxy-input-count" value="100" class="custom-input" style="width: 80px;">
+                  <button class="btn-interactive" id="btn-proxy-add">+10</button>
+                </div>
+              </div>
+
+              <div class="proxy-reactive-view">
+                <div class="reactive-display">
+                  user: <span id="reactive-user-text" style="font-weight: 600;">Antigravity</span> | 
+                  score: <span id="reactive-score-text" style="font-weight: 600;">100</span>
+                </div>
+                <div class="proxy-interceptor-log" id="proxy-log-line">
+                  [Proxy.set] 监听就绪
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>Proxy 优势：</strong>
+              可拦截对象新增属性、删除属性及数组下标变更，彻底解决旧时代 <code>Object.defineProperty</code> 的数据监听盲区。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>const state = new Proxy(raw, {
+  set(target, prop, val, receiver) {
+    const ok = Reflect.set(target, prop, val, receiver);
+    triggerUpdate();
+    return ok;
+  }
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: IntersectionObserver -->
+    <section class="spec-section" id="sec-03-observer">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 03.03</span>
+          <h2 class="spec-title">视口交叉监听 IntersectionObserver (60fps 懒加载)</h2>
+        </div>
+        <span class="spec-meta-tag">Web APIs Observer</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <span style="font-size: 0.78rem; color: var(--text-muted);">向下滚动容器观察交叉检测：</span>
+            <span class="badge" id="observer-hit-counter">已曝光: 1 / 3</span>
+          </div>
+
+          <div class="spec-interactive-stage observer-sandbox-area">
+            <div class="mock-scroll-viewport" id="mock-scroll-viewport" style="width: 100%; max-width: 480px;">
+              <div class="observe-target-card is-visible" id="obs-card-1" data-index="1">
+                <span class="obs-badge">Card 1 (首屏可见)</span>
+                <p>IntersectionRatio: 1.0</p>
+              </div>
+
+              <div class="observe-spacer">↓ 滚动触发交叉观察器 ↓</div>
+
+              <div class="observe-target-card" id="obs-card-2" data-index="2">
+                <span class="obs-badge">Card 2 (懒加载项)</span>
+                <p class="obs-status-text">未激活</p>
+              </div>
+
+              <div class="observe-spacer">↓ 继续向下滚动 ↓</div>
+
+              <div class="observe-target-card" id="obs-card-3" data-index="3">
+                <span class="obs-badge">Card 3 (底部曝光统计)</span>
+                <p class="obs-status-text">未激活</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>零 CPU 滚动损耗：</strong>
+              由浏览器排版引擎在独立线程计算相交面积，避免在主线程监听 <code>scroll</code> 导致页面卡顿。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.4 });</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: AbortController -->
+    <section class="spec-section" id="sec-03-abort">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 03.04</span>
+          <h2 class="spec-title">异步中止信号 AbortController 与防竞态机制</h2>
+        </div>
+        <span class="spec-meta-tag">DOM Standard Abort</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <button class="btn-interactive" id="btn-start-fetch">发起慢速网络请求 (3s)</button>
+              <button class="btn-interactive btn-secondary" id="btn-abort-fetch" style="color: var(--accent-danger);" disabled>
+                abort() 中止请求
+              </button>
+            </div>
+            <span class="badge" id="abort-status-badge">Idle</span>
+          </div>
+
+          <div class="spec-interactive-stage abort-sandbox-pane">
+            <div class="abort-visualizer" style="width: 100%; max-width: 480px;">
+              <div class="pipeline-progress-bar">
+                <div class="progress-fill" id="abort-progress-fill"></div>
+              </div>
+              <div class="abort-log-display" id="abort-log-display">
+                点击上方按钮发起模拟网络请求...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>通用中止信号：</strong>
+              同一个 <code>controller.signal</code> 不仅能中止 <code>fetch()</code>，还能传给事件监听器一键清除。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>let controller = null;
+
+function fetchData() {
+  if (controller) controller.abort(); // 丢弃上一次请求
+  controller = new AbortController();
+
+  fetch('/api/search', { signal: controller.signal })
+    .catch(err => {
+      if (err.name === 'AbortError') console.log('已安全中止');
+    });
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Cheatsheet Table -->
+    <section class="spec-reference-section" id="sec-03-cheatsheet">
+      <h3 class="spec-ref-title">§ 03.05 JS 运行时与核心 API 规范速查</h3>
+      <div class="cheatsheet-table-wrap">
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th>特性 / API</th>
+              <th>规范归属</th>
+              <th>调用签名</th>
+              <th>性能与适用场景</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>queueMicrotask()</code></td>
+              <td>HTML Living Standard</td>
+              <td><code>queueMicrotask(fn)</code></td>
+              <td>在当前同步执行栈清空后立即执行，优先级高于 setTimeout</td>
+            </tr>
+            <tr>
+              <td><code>Proxy & Reflect</code></td>
+              <td>ECMAScript 2015+</td>
+              <td><code>new Proxy(target, handler)</code></td>
+              <td>现代响应式框架核心（Vue3），无侵入式拦截对象与数组读写</td>
+            </tr>
+            <tr>
+              <td><code>IntersectionObserver</code></td>
+              <td>W3C Web APIs</td>
+              <td><code>new IntersectionObserver(cb, opt)</code></td>
+              <td>高性能视口交叉传感器，彻底淘汰卡顿的 scroll 轮询</td>
+            </tr>
+            <tr>
+              <td><code>AbortController</code></td>
+              <td>DOM Standard</td>
+              <td><code>controller.abort()</code></td>
+              <td>统一中止 Fetch 请求、清理 addEventListener 监听器</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+

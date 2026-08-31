@@ -1,0 +1,307 @@
+﻿<div class="module-container">
+  
+  <header class="module-doc-header">
+    <div class="doc-tag-row">
+      <span class="doc-spec-badge">SPEC 08 / DEEP WEB APIS & THREADING</span>
+    </div>
+    <h1 class="doc-title">高级 Web API、多线程与内存管理</h1>
+    <p class="doc-lead">
+      Web Workers 后台线程计算、ReadableStream 流式管道传输、WeakMap 弱引用垃圾回收与浏览器存储矩阵。
+    </p>
+
+  </header>
+
+    <div class="doc-toc-bar">
+      <span class="toc-label">INDEX:</span>
+      <a href="#sec-08-workers" class="toc-pill">§ 08.01 Web Workers 多线程</a>
+      <a href="#sec-08-streams" class="toc-pill">§ 08.02 Streams 流式管道</a>
+      <a href="#sec-08-weakmap" class="toc-pill">§ 08.03 WeakMap 弱引用与 GC</a>
+      <a href="#sec-08-storage" class="toc-pill">§ 08.04 存储方案矩阵</a>
+      <a href="#sec-08-cheatsheet" class="toc-pill">§ 08.05 规范速查</a>
+    </div>
+
+  <div class="spec-stream">
+
+    <!-- Section 1: Web Workers -->
+    <section class="spec-section" id="sec-08-workers">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 08.01</span>
+          <h2 class="spec-title">多线程并行计算：Web Workers vs 主线程阻塞对比</h2>
+        </div>
+        <span class="spec-meta-tag">HTML5 Web Workers</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <button class="btn-interactive btn-secondary" id="btn-block-main" style="color: var(--accent-danger);">
+                主线程执行死循环 (UI 瞬间卡死)
+              </button>
+              <button class="btn-interactive" id="btn-run-worker">
+                Worker 线程执行 (UI 保持 60fps)
+              </button>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage worker-stage">
+            <div class="worker-demo-card">
+              <div class="worker-status-header">
+                <span>UI 响应能力指示球 (保持持续旋转)：</span>
+                <div class="spinner-ball" id="ui-heartbeat-spinner"></div>
+              </div>
+              <div class="worker-result-log" id="worker-result-log">
+                点击上方按钮执行耗时算法测试...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>线程隔离机制：</strong>
+              Web Worker 在独立的后台线程中执行，无权直接访问 DOM，通过 <code>postMessage</code> 与主线程进行结构化克隆（Structured Clone）通信。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>const worker = new Worker('worker.js');
+worker.postMessage({ n: 42 });
+
+worker.onmessage = (e) => {
+  console.log('后台计算结果:', e.data);
+};</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Streams API -->
+    <section class="spec-section" id="sec-08-streams">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 08.02</span>
+          <h2 class="spec-title">流式数据与管道：ReadableStream 打字机渲染</h2>
+        </div>
+        <span class="spec-meta-tag">WHATWG Streams</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <button class="btn-interactive" id="btn-start-stream">
+              启动 ReadableStream 流式传输
+            </button>
+          </div>
+
+          <div class="spec-interactive-stage stream-stage">
+            <div class="stream-output-box" id="stream-output-box">
+              <span style="color: var(--text-muted);">等待流式数据推送...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>流式管道模型：</strong>
+              无需等待整个网络请求载荷完全返回，通过 <code>response.body.getReader()</code> 逐块接收 Uint8Array 并即时解码上屏（大模型流式打字底层原理）。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>const reader = response.body.getReader();
+const decoder = new TextDecoder();
+
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+  renderChunk(decoder.decode(value));
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: WeakMap & Memory -->
+    <section class="spec-section" id="sec-08-weakmap">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 08.03</span>
+          <h2 class="spec-title">内存泄漏防范：WeakMap 弱引用与自动垃圾回收 (GC)</h2>
+        </div>
+        <span class="spec-meta-tag">ECMAScript Memory</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <button class="btn-interactive" id="btn-create-dom-node">创建 DOM 节点并绑定私有数据</button>
+              <button class="btn-interactive btn-secondary" id="btn-remove-dom-node">移除 DOM 节点</button>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage memory-stage">
+            <div class="memory-status-card" id="memory-status-card">
+              <div class="dom-holder" id="memory-dom-holder">
+                <div class="sample-node" id="sample-target-node">目标 DOM 元素节点</div>
+              </div>
+              <div class="memory-log-text" id="memory-log-text">
+                已使用 WeakMap 绑定私有元数据。当 DOM 节点被移除且无外部强引用时，GC 会自动回收对应键值对。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>弱引用特性：</strong>
+              <code>WeakMap</code> 的键必须是对象，且键对象是弱引用。一旦对象被销毁，垃圾回收器会自动清理对应的映射值，从源头杜绝内存泄漏。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>const privateData = new WeakMap();
+
+// 绑定数据到 DOM 节点
+privateData.set(domElement, { metadata: 'safe' });
+
+// 节点被移除时，关联数据自动随之被 GC 回收</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Storage Matrix -->
+    <section class="spec-section" id="sec-08-storage">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 08.04</span>
+          <h2 class="spec-title">浏览器离线存储方案全景矩阵</h2>
+        </div>
+        <span class="spec-meta-tag">Client Storage APIs</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <span style="font-size: 0.78rem; color: var(--text-secondary);">各方案存储能力对照：</span>
+          </div>
+
+          <div class="spec-interactive-stage storage-stage">
+            <div class="storage-grid-cards">
+              <div class="storage-card">
+                <span class="storage-name">LocalStorage</span>
+                <span class="storage-cap">~5 MB</span>
+                <p>同步阻塞、纯字符串键值、跨同源标签页共享</p>
+              </div>
+              <div class="storage-card">
+                <span class="storage-name">IndexedDB</span>
+                <span class="storage-cap">几百 GB (按磁盘比例)</span>
+                <p>异步非阻塞、事务型对象存储、支持二进制与复杂索引</p>
+              </div>
+              <div class="storage-card">
+                <span class="storage-name">OPFS (私有文件系统)</span>
+                <span class="storage-cap">极高 (直通磁盘)</span>
+                <p>极低延迟同步读写，专为 SQLite WASM 设计</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>选型建议：</strong>
+              小型配置读写使用 LocalStorage；结构化数据与离线缓存使用 IndexedDB；高性能数据持久化优先使用 Origin Private File System (OPFS)。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>// 原生 OPFS 私有文件系统读写
+const root = await navigator.storage.getDirectory();
+const fileHandle = await root.getFileHandle('data.db', { create: true });
+const accessHandle = await fileHandle.createSyncAccessHandle();</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Cheatsheet Table -->
+    <section class="spec-reference-section" id="sec-08-cheatsheet">
+      <h3 class="spec-ref-title">§ 08.05 高级 Web API 与存储方案速查</h3>
+      <div class="cheatsheet-table-wrap">
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th>API / 方案</th>
+              <th>执行线程</th>
+              <th>通信 / 传输方式</th>
+              <th>主要应用场景</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>Web Workers</code></td>
+              <td>独立后台线程</td>
+              <td><code>postMessage</code> 结构化克隆</td>
+              <td>图像处理、音视频解码、复杂数学运算</td>
+            </tr>
+            <tr>
+              <td><code>ReadableStream</code></td>
+              <td>主线程 / Worker</td>
+              <td>流式管道逐块消费 (getReader)</td>
+              <td>大模型 AI 打字机输出、大文件流式下载</td>
+            </tr>
+            <tr>
+              <td><code>WeakMap</code></td>
+              <td>主线程内存</td>
+              <td>弱引用键，自动 GC</td>
+              <td>私有属性封装、DOM 扩展元数据缓存</td>
+            </tr>
+            <tr>
+              <td><code>IndexedDB</code></td>
+              <td>异步非阻塞</td>
+              <td>事务与游标检索</td>
+              <td>PWA 离线应用、前端本地数据库</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+

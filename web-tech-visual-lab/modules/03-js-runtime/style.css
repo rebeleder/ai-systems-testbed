@@ -1,0 +1,253 @@
+﻿/* ==========================================================================
+   MODULE 03: JS RUNTIME - CLEAN WORKBENCH STYLES
+   ========================================================================== */
+
+/* Event Loop */
+.event-loop-arena {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.loop-queues-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.queue-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.queue-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 4px;
+}
+
+.queue-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.queue-badge {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.queue-body {
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.queue-empty-text {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.queue-item-pill {
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: var(--radius-xs);
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-align: center;
+  background: var(--bg-card-inner);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+}
+
+.loop-console-pane {
+  background: var(--bg-code);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.console-title {
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.console-output {
+  min-height: 50px;
+  max-height: 90px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.log-line {
+  color: var(--text-code);
+}
+
+/* Proxy Reactivity */
+.proxy-sandbox-pane {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.proxy-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.proxy-form-group label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.proxy-reactive-view {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reactive-display {
+  font-size: 0.84rem;
+  color: var(--text-primary);
+}
+
+.proxy-interceptor-log {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+/* IntersectionObserver */
+.observer-sandbox-area {
+  padding: 10px;
+}
+
+.mock-scroll-viewport {
+  width: 100%;
+  height: 180px;
+  overflow-y: scroll;
+  border: 1px dashed var(--border-medium);
+  border-radius: var(--radius-xs);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg-card);
+}
+
+.observe-target-card {
+  background: var(--bg-card-inner);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.observe-target-card.is-visible {
+  opacity: 1;
+  border-color: var(--accent-success);
+}
+
+.obs-badge {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.observe-target-card.is-visible .obs-badge {
+  color: var(--accent-success);
+}
+
+.observe-target-card p {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.observe-spacer {
+  text-align: center;
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  padding: 14px 0;
+}
+
+/* AbortController */
+.abort-sandbox-pane {
+  padding: 16px;
+}
+
+.abort-visualizer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pipeline-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-card-inner);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--text-primary);
+  transition: width 0.1s linear;
+}
+
+.progress-fill.aborted {
+  background: var(--accent-danger) !important;
+}
+
+.progress-fill.success {
+  background: var(--accent-success) !important;
+}
+
+.abort-log-display {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  padding: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}

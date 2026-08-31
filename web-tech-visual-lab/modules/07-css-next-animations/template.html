@@ -1,0 +1,319 @@
+﻿<div class="module-container">
+  
+  <header class="module-doc-header">
+    <div class="doc-tag-row">
+      <span class="doc-spec-badge">SPEC 07 / CSS ANIMATIONS & COLOR LEVEL 4</span>
+    </div>
+    <h1 class="doc-title">下一代 CSS 动画与现代色彩工程</h1>
+    <p class="doc-lead">
+      纯 CSS 滚动驱动动画（Scroll-Driven）、视图过渡（View Transitions API）、级联层级 @layer 与符合人眼感知的 OKLCH 色彩模型。
+    </p>
+
+  </header>
+
+    <div class="doc-toc-bar">
+      <span class="toc-label">INDEX:</span>
+      <a href="#sec-07-scroll-anim" class="toc-pill">§ 07.01 滚动驱动动画</a>
+      <a href="#sec-07-view-trans" class="toc-pill">§ 07.02 View Transitions 视图过渡</a>
+      <a href="#sec-07-layers" class="toc-pill">§ 07.03 @layer 级联层与 @scope</a>
+      <a href="#sec-07-color" class="toc-pill">§ 07.04 OKLCH 色彩与 color-mix()</a>
+      <a href="#sec-07-cheatsheet" class="toc-pill">§ 07.05 规范速查</a>
+    </div>
+
+  <div class="spec-stream">
+
+    <!-- Section 1: Scroll-Driven Animations -->
+    <section class="spec-section" id="sec-07-scroll-anim">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 07.01</span>
+          <h2 class="spec-title">滚动驱动动画（Scroll-Driven Animations）零 JS 视差工作台</h2>
+        </div>
+        <span class="spec-meta-tag">CSS Scroll Animations</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <span style="font-size: 0.78rem; color: var(--text-secondary);">在下方容器内滚动，观察进度条与视差卡片变化：</span>
+          </div>
+
+          <div class="spec-interactive-stage scroll-anim-stage">
+            <div class="scroll-demo-container" id="scroll-timeline-container">
+              <!-- 顶部纯 CSS 驱动进度条 -->
+              <div class="scroll-progress-indicator" id="scroll-progress-indicator"></div>
+
+              <div class="scroll-content-flow">
+                <div class="scroll-article-hero">
+                  <h4>向下滚动体验 60fps 滚动驱动</h4>
+                  <p>纯 CSS animation-timeline 驱动，彻底告别 window.onscroll 性能抖动。</p>
+                </div>
+
+                <div class="scroll-parallax-card card-a">
+                  <span>卡片 A · 滚动渐入缩放</span>
+                </div>
+
+                <div class="scroll-parallax-card card-b">
+                  <span>卡片 B · 视差位移</span>
+                </div>
+
+                <div class="scroll-parallax-card card-c">
+                  <span>卡片 C · 终点完成</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>零 JS 动画时间线：</strong>
+              使用 <code>animation-timeline: scroll()</code> 或 <code>view()</code>，浏览器直接将滚动距离映射为关键帧插值，由排版合成器线程直接渲染。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">CSS</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>/* 纯 CSS 滚动进度条 */
+.progress-bar {
+  animation: growProgress auto linear;
+  animation-timeline: scroll(root);
+}
+
+@keyframes growProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: View Transitions -->
+    <section class="spec-section" id="sec-07-view-trans">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 07.02</span>
+          <h2 class="spec-title">视图过渡 API（View Transitions API）单页平滑形态蜕变</h2>
+        </div>
+        <span class="spec-meta-tag">DOM View Transitions</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <button class="btn-interactive" id="btn-trigger-view-trans">
+              切换视图形态 (document.startViewTransition)
+            </button>
+          </div>
+
+          <div class="spec-interactive-stage view-trans-stage">
+            <div class="view-transition-host list-mode" id="view-trans-host">
+              <div class="vt-item item-1">
+                <div class="vt-icon">A</div>
+                <div class="vt-meta">
+                  <span class="vt-title">性能优化套件</span>
+                  <span class="vt-desc">Core Web Vitals 指标加速</span>
+                </div>
+              </div>
+              <div class="vt-item item-2">
+                <div class="vt-icon">B</div>
+                <div class="vt-meta">
+                  <span class="vt-title">组件设计系统</span>
+                  <span class="vt-desc">原子化 Token 与无障碍适配</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>浏览器原生快照过渡：</strong>
+              <code>document.startViewTransition()</code> 在改变 DOM 前后分别截取快照，并自动进行伪元素层级补间动画，实现跨视图形态丝滑变形。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>// 启用原生平滑视图过渡
+document.startViewTransition(() => {
+  container.classList.toggle('grid-mode');
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: @layer & @scope -->
+    <section class="spec-section" id="sec-07-layers">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 07.03</span>
+          <h2 class="spec-title">CSS 现代级联层 @layer 与作用域 @scope</h2>
+        </div>
+        <span class="spec-meta-tag">CSS Cascading & Scope</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <span style="font-size: 0.78rem; color: var(--text-secondary);">级联层覆盖测试：</span>
+          </div>
+
+          <div class="spec-interactive-stage layer-stage">
+            <div class="layer-demo-card">
+              <h4>@layer 优先级覆盖测试</h4>
+              <p>即使 @layer base 中写了 ID 选择器（#btn），也一定会被 @layer utilities 中的普通类名覆盖！</p>
+              <button class="layer-target-btn">Layer 按钮</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>终结特异性混乱：</strong>
+              在 <code>@layer</code> 声明顺序中，后声明的层优先级永远高于先声明的层，层级优先级高于内部任意选择器权重计算。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">CSS</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>@layer reset, components, utilities;
+
+@layer components {
+  .btn { background: #2563eb; }
+}
+
+@layer utilities {
+  .btn-custom { background: #16a34a; }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: OKLCH & color-mix -->
+    <section class="spec-section" id="sec-07-color">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 07.04</span>
+          <h2 class="spec-title">下一代色彩空间 OKLCH 与原生混色器 color-mix()</h2>
+        </div>
+        <span class="spec-meta-tag">CSS Color Level 4</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <label for="color-mix-ratio" style="color: var(--text-secondary); font-size: 0.76rem;">混合比例 (Blue vs White):</label>
+              <input type="range" id="color-mix-ratio" min="0" max="100" value="60" style="width: 100px;">
+              <span id="mix-ratio-display" style="font-family: var(--font-mono); font-size: 0.72rem;">60%</span>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage color-stage">
+            <div class="color-swatch-box" id="color-swatch-box" style="background-color: color-mix(in oklch, #2563eb 60%, white);">
+              <span class="color-text-label" id="color-text-label">color-mix(in oklch, blue 60%, white)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>感知均匀色彩空间：</strong>
+              <code>oklch()</code> 具备真正的人眼感知亮度线性度，避免了 sRGB / HSL 在黄色和蓝色之间明度突变的缺陷；<code>color-mix()</code> 支持动态生成中间色系。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">CSS</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>/* 原生色彩混合 */
+.tinted-surface {
+  background: color-mix(in oklch, var(--primary) 70%, white);
+}
+
+/* 宽色域 OKLCH */
+.vibrant-blue {
+  color: oklch(0.6 0.25 260);
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Cheatsheet Table -->
+    <section class="spec-reference-section" id="sec-07-cheatsheet">
+      <h3 class="spec-ref-title">§ 07.05 现代 CSS 动效与色彩函数规范速查</h3>
+      <div class="cheatsheet-table-wrap">
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th>特性 / 函数</th>
+              <th>规范归属</th>
+              <th>语法签名</th>
+              <th>核心能力</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>animation-timeline</code></td>
+              <td>Scroll-Driven Animations</td>
+              <td><code>animation-timeline: scroll()</code></td>
+              <td>将页面或容器滚动进度绑定为动画时间线，零 JS 消耗</td>
+            </tr>
+            <tr>
+              <td><code>startViewTransition()</code></td>
+              <td>View Transitions API</td>
+              <td><code>document.startViewTransition(cb)</code></td>
+              <td>自动捕获前一视图与后一视图快照，生成平滑形变过渡</td>
+            </tr>
+            <tr>
+              <td><code>@layer</code></td>
+              <td>CSS Cascading 5</td>
+              <td><code>@layer base, components;</code></td>
+              <td>显式定义级联层级顺序，后置层优先级永远高于前置层</td>
+            </tr>
+            <tr>
+              <td><code>color-mix()</code></td>
+              <td>CSS Color 4</td>
+              <td><code>color-mix(in oklch, col1 P%, col2)</code></td>
+              <td>在指定色彩空间内动态插值混合生成新颜色</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+

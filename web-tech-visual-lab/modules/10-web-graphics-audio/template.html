@@ -1,0 +1,179 @@
+﻿<div class="module-container">
+  
+  <header class="module-doc-header">
+    <div class="doc-tag-row">
+      <span class="doc-spec-badge">SPEC 10 / PURE CLIENT-SIDE GRAPHICS & AUDIO</span>
+    </div>
+    <h1 class="doc-title">纯前端视听计算与硬件底层接口</h1>
+    <p class="doc-lead">
+      Canvas 像素级 ImageData 图像卷积滤镜算法、Web Audio API 真实声波振荡合成器与音频示波可视化。
+    </p>
+
+  </header>
+
+    <div class="doc-toc-bar">
+      <span class="toc-label">INDEX:</span>
+      <a href="#sec-10-canvas" class="toc-pill">§ 10.01 Canvas 图像卷积滤镜</a>
+      <a href="#sec-10-audio" class="toc-pill">§ 10.02 Web Audio 振荡合成器</a>
+      <a href="#sec-10-cheatsheet" class="toc-pill">§ 10.03 媒体接口速查</a>
+    </div>
+
+  <div class="spec-stream">
+
+    <!-- Section 1: Canvas 2D Convolution Filters -->
+    <section class="spec-section" id="sec-10-canvas">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 10.01</span>
+          <h2 class="spec-title">Canvas 2D 像素处理：原生矩阵卷积核滤镜实验室</h2>
+        </div>
+        <span class="spec-meta-tag">HTML5 Canvas ImageData</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <button class="btn-interactive" id="btn-filter-normal">原图</button>
+              <button class="btn-interactive btn-secondary" id="btn-filter-grayscale">灰度算法</button>
+              <button class="btn-interactive btn-secondary" id="btn-filter-invert">反相处理</button>
+              <button class="btn-interactive btn-secondary" id="btn-filter-edge">Sobel 边缘检测</button>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage canvas-stage">
+            <div class="canvas-box-wrap">
+              <canvas id="filter-demo-canvas" width="360" height="180"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>PIXEL ALGORITHM & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>像素级操作原理：</strong>
+              通过 <code>ctx.getImageData()</code> 获取一维连续 <code>Uint8ClampedArray</code> 像素缓冲区（[R, G, B, A, ...]），直接在客户端进行数学矩阵变换。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>const imgData = ctx.getImageData(0, 0, width, height);
+const d = imgData.data;
+
+for (let i = 0; i &lt; d.length; i += 4) {
+  const gray = 0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2];
+  d[i] = d[i+1] = d[i+2] = gray;
+}
+ctx.putImageData(imgData, 0, 0);</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Web Audio API Oscillator -->
+    <section class="spec-section" id="sec-10-audio">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 10.02</span>
+          <h2 class="spec-title">Web Audio API 原生音频振荡合成器与示波器</h2>
+        </div>
+        <span class="spec-meta-tag">W3C Web Audio API</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <button class="btn-interactive" id="btn-play-tone">播放合成音调 (440Hz 标准音 A)</button>
+              <button class="btn-interactive btn-secondary" id="btn-play-chord">播放和弦</button>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage audio-stage">
+            <div class="audio-oscilloscope-card">
+              <div class="oscilloscope-screen" id="oscilloscope-screen">
+                <div class="audio-wave-bar" id="audio-wave-anim"></div>
+              </div>
+              <div class="audio-status-label" id="audio-status-label">点击上方按钮，浏览器将使用纯数学公式合成音频脉冲</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>AUDIO GRAPH & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>音频节点图管线：</strong>
+              <code>OscillatorNode (振荡器)</code> $\to$ <code>GainNode (音量衰减)</code> $\to$ <code>AudioContext.destination (扬声器)</code>。无需任何外部音频文件即可合成任意音效。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>const ctx = new AudioContext();
+const osc = ctx.createOscillator();
+const gain = ctx.createGain();
+
+osc.type = 'sine'; // 正弦波
+osc.frequency.value = 440; // A4 音符
+
+osc.connect(gain);
+gain.connect(ctx.destination);
+osc.start();</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Cheatsheet Table -->
+    <section class="spec-reference-section" id="sec-10-cheatsheet">
+      <h3 class="spec-ref-title">§ 10.03 客户端底层多媒体与图形硬件 API 速查</h3>
+      <div class="cheatsheet-table-wrap">
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th>API 接口</th>
+              <th>渲染 / 执行载体</th>
+              <th>底层驱动</th>
+              <th>主要应用</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>Canvas 2D (ImageData)</code></td>
+              <td>CPU / GPU 硬件加速</td>
+              <td>原生像素缓冲区内存</td>
+              <td>图像滤镜、富文本绘图、验证码生成</td>
+            </tr>
+            <tr>
+              <td><code>Web Audio API</code></td>
+              <td>独立底层音频渲染线程</td>
+              <td>系统声卡硬件驱动</td>
+              <td>游戏音效、合成器乐器、降噪与音频可视化</td>
+            </tr>
+            <tr>
+              <td><code>WebGL / WebGPU</code></td>
+              <td>GPU 着色器管线 (Shaders)</td>
+              <td>DirectX 12 / Metal / Vulkan</td>
+              <td>3D 渲染、客户端轻量模型推理、数据可视化</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+

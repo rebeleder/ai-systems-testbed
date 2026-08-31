@@ -1,0 +1,108 @@
+﻿/* ==========================================================================
+   MODULE 12: CSS MATH & TYPOGRAPHY - CLEAN WORKBENCH STYLES
+   ========================================================================== */
+
+/* Clamp Stage */
+.clamp-stage {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.clamp-fluid-container {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: width 0.15s ease;
+}
+
+.clamp-fluid-title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  /* 使用 CSS clamp 动态响应 */
+  font-size: clamp(18px, 4.5vw, 36px);
+  line-height: 1.2;
+}
+
+/* Subgrid Stage */
+.subgrid-stage {
+  padding: 16px;
+  width: 100%;
+}
+
+.subgrid-parent-grid {
+  width: 100%;
+  max-width: 500px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.subgrid-parent-grid.enable-subgrid {
+  grid-template-rows: auto 1fr auto;
+}
+
+.subgrid-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.enable-subgrid .subgrid-card {
+  grid-row: span 3;
+  display: grid;
+  grid-template-rows: subgrid;
+}
+
+.card-item-title {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.card-item-desc {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+/* Text Wrap Stage */
+.text-wrap-stage {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.text-wrap-sample-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+
+.wrap-heading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.wrap-heading.balance-mode {
+  text-wrap: balance;
+}
+
+.wrap-heading.pretty-mode {
+  text-wrap: pretty;
+}
+
+.wrap-heading.auto-mode {
+  text-wrap: auto;
+}

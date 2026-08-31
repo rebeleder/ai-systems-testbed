@@ -1,0 +1,223 @@
+﻿<div class="module-container">
+  
+  <header class="module-doc-header">
+    <div class="doc-tag-row">
+      <span class="doc-spec-badge">SPEC 13 / ASYNC CONCURRENCY & NETWORKING</span>
+    </div>
+    <h1 class="doc-title">异步并发调度赛马场与网络传输协议</h1>
+    <p class="doc-lead">
+      Promise 6 大并发组合器同屏竞速实测（all / allSettled / race / any）与实时推送协议（SSE vs WebSocket vs 轮询）网络开销对比。
+    </p>
+
+  </header>
+
+    <div class="doc-toc-bar">
+      <span class="toc-label">INDEX:</span>
+      <a href="#sec-13-promise" class="toc-pill">§ 13.01 Promise 并发赛马场</a>
+      <a href="#sec-13-protocols" class="toc-pill">§ 13.02 SSE vs WebSocket 对决</a>
+      <a href="#sec-13-cheatsheet" class="toc-pill">§ 13.03 并发与协议速查</a>
+    </div>
+
+  <div class="spec-stream">
+
+    <!-- Section 1: Promise Concurrency Arena -->
+    <section class="spec-section" id="sec-13-promise">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 13.01</span>
+          <h2 class="spec-title">Promise 6 大并发组合器同屏竞速赛马场</h2>
+        </div>
+        <span class="spec-meta-tag">ECMAScript Promises</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <label for="select-promise-mode" style="color: var(--text-secondary); font-size: 0.76rem;">并发策略:</label>
+              <select id="select-promise-mode" class="custom-input">
+                <option value="all">Promise.all (一败俱败)</option>
+                <option value="allSettled" selected>Promise.allSettled (等待全部结算)</option>
+                <option value="race">Promise.race (先到先得/不论成败)</option>
+                <option value="any">Promise.any (取首个成功项)</option>
+              </select>
+              <button class="btn-interactive" id="btn-fire-promise-race">发射并发请求</button>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage promise-stage">
+            <div class="promise-race-tracks">
+              <!-- Track 1 -->
+              <div class="race-track-row">
+                <span class="track-name">Task 1 (600ms 成功)</span>
+                <div class="track-progress-bar">
+                  <div class="track-fill" id="track-fill-1"></div>
+                </div>
+                <span class="track-result-tag" id="track-tag-1">Ready</span>
+              </div>
+
+              <!-- Track 2 (失败) -->
+              <div class="race-track-row">
+                <span class="track-name">Task 2 (400ms 失败 🔴)</span>
+                <div class="track-progress-bar">
+                  <div class="track-fill error-fill" id="track-fill-2"></div>
+                </div>
+                <span class="track-result-tag" id="track-tag-2">Ready</span>
+              </div>
+
+              <!-- Track 3 -->
+              <div class="race-track-row">
+                <span class="track-name">Task 3 (900ms 成功)</span>
+                <div class="track-progress-bar">
+                  <div class="track-fill" id="track-fill-3"></div>
+                </div>
+                <span class="track-result-tag" id="track-tag-3">Ready</span>
+              </div>
+            </div>
+
+            <div class="promise-race-log" id="promise-race-log">
+              选择上方并发策略并点击发射，观察结算时序与返回值机制...
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>COMBINATOR SPEC & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box" id="promise-combinator-notes">
+              <strong>allSettled 优势：</strong>
+              永远不会提前 reject，等待所有 Promise 无论 resolve 还是 reject 全部就绪后返回包含 <code>{ status, value/reason }</code> 的结果数组，非常适合批量并发埋点与状态上报。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content" id="promise-code-snippet"><code>const results = await Promise.allSettled([
+  fetch('/api/user'),
+  fetch('/api/posts'),
+  fetch('/api/metrics')
+]);
+
+results.forEach(res => {
+  if (res.status === 'fulfilled') console.log(res.value);
+  else console.error(res.reason);
+});</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Protocols SSE vs WebSocket -->
+    <section class="spec-section" id="sec-13-protocols">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 13.02</span>
+          <h2 class="spec-title">实时网络通信协议对决：SSE vs WebSocket vs 轮询</h2>
+        </div>
+        <span class="spec-meta-tag">HTTP Real-Time Protocols</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <button class="btn-interactive" id="btn-demo-sse">模拟 SSE (单向文本流推送)</button>
+              <button class="btn-interactive btn-secondary" id="btn-demo-ws">模拟 WebSocket (全双工双向)</button>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage protocol-stage">
+            <div class="protocol-compare-card">
+              <div class="protocol-channel-box" id="protocol-channel-box">
+                <div class="proto-header">
+                  <span class="proto-name" id="proto-name-badge">Server-Sent Events (EventSource)</span>
+                  <span class="proto-stat">HTTP/2 纯单向长流</span>
+                </div>
+                <div class="proto-feed-stream" id="proto-feed-stream">
+                  <div class="feed-item text-muted">&gt; 点击上方按钮建立模拟长连接...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>PROTOCOL COMPARISON & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>SSE (Server-Sent Events) 核心优势：</strong>
+              天然基于标准 HTTP 协议、原生支持断线自动重连、支持消息 ID 追踪。是大语言模型（LLM）对话打字输出与监控通知的绝对最佳技术选型。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">JavaScript (EventSource)</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>// 原生 SSE 监听
+const sse = new EventSource('/api/llm/stream');
+
+sse.onmessage = (event) => {
+  renderChunk(event.data);
+};
+
+sse.onerror = () => sse.close();</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Cheatsheet Table -->
+    <section class="spec-reference-section" id="sec-13-cheatsheet">
+      <h3 class="spec-ref-title">§ 13.03 异步并发 API 与实时协议速查表</h3>
+      <div class="cheatsheet-table-wrap">
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th>API / 协议</th>
+              <th>通信方向</th>
+              <th>失败策略</th>
+              <th>典型适用场景</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>Promise.allSettled</code></td>
+              <td>并发批处理</td>
+              <td>永不提前 Reject，等待全部结束</td>
+              <td>多接口批量容错拉取、日志汇总上报</td>
+            </tr>
+            <tr>
+              <td><code>Promise.any</code></td>
+              <td>并发竞速</td>
+              <td>全部失败时抛出 AggregateError</td>
+              <td>从多个全球镜像 CDN 节点竞速拉取资源</td>
+            </tr>
+            <tr>
+              <td><code>Server-Sent Events (SSE)</code></td>
+              <td>服务端 $\to$ 客户端 (单向)</td>
+              <td>原生浏览器自动断线重连</td>
+              <td>AI 对话流式打字、股票实时行情、系统通知</td>
+            </tr>
+            <tr>
+              <td><code>WebSocket</code></td>
+              <td>客户端 $\leftrightarrow$ 服务端 (全双工)</td>
+              <td>需自行实现心跳与重连机制</td>
+              <td>多人在线协同白板、实时多人游戏、即时聊天</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+

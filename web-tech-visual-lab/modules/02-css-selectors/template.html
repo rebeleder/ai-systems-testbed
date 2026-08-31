@@ -1,0 +1,423 @@
+﻿<div class="module-container">
+  
+  <header class="module-doc-header">
+    <div class="doc-tag-row">
+      <span class="doc-spec-badge">SPEC 02 / CSS SELECTORS LEVEL 4 & CONTAINER QUERIES</span>
+    </div>
+    <h1 class="doc-title">现代 CSS 选择器与核心布局引擎</h1>
+    <p class="doc-lead">
+      CSS Selectors Level 4 关系伪类、特异性权重控制规则、Flex/Grid 空间算法与现代容器级响应式规范。
+    </p>
+
+  </header>
+
+    <div class="doc-toc-bar">
+      <span class="toc-label">INDEX:</span>
+      <a href="#sec-02-has" class="toc-pill">§ 02.01 :has() 关系联动</a>
+      <a href="#sec-02-is-where" class="toc-pill">§ 02.02 :is() vs :where() 特异性</a>
+      <a href="#sec-02-flex" class="toc-pill">§ 02.03 Flexbox 空间瓜分</a>
+      <a href="#sec-02-grid" class="toc-pill">§ 02.04 Grid auto-fit 网格</a>
+      <a href="#sec-02-container" class="toc-pill">§ 02.05 @container 容器查询</a>
+      <a href="#sec-02-cheatsheet" class="toc-pill">§ 02.06 规范速查</a>
+    </div>
+
+  <div class="spec-stream">
+
+    <!-- Section 1: :has() -->
+    <section class="spec-section" id="sec-02-has">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 02.01</span>
+          <h2 class="spec-title">CSS :has() 父选择器与关系状态联动工作台</h2>
+        </div>
+        <span class="spec-meta-tag">CSS Relational Selector</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <span style="font-size: 0.78rem; color: var(--text-secondary);">勾选子控件观察父级卡片状态改变：</span>
+          </div>
+
+          <div class="spec-interactive-stage has-sandbox-area">
+            <div class="smart-task-card" id="smart-task-card" style="width: 100%; max-width: 480px;">
+              <div class="task-card-header">
+                <span class="task-badge">Task #1024</span>
+                <span class="task-state-indicator">Default State</span>
+              </div>
+
+              <h4 class="task-title">前端性能优化与状态机重构</h4>
+              <p class="task-desc">通过纯 CSS :has() 建立声明式的父子状态联动体系，告别 JS 表单监听。</p>
+
+              <div class="task-controls-group">
+                <label class="custom-checkbox-label">
+                  <input type="checkbox" id="chk-urgent" class="has-trigger-checkbox">
+                  <span>标记为高优先级 (Urgent - 触发告警边框)</span>
+                </label>
+
+                <label class="custom-checkbox-label">
+                  <input type="checkbox" id="chk-danger" class="has-trigger-danger">
+                  <span>包含破坏性变更 (Breaking - 触发危险操作)</span>
+                </label>
+              </div>
+
+              <div class="task-footer">
+                <span class="task-hint">CSS 自动感知子节点变更</span>
+                <button class="btn-interactive task-btn">确认操作</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>关系伪类规则：</strong>
+              <code>:has()</code> 可充当父选择器与前驱兄弟选择器。支持形如 <code>.card:has(input:checked)</code>、<code>h1:has(+ p)</code>。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">CSS & Tailwind</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>/* 原生 CSS 规则 */
+.card:has(#chk-urgent:checked) {
+  border-color: var(--accent-warning);
+}
+.card:has(#chk-danger:checked) .btn {
+  background: var(--accent-danger);
+}
+
+/* Tailwind 4 语法 */
+&lt;div class="has-[:checked]:border-amber-500"&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: :is() vs :where() -->
+    <section class="spec-section" id="sec-02-is-where">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 02.02</span>
+          <h2 class="spec-title">特异性权重控制 :is() vs :where() 对决</h2>
+        </div>
+        <span class="spec-meta-tag">CSS Specificity</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <button class="btn-interactive btn-secondary" id="btn-toggle-override">
+              注入下游单类名覆盖 (.btn-override)
+            </button>
+          </div>
+
+          <div class="spec-interactive-stage specificity-arena">
+            <div class="spec-column">
+              <span class="spec-label"><code>:where(.btn)</code> (权重 0)</span>
+              <button class="demo-spec-btn where-target">Where 按钮</button>
+              <span class="spec-status" id="where-status">默认基础样式</span>
+            </div>
+
+            <div class="spec-column">
+              <span class="spec-label"><code>:is(.btn)</code> (继承权重)</span>
+              <button class="demo-spec-btn is-target">Is 按钮</button>
+              <span class="spec-status" id="is-status">默认基础样式</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>零权重重置：</strong>
+              <code>:where()</code> 特异性恒为 0，任何下游单类名（0,1,0）均可轻松覆盖；<code>:is()</code> 则继承参数列表中的最高权重。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">CSS</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>/* 零权重设计系统重置 */
+:where(button, input, select) {
+  all: unset;
+  border-radius: 4px;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Flexbox -->
+    <section class="spec-section" id="sec-02-flex">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 02.03</span>
+          <h2 class="spec-title">Flexbox 弹性轴向对齐与 flex-grow 空间瓜分</h2>
+        </div>
+        <span class="spec-meta-tag">CSS Flexbox Layout</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <label for="flex-justify-select" style="color: var(--text-secondary); font-size: 0.76rem;">justify-content:</label>
+              <select id="flex-justify-select" class="custom-input">
+                <option value="flex-start">flex-start</option>
+                <option value="center">center</option>
+                <option value="space-between" selected>space-between</option>
+                <option value="space-around">space-around</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label for="flex-item2-grow" style="color: var(--text-secondary); font-size: 0.76rem;">Item 2 grow:</label>
+              <input type="range" id="flex-item2-grow" min="0" max="3" value="0" step="1" style="width: 60px;">
+              <span id="grow-val-display" style="font-family: var(--font-mono); font-size: 0.72rem;">0</span>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage flex-canvas">
+            <div class="flex-sandbox-container" id="flex-sandbox-container" style="width: 100%; max-width: 520px;">
+              <div class="flex-box-item item-1">
+                <span class="item-id">Item 1</span>
+                <span class="item-stat">80px</span>
+              </div>
+              <div class="flex-box-item item-2" id="flex-dynamic-item">
+                <span class="item-id">Item 2</span>
+                <span class="item-stat" id="item2-stat-text">grow: 0</span>
+              </div>
+              <div class="flex-box-item item-3">
+                <span class="item-id">Item 3</span>
+                <span class="item-stat">80px</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>剩余空间瓜分算法：</strong>
+              当主轴存在剩余空隙时，声明了 <code>flex-grow: N</code> 的子项将按照自身权重比例瓜分可用空隙。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">CSS</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>.container {
+  display: flex;
+  justify-content: space-between;
+}
+.item-dynamic { flex: 1 1 auto; }</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Grid auto-fit -->
+    <section class="spec-section" id="sec-02-grid">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 02.04</span>
+          <h2 class="spec-title">CSS Grid 自适应网格 repeat(auto-fit, minmax(...))</h2>
+        </div>
+        <span class="spec-meta-tag">CSS Grid Matrix</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <label for="grid-min-slider" style="color: var(--text-secondary); font-size: 0.76rem;">minmax 最小宽:</label>
+              <input type="range" id="grid-min-slider" min="100" max="220" value="130" style="width: 80px;">
+              <span id="grid-min-display" style="font-family: var(--font-mono); font-size: 0.72rem;">130px</span>
+            </div>
+
+            <div class="control-group">
+              <label for="grid-mode-select" style="color: var(--text-secondary); font-size: 0.76rem;">模式:</label>
+              <select id="grid-mode-select" class="custom-input">
+                <option value="auto-fit" selected>auto-fit (拉伸填满)</option>
+                <option value="auto-fill">auto-fill (保留空轨)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="spec-interactive-stage grid-canvas-preview">
+            <div class="grid-demo-wall" id="grid-demo-wall" style="width: 100%; max-width: 520px;">
+              <div class="grid-card-item">Col 1</div>
+              <div class="grid-card-item">Col 2</div>
+              <div class="grid-card-item">Col 3</div>
+              <div class="grid-card-item">Col 4</div>
+              <div class="grid-card-item">Col 5</div>
+              <div class="grid-card-item">Col 6</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>黄金自适应公式：</strong>
+              无需任何 <code>@media</code> 媒体查询，即可让卡片网格根据可用宽度自动折行并填满整行。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">CSS</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: @container -->
+    <section class="spec-section" id="sec-02-container">
+      <div class="spec-section-header">
+        <div class="spec-section-title-wrap">
+          <span class="spec-number">§ 02.05</span>
+          <h2 class="spec-title">容器查询 @container（组件级响应式规范）</h2>
+        </div>
+        <span class="spec-meta-tag">CSS Container Queries</span>
+      </div>
+
+      <div class="spec-workbench-split">
+        <div class="spec-canvas-col">
+          <div class="spec-controls-bar">
+            <div class="control-group">
+              <label for="container-resizer" style="color: var(--text-secondary); font-size: 0.78rem;">调整容器宽度:</label>
+              <input type="range" id="container-resizer" min="280" max="820" value="720" style="width: 130px;">
+              <span id="container-width-display" style="font-family: var(--font-mono); font-size: 0.72rem;">720px</span>
+            </div>
+            <span class="badge" id="container-morph-badge">宽屏形态 (@container ≥ 650px)</span>
+          </div>
+
+          <div class="spec-interactive-stage container-query-sandbox">
+            <div class="morph-container-wrapper" id="morph-container-wrapper" style="width: 720px;">
+              <div class="cq-adaptive-card">
+                <div class="cq-avatar-circle">UI</div>
+                <div class="cq-body">
+                  <div class="cq-badge-row">
+                    <span class="card-tag">Self-Contained Component</span>
+                  </div>
+                  <h4 class="cq-title">容器级自适应卡片</h4>
+                  <p class="cq-summary">拖动上方滑块，观察组件在 480px 和 650px 断点下经历单列到多列的结构演变。</p>
+                  <div class="cq-actions">
+                    <button class="btn-interactive">Primary</button>
+                    <button class="btn-interactive btn-secondary">Secondary</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-inspector-col">
+          <div class="inspector-header">
+            <span>SPECIFICATION & CODE</span>
+          </div>
+          <div class="inspector-body">
+            <div class="spec-notes-box">
+              <strong>组件自洽响应：</strong>
+              组件断点绑定到直接宿主容器自身的 <code>inline-size</code>，使得无论组件放在侧边栏还是全宽区都能完美自适应。
+            </div>
+
+            <div class="code-preview-pane">
+              <div class="code-header">
+                <span class="code-lang">CSS</span>
+                <button class="copy-btn">复制</button>
+              </div>
+              <pre class="code-content"><code>.card-wrapper {
+  container-type: inline-size;
+  container-name: cardMorph;
+}
+
+@container cardMorph (min-width: 480px) {
+  .cq-adaptive-card { flex-direction: row; }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Cheatsheet Table -->
+    <section class="spec-reference-section" id="sec-02-cheatsheet">
+      <h3 class="spec-ref-title">§ 02.06 现代 CSS 选择器与布局规则速查</h3>
+      <div class="cheatsheet-table-wrap">
+        <table class="cheatsheet-table">
+          <thead>
+            <tr>
+              <th>特性 / 选择器</th>
+              <th>规范分类</th>
+              <th>特异性计算</th>
+              <th>核心能力</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>:has()</code></td>
+              <td>Selectors Level 4</td>
+              <td>由参数中最高权重决定</td>
+              <td>父级与前驱兄弟选择器，状态双向感知</td>
+            </tr>
+            <tr>
+              <td><code>:where()</code></td>
+              <td>Selectors Level 4</td>
+              <td>永远为 0 (0, 0, 0)</td>
+              <td>基础重置样式库，下游零阻碍覆盖</td>
+            </tr>
+            <tr>
+              <td><code>:is()</code></td>
+              <td>Selectors Level 4</td>
+              <td>继承参数列表中最高权重</td>
+              <td>选择器分组简写，容错解析</td>
+            </tr>
+            <tr>
+              <td><code>@container</code></td>
+              <td>Container Queries</td>
+              <td>不改变选择器权重</td>
+              <td>组件级响应式断点，摆脱全局视口限制</td>
+            </tr>
+            <tr>
+              <td><code>repeat(auto-fit, minmax(...))</code></td>
+              <td>CSS Grid Matrix</td>
+              <td>不涉及</td>
+              <td>零 @media 查询的响应式流式网格</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+

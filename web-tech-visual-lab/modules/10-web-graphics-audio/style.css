@@ -1,0 +1,81 @@
+﻿/* ==========================================================================
+   MODULE 10: WEB GRAPHICS & AUDIO - CLEAN WORKBENCH STYLES
+   ========================================================================== */
+
+/* Canvas Stage */
+.canvas-stage {
+  padding: 16px;
+  width: 100%;
+}
+
+.canvas-box-wrap {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+#filter-demo-canvas {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-xs);
+  display: block;
+}
+
+/* Audio Stage */
+.audio-stage {
+  padding: 16px;
+  width: 100%;
+}
+
+.audio-oscilloscope-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.oscilloscope-screen {
+  width: 100%;
+  height: 60px;
+  background: var(--bg-code);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.audio-wave-bar {
+  width: 60%;
+  height: 2px;
+  background: var(--accent-success);
+  transition: all 0.1s ease;
+}
+
+.audio-wave-bar.active {
+  animation: wavePulse 0.4s infinite alternate ease-in-out;
+  box-shadow: 0 0 10px var(--accent-success);
+}
+
+@keyframes wavePulse {
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(18); }
+  100% { transform: scaleY(4); }
+}
+
+.audio-status-label {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}

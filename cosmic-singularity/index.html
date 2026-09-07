@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>克尔黑洞 // 广义相对论引力奇点实验室</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- 画布容器 -->
+  <div id="canvas-container">
+    <canvas id="sim-canvas"></canvas>
+  </div>
+
+  <!-- 科幻 HUD 界面层 -->
+  <div class="hud-layer">
+    <!-- 顶部状态栏与度规遥测 -->
+    <header class="hud-header">
+      <div class="hud-brand">
+        <div class="pulse-indicator"></div>
+        <div class="brand-text">
+          <span class="mono-badge">天体物理实验室 // MK-IV</span>
+          <h1>克尔旋转黑洞</h1>
+        </div>
+      </div>
+
+      <div class="telemetry-deck">
+        <div class="telemetry-cell">
+          <span class="label">度规类型</span>
+          <span class="val accent-cyan" id="metric-readout">克尔度规 (高速自旋)</span>
+        </div>
+        <div class="telemetry-cell">
+          <span class="label">黑洞质量 (M☉)</span>
+          <span class="val" id="mass-readout">4.15 × 10⁶</span>
+        </div>
+        <div class="telemetry-cell">
+          <span class="label">自旋参数 (a*)</span>
+          <span class="val accent-amber" id="spin-readout">0.992 c</span>
+        </div>
+        <div class="telemetry-cell">
+          <span class="label">渲染帧率</span>
+          <span class="val accent-green" id="fps-readout">60</span>
+        </div>
+        <div class="telemetry-cell">
+          <span class="label">活跃粒子数</span>
+          <span class="val" id="particle-count">36,000</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 侧边天体物理参数监控面板 -->
+    <aside class="hud-sidebar">
+      <div class="glass-panel">
+        <div class="panel-header">
+          <span class="panel-title">相对论视界与参数</span>
+          <span class="status-dot"></span>
+        </div>
+        <div class="inspector-group">
+          <div class="metric-row">
+            <span class="m-name">史瓦西半径 (r_s)</span>
+            <span class="m-val" id="rs-val">12.24 × 10⁶ km</span>
+          </div>
+          <div class="metric-row">
+            <span class="m-name">能层外边界 (r_ergo)</span>
+            <span class="m-val accent-amber" id="ergo-val">24.48 × 10⁶ km</span>
+          </div>
+          <div class="metric-row">
+            <span class="m-name">光子球轨道 (r_ph)</span>
+            <span class="m-val accent-cyan" id="rph-val">18.36 × 10⁶ km</span>
+          </div>
+          <div class="metric-row">
+            <span class="m-name">霍金辐射通量</span>
+            <span class="m-val" id="hawking-val">2.84 × 10⁻²⁸ W</span>
+          </div>
+          <div class="metric-row">
+            <span class="m-name">参考系拖曳率 (Ω)</span>
+            <span class="m-val accent-red" id="frame-drag-val">1,482 rad/s</span>
+          </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <!-- 物理引擎开关 -->
+        <div class="panel-header">
+          <span class="panel-title">物理效应配置</span>
+        </div>
+        <div class="controls-vertical">
+          <label class="toggle-control">
+            <input type="checkbox" id="toggle-doppler" checked />
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">相对论多普勒集束效应 (蓝移/红移)</span>
+          </label>
+          <label class="toggle-control">
+            <input type="checkbox" id="toggle-jets" checked />
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">双极同步辐射等离子体喷流</span>
+          </label>
+          <label class="toggle-control">
+            <input type="checkbox" id="toggle-lensing" checked />
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">爱因斯坦环引力透镜偏折</span>
+          </label>
+          <label class="toggle-control">
+            <input type="checkbox" id="toggle-bloom" checked />
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">光子球漫反射泛光</span>
+          </label>
+        </div>
+
+        <!-- 动态调节滑块 -->
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>黑洞自旋角动量 (a*)</span>
+            <span id="slider-spin-val">0.99</span>
+          </div>
+          <input type="range" id="input-spin" min="0" max="0.998" step="0.005" value="0.99" />
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>吸积盘粒子密度</span>
+            <span id="slider-density-val">1.0x</span>
+          </div>
+          <input type="range" id="input-density" min="0.2" max="2.0" step="0.1" value="1.0" />
+        </div>
+      </div>
+    </aside>
+
+    <!-- 底部交互操作坞 -->
+    <footer class="hud-dock">
+      <!-- 模式切换按键群 -->
+      <div class="dock-cluster">
+        <button class="mode-btn active" data-mode="kerr">
+          <span class="key-badge">1</span>
+          <span class="btn-label">克尔旋转黑洞</span>
+        </button>
+        <button class="mode-btn" data-mode="chaos">
+          <span class="key-badge">2</span>
+          <span class="btn-label">相空间吸引子</span>
+        </button>
+        <button class="mode-btn" data-mode="web">
+          <span class="key-badge">3</span>
+          <span class="btn-label">宇宙纤维网</span>
+        </button>
+        <button class="mode-btn" data-mode="supernova">
+          <span class="key-badge">4</span>
+          <span class="btn-label">超新星坍缩</span>
+        </button>
+      </div>
+
+      <!-- 快捷操作按钮 -->
+      <div class="dock-cluster actions">
+        <button id="btn-chirp" class="action-btn glow-red" title="激发引力波脉冲 (模拟 LIGO GW150914 啁啾波形)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 12h3l3-9 4 18 3-9h7" />
+          </svg>
+          <span>发射引力波脉冲 [空格]</span>
+        </button>
+
+        <button id="btn-audio" class="action-btn" title="开启/关闭程序化生成的时空共振低音">
+          <svg id="audio-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            <line x1="23" y1="9" x2="17" y2="15" />
+            <line x1="17" y1="9" x2="23" y2="15" />
+          </svg>
+          <span id="audio-label">时空音效: 关闭</span>
+        </button>
+
+        <button id="btn-reset" class="action-btn icon-only" title="重置视口与粒子场">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+          </svg>
+        </button>
+      </div>
+    </footer>
+
+    <!-- 快捷手势与交互提示 -->
+    <div class="gesture-hint">
+      <span>按住左键拖拽：旋转 3D 视角</span>
+      <span class="bullet">•</span>
+      <span>Shift + 点击：注入微引力阱</span>
+      <span class="bullet">•</span>
+      <span>滚轮滑动：缩放穿透光子球</span>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

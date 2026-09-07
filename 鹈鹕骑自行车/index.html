@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>鹈鹕骑自行车 · SVG 产物对照表</title>
+  <link rel="stylesheet" href="gallery.css">
+  <script src="gallery-data.js" defer></script>
+  <script src="gallery.js" defer></script>
+</head>
+<body>
+  <header><div><p class="eyebrow">SVG COLLECTION / 2026</p><h1>鹈鹕骑自行车</h1><p class="intro">横向对照 Harness，纵向浏览模型与思考强度。点击作品放大。</p></div><p id="summary" class="summary"></p></header>
+  <main>
+    <form class="toolbar" role="search" onsubmit="return false">
+      <label>搜索模型<input id="search" type="search" placeholder="例如 Gemini、GPT、Kimi" autocomplete="off"></label>
+      <label>Harness<select id="harness"><option value="">全部 Harness</option></select></label>
+      <label>思考强度<select id="effort"><option value="">全部强度</option></select></label>
+      <button type="reset">重置</button><span id="count" role="status"></span>
+    </form>
+    <div class="matrix" tabindex="0" role="region" aria-label="SVG 对照表，可横向及纵向滚动"><table><caption class="sr-only">每列一个 Harness，每行一个模型与思考强度组合，未收录的组合显示横线。</caption><thead id="head"></thead><tbody id="body"></tbody></table></div>
+    <p id="empty" hidden>没有匹配的产物，请调整筛选条件。</p>
+    <footer><span>— 表示尚无产物 · SVG 保持原始比例</span><a href="TEST-PROMPT.md">测试提示词与结果记录 ↗</a></footer>
+  </main>
+  <dialog id="viewer"><div class="dialog-bar"><h2 id="viewer-title"></h2><a id="original" target="_blank" rel="noopener">打开 SVG ↗</a><button id="close" aria-label="关闭预览">关闭 ×</button></div><img id="large" alt=""><p id="filename"></p></dialog>
+</body>
+</html>

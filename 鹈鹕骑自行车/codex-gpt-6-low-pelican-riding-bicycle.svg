@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1000" viewBox="0 0 1200 1000" role="img" aria-labelledby="title desc">
+  <title id="title">海风骑行 · 鹈鹕骑自行车</title>
+  <desc id="desc">一只白色鹈鹕伸着金黄色长喙，翅膀扶住车把，橙色蹼足踩着踏板，骑着青绿色自行车经过海边。</desc>
+  <defs>
+    <pattern id="spokes" width="1" height="1" patternContentUnits="objectBoundingBox">
+      <path d="M.5 0V1M0 .5H1M.146 .146L.854 .854M.146 .854L.854 .146M.309 .038L.691 .962M.038 .309L.962 .691M.038 .691L.962 .309M.309 .962L.691 .038" fill="none" stroke="#76928d" stroke-width=".006"/>
+    </pattern>
+    <g id="wheel">
+      <circle r="150" fill="#f8f5e9" stroke="#223e42" stroke-width="15"/>
+      <circle r="138" fill="url(#spokes)" stroke="#9ab7ac" stroke-width="3"/>
+      <circle r="12" fill="#e9ede1" stroke="#223e42" stroke-width="5"/>
+    </g>
+  </defs>
+  <rect width="1200" height="1000" fill="#f5efdf"/>
+  <circle cx="868" cy="272" r="126" fill="#efd58c"/>
+  <path d="M100 589Q331 543 534 577T1100 562V855H100Z" fill="#dfebe2"/>
+  <g fill="none" stroke="#bacfc5" stroke-width="3" stroke-linecap="round">
+    <path d="M123 631H265M877 608H1067M956 646H1110M105 686H200"/>
+    <path d="M961 173q16-17 32 0q16-17 32 0M1010 214q11-12 22 0q11-12 22 0" stroke="#778c83"/>
+  </g>
+  <ellipse cx="601" cy="878" rx="430" ry="24" fill="#d9d5c4"/>
+  <path d="M92 878H1108" stroke="#aaa998" stroke-width="3"/>
+  <!-- 自行车：车轮、传动和完整三角车架。 -->
+  <use href="#wheel" x="345" y="718"/>
+  <use href="#wheel" x="864" y="718"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M342 702L546 701Q579 704 579 728Q579 751 550 752L343 733Q321 730 321 717Q321 705 342 702Z" stroke="#6f8178" stroke-width="5"/>
+    <path d="M345 718L467 518L555 718L345 718L746 518L555 718M467 518H746" stroke="#213e41" stroke-width="17"/>
+    <path d="M345 718L467 518L555 718L345 718L746 518L555 718M467 518H746" stroke="#319d99" stroke-width="10"/>
+    <path d="M864 718L753 510L733 461" stroke="#213e41" stroke-width="18"/>
+    <path d="M864 718L753 510L733 461" stroke="#319d99" stroke-width="10"/>
+    <path d="M467 518L449 469M732 460L717 419L777 401Q803 397 807 416Q809 432 789 436" stroke="#3c5554" stroke-width="10"/>
+    <path d="M773 402Q801 397 807 416" stroke="#b46643" stroke-width="15"/>
+    <path d="M790 436Q844 481 826 573" stroke="#536b63" stroke-width="3"/>
+    <path d="M198 671A158 158 0 0 1 485 649M723 650A158 158 0 0 1 1012 671" stroke="#709e92" stroke-width="8"/>
+  </g>
+  <path d="M412 462Q445 449 489 460Q501 464 491 475H418Q399 473 412 462Z" fill="#694a39" stroke="#293f3d" stroke-width="5"/>
+  <!-- 远侧腿在身体后面，蹼足落在后方踏板上。 -->
+  <path d="M502 454L474 554L508 660" fill="none" stroke="#b76c32" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M507 647L536 670L486 670L493 652Z" fill="#d68a3d" stroke="#714c31" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M509 675L555 718" stroke="#415955" stroke-width="8"/>
+  <path d="M481 675H531" stroke="#243f41" stroke-width="9" stroke-linecap="round"/>
+  <!-- 鹈鹕：低垂喉囊、长颈和圆润羽毛。 -->
+  <path d="M403 390L296 349L332 399L307 406L403 444Z" fill="#d7ded5" stroke="#294448" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M365 378C413 342 488 352 537 374C574 388 602 366 600 323L595 238C591 186 618 147 659 149C704 149 726 183 715 221C708 242 680 255 663 248L671 321C687 395 646 456 585 480C511 510 410 487 375 445C354 420 347 396 365 378Z" fill="#fffdf3" stroke="#294448" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M635 264Q630 349 651 357Q644 421 580 454Q469 493 391 436Q424 496 526 489Q649 487 673 391Q685 350 663 248Z" fill="#e0e6dc"/>
+  <path d="M402 397Q455 371 520 399Q587 429 665 417Q629 461 557 460Q471 465 418 423" fill="#edf0e5" stroke="#294448" stroke-width="5" stroke-linecap="round"/>
+  <path d="M453 413Q499 444 564 438M477 401Q522 427 578 424" fill="none" stroke="#b1beb4" stroke-width="4" stroke-linecap="round"/>
+  <!-- 前侧翼伸向车把。 -->
+  <path d="M542 394Q583 386 628 405L714 423Q748 430 781 413Q791 409 789 399Q787 390 776 393L734 402L641 365Q600 350 575 369" fill="#fffdf3" stroke="#294448" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M746 411L770 406M751 419L779 413" stroke="#aabbb0" stroke-width="3" stroke-linecap="round"/>
+  <!-- 金色喉囊与细长上喙。 -->
+  <path d="M688 218L944 244Q883 287 811 302Q731 316 680 247Z" fill="#edb55a" stroke="#294448" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M705 238Q763 294 871 267Q778 311 712 261Z" fill="#d99045"/>
+  <path d="M686 210Q742 207 806 216L968 241Q974 244 963 248L696 233Q682 230 686 210Z" fill="#f6cb68" stroke="#294448" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M720 220L921 240" stroke="#ffe6a6" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="671" cy="195" r="14" fill="#ecd292"/>
+  <circle cx="673" cy="195" r="7" fill="#203b40"/>
+  <circle cx="675" cy="192" r="2.4" fill="#fff"/>
+  <path d="M648 174Q661 166 674 172M612 181L597 169M619 165L610 151" fill="none" stroke="#294448" stroke-width="4" stroke-linecap="round"/>
+  <!-- 海蓝色颈巾沿骑行方向飘动。 -->
+  <path d="M603 288Q632 306 670 288L674 311Q636 328 603 310Z" fill="#327d83" stroke="#294448" stroke-width="4"/>
+  <path d="M607 307Q557 322 521 290L532 322L513 337Q570 348 618 318Z" fill="#327d83" stroke="#294448" stroke-width="4" stroke-linejoin="round"/>
+  <!-- 前侧腿和踩踏动作。 -->
+  <path d="M564 477L606 545Q610 552 605 563L572 622" fill="none" stroke="#294448" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M564 477L606 545Q610 552 605 563L572 622" fill="none" stroke="#e9a44c" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M570 615Q582 616 590 628L624 645L604 647L593 642L593 649L551 644Z" fill="#edac4e" stroke="#294448" stroke-width="5" stroke-linejoin="round"/>
+  <circle cx="555" cy="718" r="26" fill="#d7ded1" stroke="#294448" stroke-width="5"/>
+  <circle cx="555" cy="718" r="8" fill="#294448"/>
+  <path d="M555 718L585 651" stroke="#405c59" stroke-width="9" stroke-linecap="round"/>
+  <rect x="554" y="647" width="66" height="11" rx="4" fill="#294448"/>
+  <g fill="none" stroke="#769f92" stroke-width="4" stroke-linecap="round">
+    <path d="M242 473H307M206 493H280M252 513H315"/>
+  </g>
+  <text x="100" y="112" font-family="Georgia,serif" font-size="25" letter-spacing="5" fill="#345653">COASTAL COMMUTE</text>
+  <text x="100" y="148" font-family="Arial,sans-serif" font-size="12" letter-spacing="3" fill="#78877a">A LITTLE WIND. A LONG WAY HOME.</text>
+  <text x="1100" y="938" text-anchor="end" font-family="Arial,sans-serif" font-size="12" letter-spacing="3" fill="#78877a">07 / PELICAN VELO CLUB</text>
+</svg>

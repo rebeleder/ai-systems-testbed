@@ -1,0 +1,58 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0a0e1a;
+}
+
+canvas {
+  display: block;
+}
+
+/* 页面加载遮罩（脚本就绪后移除） */
+#loading {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: #0a0e1a;
+  color: #8fa3c7;
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans SC", sans-serif;
+  font-size: 14px;
+  letter-spacing: 4px;
+  z-index: 10;
+  transition: opacity .6s;
+}
+
+#loading.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 34px;
+  height: 34px;
+  border: 3px solid rgba(143, 163, 199, .25);
+  border-top-color: #8fa3c7;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+#fallback p {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8fa3c7;
+  font-family: sans-serif;
+}

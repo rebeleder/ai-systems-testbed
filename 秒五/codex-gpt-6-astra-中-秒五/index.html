@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e5eff0">
+  <title>春待ち駅 · A little station in spring</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}
+  </script>
+</head>
+<body>
+  <canvas id="scene" aria-label="可旋转的日系春日铁路微缩模型"></canvas>
+  <p id="hint" role="status">左键旋转 · 滚轮缩放 · 右键平移 · 双击复位</p>
+  <p id="error" role="alert" hidden>场景未能加载，请检查网络连接后刷新页面。</p>
+  <script type="module" src="./main.js" onerror="document.getElementById('error').hidden=false"></script>
+</body>
+</html>

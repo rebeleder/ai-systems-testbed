@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="lPLIwtLlgLckoGPlEISkAG">
+<head data-page-node-id="NwbWGc5SKhPcaohsJkegOb">
+<meta charset="UTF-8" data-page-node-id="FBu5GXryHt2cCiLC4wUqeX">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="nEDetwXS0Pt1df8xF5jnd2">
+<title>雨夜便利店 · 微缩街角模型</title>
+<link rel="stylesheet" href="style.css" data-page-node-id="LgzMpNfoBTaFVKXfmIPF3Q">
+</head>
+<body data-page-node-id="RvDyEkE9R1W6ZNEflbbIcD">
+<div id="loading" data-page-node-id="FdiDjDIsgz4JdAVRC23csC">
+  <div class="spinner" data-page-node-id="5JLyQBQclNe1z4z2VMyeRm"></div>
+  <p data-page-node-id="gXgMk1aGfEy1s8umzd13v5">正在搭建雨夜街角…</p>
+</div>
+<div id="fallback" style="display:none" data-page-node-id="pQpMGxeQD9b7XgA99dfcGw">
+  <p data-page-node-id="AjiiuGl3kQNHCkJdKzLsXM">当前网络无法加载 Three.js，请联网后刷新页面。</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+  // CDN 兜底切换
+  if (!window.THREE) document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"><\/script>');
+</script>
+<script>
+  if (!window.THREE) document.write('<script src="https://unpkg.com/three@0.128.0/build/three.min.js"><\/script>');
+</script>
+<script>
+  if (!window.THREE) document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"><\/script>');
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (!window.THREE) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('fallback').style.display = 'block';
+    }
+  });
+</script>
+<script src="main.js"></script>
+</body>
+</html>

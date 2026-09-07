@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="TV4jDxsje8iuIpUAUmq5XQ">
+<head data-page-node-id="Tfomb1D6MwFOD2aG1FekDX">
+<meta charset="UTF-8" data-page-node-id="GEX38QNfXQGl9rFoVDHp24">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" data-page-node-id="t5CXywWeLMjCnsMBFklxxR">
+<title>PS5 DualSense · 网页交互手柄</title>
+<style>
+:root{
+  --bg-a:#1b2434; --bg-b:#0b0e14; --bg-c:#05070a;
+  --txt:#e9eef6; --muted:#8b96a9;
+  --line:rgba(255,255,255,.10);
+  --panel:rgba(255,255,255,.045);
+  --accent:#3b82f6;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(1100px 620px at 50% -8%, var(--bg-a) 0%, var(--bg-b) 52%, var(--bg-c) 100%);
+  color:var(--txt);
+  font:14px/1.55 "Segoe UI",-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.app{
+  display:grid; grid-template-columns:minmax(0,1fr) 322px;
+  gap:18px; padding:18px; align-items:start;
+}
+@media (max-width:960px){ .app{grid-template-columns:1fr; padding:12px} }
+
+/* ---------- 舞台 ---------- */
+.stage{
+  position:relative; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  perspective:1700px; min-height:70vh;
+  border:1px solid var(--line); border-radius:18px;
+  background:
+    radial-gradient(700px 460px at 50% 40%, rgba(90,130,200,.10), transparent 70%),
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012));
+  overflow:hidden;
+}
+.stage::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.022) 0 1px, transparent 1px 3px);
+  mix-blend-mode:overlay;
+}
+.pad-wrap{
+  width:100%; max-width:1060px; transform-style:preserve-3d;
+  transition:transform .3s cubic-bezier(.22,.8,.28,1);
+  will-change:transform; touch-action:none;
+}
+svg#pad{width:100%; height:auto; display:block; overflow:visible; user-select:none; -webkit-user-select:none}
+.stage-hint{
+  position:absolute; left:50%; bottom:14px; transform:translateX(-50%);
+  font-size:12px; color:var(--muted); letter-spacing:.04em; white-space:nowrap;
+  background:rgba(6,9,14,.55); padding:5px 12px; border-radius:999px; border:1px solid var(--line);
+}
+
+/* ---------- 手柄部件交互 ---------- */
+.ctrl{cursor:pointer; transform-box:fill-box; transform-origin:center;
+  transition:transform .09s ease-out, filter .16s ease;}
+.ctrl:hover{filter:brightness(1.14) drop-shadow(0 0 7px rgba(255,255,255,.30))}
+.ctrl.is-down{transform:translateY(3px) scale(.955); filter:brightness(.78) saturate(1.25)}
+.dpad-arm.is-down{transform:translateY(2px) scale(.94)}
+.cap{transform-box:fill-box; transform-origin:center;
+  transition:transform .42s cubic-bezier(.2,1.25,.35,1)}
+.labels{opacity:0; transition:opacity .25s ease; pointer-events:none}
+.show-labels .labels{opacity:1}
+.tp-ripple{transform-box:fill-box; transform-origin:center; pointer-events:none}
+
+/* ---------- 侧栏 ---------- */
+.hud{display:flex; flex-direction:column; gap:12px}
+.card{
+  border:1px solid var(--line); border-radius:16px; background:var(--panel);
+  padding:14px 15px; backdrop-filter:blur(8px);
+}
+.card h2{margin:0 0 10px; font-size:12px; letter-spacing:.14em; color:var(--muted); font-weight:600; text-transform:uppercase}
+.title{font-size:19px; font-weight:700; margin:0 0 4px; letter-spacing:.02em}
+.sub{font-size:12px; color:var(--muted); margin:0}
+.chips{display:flex; flex-wrap:wrap; gap:6px; min-height:26px}
+.chip{
+  font-size:12px; padding:3px 9px; border-radius:999px;
+  border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.07);
+  font-variant-numeric:tabular-nums;
+}
+.chip.dim{opacity:.32}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.minipad{
+  position:relative; width:100%; aspect-ratio:1/1; border-radius:12px;
+  border:1px solid var(--line); background:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,.055), transparent 70%);
+}
+.minipad::before,.minipad::after{
+  content:""; position:absolute; background:rgba(255,255,255,.12);
+}
+.minipad::before{left:50%; top:8%; bottom:8%; width:1px}
+.minipad::after{top:50%; left:8%; right:8%; height:1px}
+.dot{
+  position:absolute; left:50%; top:50%; width:16px; height:16px; margin:-8px 0 0 -8px;
+  border-radius:50%; background:#22d3ee; box-shadow:0 0 14px rgba(34,211,238,.85);
+  transition:transform .05s linear;
+}
+.rowlab{display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:6px}
+.bar{height:8px; border-radius:99px; background:rgba(255,255,255,.09); overflow:hidden}
+.bar>i{display:block; height:100%; width:0%; border-radius:99px; background:linear-gradient(90deg,#a78bfa,#c084fc); transition:width .05s linear}
+.swatches{display:flex; gap:8px; flex-wrap:wrap}
+.sw{width:26px; height:26px; border-radius:50%; border:2px solid rgba(255,255,255,.18); cursor:pointer; transition:transform .12s}
+.sw:hover{transform:scale(1.14)}
+.sw.on{border-color:#fff; box-shadow:0 0 0 2px rgba(255,255,255,.25)}
+.pill{font-size:11px; padding:3px 9px; border-radius:999px; border:1px solid var(--line); color:var(--muted)}
+.pill.on{color:#7ee0a1; border-color:rgba(126,224,161,.4); background:rgba(126,224,161,.10)}
+.opts{display:flex; flex-direction:column; gap:9px; font-size:13px}
+.opts label{display:flex; align-items:center; gap:8px; cursor:pointer; color:#cfd8e6}
+.opts input{accent-color:#3b82f6; width:15px; height:15px}
+.btnline{display:flex; gap:8px}
+button.sm{
+  flex:1; font:inherit; font-size:12px; color:var(--txt); cursor:pointer;
+  padding:7px 10px; border-radius:10px; border:1px solid var(--line);
+  background:rgba(255,255,255,.06); transition:background .15s;
+}
+button.sm:hover{background:rgba(255,255,255,.13)}
+.kbd{font-size:11.5px; color:var(--muted); line-height:1.9}
+.kbd b{color:#cfd8e6; font-weight:600}
+</style>
+</head>
+<body data-page-node-id="EU0OM91FaeWPvPfhfYFWjW">
+<div class="app" data-page-node-id="oodgxcV2h1Zzwqxn096h4U">
+  <main class="stage" id="stage" data-page-node-id="ZCWZOWYqASbbMUKKgK1Mz3">
+    <div class="pad-wrap" id="padWrap" data-page-node-id="9pDUghfBOiIiiX5PytmTDI">
+      <svg id="pad" viewBox="0 0 1000 760" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PS5 DualSense 交互手柄" data-page-node-id="ZvIgNgeSBa53DgainpjUVm">
+        <defs data-page-node-id="H6Z1GuGD6Z7u4ZRWnwRdqM">
+          <linearGradient id="gShell" x1="0" y1="84" x2="0" y2="680" gradientUnits="userSpaceOnUse" data-page-node-id="se60EfPyaxroUIVC9WWm7A">
+            <stop offset="0" stop-color="#ffffff" data-page-node-id="KAKAYPdadcKIL2K4Tdyame"/>
+            <stop offset=".38" stop-color="#f2f4f8" data-page-node-id="Y7kv5Q93mZqkkRHOxtIBvd"/>
+            <stop offset=".74" stop-color="#dde1e9" data-page-node-id="7IQZ1fGDu8ZkBJowvm9DGx"/>
+            <stop offset="1" stop-color="#b7bec9" data-page-node-id="EswXMdC23i28HimeBuRP0s"/>
+          </linearGradient>
+          <linearGradient id="gTrim" x1="0" y1="400" x2="0" y2="580" gradientUnits="userSpaceOnUse" data-page-node-id="yhmhoMEc4KoZEuCYN5nvTA">
+            <stop offset="0" stop-color="#2c313a" data-page-node-id="alQaHhim6iSzdLGeiJU1gk"/>
+            <stop offset="1" stop-color="#0a0c10" data-page-node-id="Gbk1mmlS007vkulJBQPYvl"/>
+          </linearGradient>
+          <linearGradient id="gBumper" x1="0" y1="0" x2="0" y2="1" data-page-node-id="iA1UriyTunHA2TD3CFsrKm">
+            <stop offset="0" stop-color="#f7f9fc" data-page-node-id="B4UXkAXFNszDp9skzgmYKE"/>
+            <stop offset="1" stop-color="#a9b1bf" data-page-node-id="CwuXxiNEA4lTwNN0XJvcar"/>
+          </linearGradient>
+          <linearGradient id="gTrigger" x1="0" y1="0" x2="0" y2="1" data-page-node-id="VjB2r9C9JjHhggCZYuSajY">
+            <stop offset="0" stop-color="#646c7c" data-page-node-id="333GxBHuS4dXyCFL6EI8zG"/>
+            <stop offset="1" stop-color="#1e222a" data-page-node-id="CRql413NyLIxkFtk8eL1gm"/>
+          </linearGradient>
+          <linearGradient id="gKeyDark" x1="0" y1="0" x2="0" y2="1" data-page-node-id="LB8SWmItOPZK48gpOFxYqO">
+            <stop offset="0" stop-color="#5d666f" data-page-node-id="odPF6Uxe7Ji7yAh3iPtUcJ"/>
+            <stop offset=".45" stop-color="#3a4048" data-page-node-id="0vwZjssg2ZWDGA9ZMhaI7c"/>
+            <stop offset="1" stop-color="#20242b" data-page-node-id="h0ihzJGYTaHzoDr49auDzT"/>
+          </linearGradient>
+          <radialGradient id="gWell" cx=".5" cy=".40" r=".66" data-page-node-id="NBClA5aXbIG4psYBnuHEJs">
+            <stop offset="0" stop-color="#3c424b" data-page-node-id="NpcGX0wcdfBlG4oZr6yHf8"/>
+            <stop offset="1" stop-color="#12151a" data-page-node-id="KJGU4RKEvUC4mLFAGo8bDw"/>
+          </radialGradient>
+          <radialGradient id="gCap" cx=".36" cy=".30" r=".82" data-page-node-id="IO4OPDiGWDvbzNvLGk0KgB">
+            <stop offset="0" stop-color="#59616d" data-page-node-id="Vj44SKNGf2HLJsIsIXRxuP"/>
+            <stop offset=".52" stop-color="#2c313a" data-page-node-id="25gZgjm9Q6dF4x5NRIpgcr"/>
+            <stop offset="1" stop-color="#11141a" data-page-node-id="sNRoKpBRg6erugyvL2YySl"/>
+          </radialGradient>
+          <linearGradient id="gTouch" x1="0" y1="0" x2="0" y2="1" data-page-node-id="U9b4sAR1VnVQavM07Kwjq3">
+            <stop offset="0" stop-color="#fcfdff" data-page-node-id="2Kiqaeas0TAwes7xFQJtPE"/>
+            <stop offset=".55" stop-color="#eef1f6" data-page-node-id="91qNfCHGohq5Ag24456BNJ"/>
+            <stop offset="1" stop-color="#dae0ea" data-page-node-id="wm1NEdi7A67jtqMsiXAcnX"/>
+          </linearGradient>
+          <linearGradient id="gKeyLight" x1="0" y1="0" x2="0" y2="1" data-page-node-id="MYuWP9DZNcyHebuFnXff6z">
+            <stop offset="0" stop-color="#ffffff" data-page-node-id="GWWHHYOtxRmlMTWZyEVeAx"/>
+            <stop offset="1" stop-color="#c3cad6" data-page-node-id="abh5qNLN3oo31sUqfHaejo"/>
+          </linearGradient>
+
+          <linearGradient id="gLbFade" x1="0" y1="161" x2="0" y2="369" gradientUnits="userSpaceOnUse" data-page-node-id="W5L9rWwKxObUVnbxArFlHE">
+            <stop offset="0" stop-color="#fff" data-page-node-id="lXiBdGfPs39XhYfLCzwRek"/>
+            <stop offset=".60" stop-color="#fff" data-page-node-id="z9Wdks4H3Gnpof6PpKJHWW"/>
+            <stop offset="1" stop-color="#000" data-page-node-id="fGeyw0h1pOggb1C76UsgAz"/>
+          </linearGradient>
+          <mask id="mLbFade" data-page-node-id="k4TKzLNJT73GFkR2UAKiNG">
+            <rect x="300" y="140" width="400" height="240" fill="url(#gLbFade)" data-page-node-id="Kn9NFHnrzEV3l7WLNDTnzZ"/>
+          </mask>
+
+          <filter id="fShadow" x="-30%" y="-30%" width="160%" height="180%" data-page-node-id="R4D532PCKtWZWFBEw5wmR0">
+            <feDropShadow dx="0" dy="22" stdDeviation="26" flood-color="#000" flood-opacity=".62" data-page-node-id="PRbwbUiEZHoyBBbPmM5BR5"/>
+          </filter>
+          <filter id="fGlow" x="-90%" y="-90%" width="280%" height="280%" data-page-node-id="UgI7x4L3ePK7FAmxw8e3dl">
+            <feGaussianBlur stdDeviation="9" result="b" data-page-node-id="C0ziDGYNxHsVSe4HCEhTKU"/>
+            <feMerge data-page-node-id="1vqNvh8IGebiYe01nMSrQ2"><feMergeNode in="b" data-page-node-id="RxUmRUfGuowaSL2XJhLvBZ"/><feMergeNode in="b" data-page-node-id="FeDaEMHGkg3ViDHg7qMuWc"/><feMergeNode in="SourceGraphic" data-page-node-id="jxSxafhZI9DKTcjBqTLCrb"/></feMerge>
+          </filter>
+          <filter id="fGlowBig" x="-90%" y="-90%" width="280%" height="280%" data-page-node-id="pLGpGpru4zepvfF2GUS9do">
+            <feGaussianBlur stdDeviation="18" result="b" data-page-node-id="H0JNDQpT5dyi2vBAYsP6sw"/>
+            <feMerge data-page-node-id="QhfEYwfjDDnkpxh81dYvIo"><feMergeNode in="b" data-page-node-id="OhCD1rBZJCB9CDP1XMsXJi"/><feMergeNode in="b" data-page-node-id="IGHRj3NbmZO8o9gkfxiVMP"/><feMergeNode in="SourceGraphic" data-page-node-id="7PD8bRGrVLwGGEAcl158zi"/></feMerge>
+          </filter>
+          <filter id="fBlur" x="-60%" y="-60%" width="220%" height="220%" data-page-node-id="ZijVwx548ua9qBS7BcEVVj">
+            <feGaussianBlur stdDeviation="18" data-page-node-id="D93Oan9hloRl9BwonUHbSE"/>
+          </filter>
+
+          <clipPath id="clipBody" data-page-node-id="Vz8BoQs4ifUG2uOEyMk14f">
+            <path d="M 500 528 C 552 522 604 546 632 584 C 654 616 668 642 696 652
+                     C 736 664 782 656 814 646 C 862 594 902 528 918 452
+                     C 930 396 928 330 912 268 C 894 194 846 142 782 120
+                     C 716 96 610 84 500 84 C 390 84 284 96 218 120
+                     C 154 142 106 194 88 268 C 72 330 70 396 82 452
+                     C 98 528 138 594 186 646 C 218 656 264 664 304 652
+                     C 332 642 346 616 368 584 C 396 546 448 522 500 528 Z" data-page-node-id="o08BrwWbafJ9kz5pmPh0Lh"/>
+          </clipPath>
+        </defs>
+
+        <!-- ===== 地面灯光带（手柄下方） ===== -->
+        <ellipse id="floorGlow" cx="500" cy="702" rx="336" ry="26" fill="#3b82f6" opacity=".26" filter="url(#fGlowBig)" data-page-node-id="YRYNpAS7Bv7soaTAF0kQ3O"/>
+        <rect id="lightBar" x="318" y="672" width="364" height="16" rx="8" fill="#3b82f6" filter="url(#fGlow)" data-page-node-id="cqd2vHZ8Ns445CENpw6H3G"/>
+
+        <!-- ===== 扳机 / 肩键（本体之后） ===== -->
+        <g id="trigL" class="ctrl" data-btn="l2" data-page-node-id="XMfH8qnekL5C2lQlhZ5Hqc">
+          <path d="M 250 66 L 250 34 C 250 20 262 10 280 8 L 320 8 C 338 10 350 20 350 34 L 350 66 Z"
+                fill="url(#gTrigger)" stroke="rgba(0,0,0,.45)" stroke-width="2" stroke-linejoin="round"
+                transform="rotate(-6 300 66)" data-page-node-id="jbxe37tmh3TKRNJUWOESls"/>
+          <path d="M 256 60 L 256 36 C 256 26 264 19 280 17 L 320 17 C 336 19 344 26 344 36 L 344 60 Z"
+                fill="rgba(255,255,255,.10)" transform="rotate(-6 300 66)" data-page-node-id="H2fM04sSQJc2SPgqeqPhtk"/>
+        </g>
+        <g id="trigR" class="ctrl" data-btn="r2" data-page-node-id="E8PfLgLGbLI0RIHGfHW7OW">
+          <path d="M 750 66 L 750 34 C 750 20 738 10 720 8 L 680 8 C 662 10 650 20 650 34 L 650 66 Z"
+                fill="url(#gTrigger)" stroke="rgba(0,0,0,.45)" stroke-width="2" stroke-linejoin="round"
+                transform="rotate(6 700 66)" data-page-node-id="Px2LvOkMZMo25Qrzw3buE0"/>
+          <path d="M 744 60 L 744 36 C 744 26 736 19 720 17 L 680 17 C 664 19 656 26 656 36 L 656 60 Z"
+                fill="rgba(255,255,255,.10)" transform="rotate(6 700 66)" data-page-node-id="UHzFHbiL1VQBnDOy2Kq2GG"/>
+        </g>
+        <g id="bumpL" class="ctrl" data-btn="l1" data-page-node-id="dycFfF5Q5wLBwzOUgOcd2G">
+          <rect x="234" y="54" width="132" height="52" rx="19" fill="url(#gBumper)"
+                stroke="rgba(0,0,0,.35)" stroke-width="2" transform="rotate(-5 300 100)" data-page-node-id="ElLA4VUi7BY3uSw8kLpJQL"/>
+          <rect x="243" y="60" width="114" height="18" rx="9" fill="rgba(255,255,255,.55)" transform="rotate(-5 300 100)" data-page-node-id="fSrdQZVSlhbyMlXRiDhfYF"/>
+        </g>
+        <g id="bumpR" class="ctrl" data-btn="r1" data-page-node-id="nVn73P7uqU2wVf5PFvEtiN">
+          <rect x="634" y="54" width="132" height="52" rx="19" fill="url(#gBumper)"
+                stroke="rgba(0,0,0,.35)" stroke-width="2" transform="rotate(5 700 100)" data-page-node-id="lxBRrzBLTDP4LsqZP9PqwS"/>
+          <rect x="643" y="60" width="114" height="18" rx="9" fill="rgba(255,255,255,.55)" transform="rotate(5 700 100)" data-page-node-id="x7SKpdJcQGAVXAlthP0LcH"/>
+        </g>
+
+        <!-- ===== 手柄本体 ===== -->
+        <g id="body" filter="url(#fShadow)" data-page-node-id="7VR2ayU6bs8t0okrWWpkZa">
+          <path id="shell" fill="url(#gShell)" d="M 500 528 C 552 522 604 546 632 584 C 654 616 668 642 696 652
+                     C 736 664 782 656 814 646 C 862 594 902 528 918 452
+                     C 930 396 928 330 912 268 C 894 194 846 142 782 120
+                     C 716 96 610 84 500 84 C 390 84 284 96 218 120
+                     C 154 142 106 194 88 268 C 72 330 70 396 82 452
+                     C 98 528 138 594 186 646 C 218 656 264 664 304 652
+                     C 332 642 346 616 368 584 C 396 546 448 522 500 528 Z" data-page-node-id="S7jD3296J89r83ohmGlfdN"/>
+          <g clip-path="url(#clipBody)" data-page-node-id="4ETQZfD3DkNKb9MUwcKCor">
+            <!-- 黑色下护板（蝙蝠翼造型） -->
+            <path fill="url(#gTrim)" d="M 168 428
+              C 203 422 218 481 248 494 C 278 507 317 508 346 508
+              C 375 508 394 499 420 492 C 446 485 473 468 500 468
+              C 527 468 554 485 580 492 C 606 499 625 508 654 508
+              C 683 508 722 507 752 494 C 782 481 797 422 832 428
+              C 806 486 776 516 744 536 C 706 558 660 570 616 562
+              C 570 554 530 542 500 534 C 470 542 430 554 384 562
+              C 340 570 294 558 256 536 C 224 516 194 486 168 428 Z" data-page-node-id="DaT85kSHASBIyGHUmCQubU"/>
+            <path fill="none" stroke="rgba(255,255,255,.13)" stroke-width="1.6" d="M 168 428
+              C 203 422 218 481 248 494 C 278 507 317 508 346 508
+              C 375 508 394 499 420 492 C 446 485 473 468 500 468
+              C 527 468 554 485 580 492 C 606 499 625 508 654 508
+              C 683 508 722 507 752 494 C 782 481 797 422 832 428" data-page-node-id="HZRXrdh8dyJLaoulrtFaXf"/>
+            <!-- 质感：顶部高光 / 握把阴影 -->
+            <ellipse cx="500" cy="118" rx="330" ry="58" fill="rgba(255,255,255,.62)" filter="url(#fBlur)" data-page-node-id="lzvcv9lUL2EXkPwaJ33exu"/>
+            <ellipse cx="228" cy="612" rx="120" ry="86" fill="rgba(0,0,0,.20)" filter="url(#fBlur)" data-page-node-id="qGUoYagiE1D23mJo3aGHwU"/>
+            <ellipse cx="772" cy="612" rx="120" ry="86" fill="rgba(0,0,0,.20)" filter="url(#fBlur)" data-page-node-id="4Ece9J1rtc8osfhPfttoxA"/>
+            <ellipse cx="740" cy="560" rx="60" ry="70" fill="rgba(255,255,255,.10)" filter="url(#fBlur)" data-page-node-id="L6rMybPiSAdhCb6ESMSkRX"/>
+            <ellipse cx="260" cy="560" rx="60" ry="70" fill="rgba(255,255,255,.10)" filter="url(#fBlur)" data-page-node-id="hvRDlPQ5YLkQUDGuKaGwsD"/>
+          </g>
+          <path fill="none" stroke="rgba(0,0,0,.30)" stroke-width="2.5" d="M 500 528 C 552 522 604 546 632 584 C 654 616 668 642 696 652
+                     C 736 664 782 656 814 646 C 862 594 902 528 918 452
+                     C 930 396 928 330 912 268 C 894 194 846 142 782 120
+                     C 716 96 610 84 500 84 C 390 84 284 96 218 120
+                     C 154 142 106 194 88 268 C 72 330 70 396 82 452
+                     C 98 528 138 594 186 646 C 218 656 264 664 304 652
+                     C 332 642 346 616 368 584 C 396 546 448 522 500 528 Z" data-page-node-id="vZvMT4uDzBgxpVnBv05cBy"/>
+        </g>
+
+        <!-- ===== 触控板灯带 ===== -->
+        <g filter="url(#fGlow)" data-page-node-id="BgkWeV6mTIC2nYVcbYQ7k7">
+          <g mask="url(#mLbFade)" data-page-node-id="LHn7APYk1b7dBDFKL0kgXo">
+            <rect id="touchLight" x="336" y="161" width="328" height="208" rx="30" fill="#3b82f6" data-page-node-id="Wf4g51vHBjLABZrIvGaa8j"/>
+          </g>
+        </g>
+
+        <!-- ===== 触控板 ===== -->
+        <g id="touchpad" class="ctrl" data-btn="touchpad" data-page-node-id="ZiRAStCFfXCTvPe5JckqBb">
+          <rect x="350" y="175" width="300" height="180" rx="20" fill="url(#gTouch)"
+                stroke="rgba(0,0,0,.22)" stroke-width="2" data-page-node-id="PxrCnnFmGcsYw17KVzhUlg"/>
+          <rect x="350" y="175" width="300" height="180" rx="20" fill="none"
+                stroke="rgba(255,255,255,.85)" stroke-width="1" data-page-node-id="4XzUGGzOb24bf6U7P63At2"/>
+          <rect x="362" y="187" width="276" height="156" rx="14" fill="rgba(0,0,0,.035)" data-page-node-id="VAF08HA0PQGO6yCVvU0PYx"/>
+          <circle id="tpRipple" class="tp-ripple" cx="500" cy="265" r="40"
+                  fill="rgba(255,255,255,.55)" opacity="0" data-page-node-id="DmOruB8pesCBJAOwO12zgO"/>
+        </g>
+
+        <!-- ===== Create / Options ===== -->
+        <g id="btnCreate" class="ctrl" data-btn="create" data-page-node-id="CvCs6b5NdELiboBiLnnkFA">
+          <rect x="289" y="186" width="22" height="48" rx="11" fill="url(#gKeyDark)"
+                stroke="rgba(0,0,0,.35)" stroke-width="1.5" transform="rotate(-20 300 210)" data-page-node-id="wytGHdkF6oGJUyZYU5ZYbI"/>
+          <g transform="rotate(-20 300 210)" stroke="#aeb7c6" stroke-width="2.4" stroke-linecap="round" data-page-node-id="4dOq4uWwFdegtX9pt4GMo6">
+            <line x1="294" y1="200" x2="306" y2="200" data-page-node-id="NQ8SVEfwGm86lY4rjWOIAF"/>
+            <line x1="294" y1="210" x2="306" y2="210" data-page-node-id="zGnqOzIskcTYpGgiYf9WwD"/>
+            <line x1="294" y1="220" x2="306" y2="220" data-page-node-id="nrTNljpoJxcyPdWbmnhgSI"/>
+          </g>
+        </g>
+        <g id="btnOptions" class="ctrl" data-btn="options" data-page-node-id="MCiNjhgw28MDmvfdVNuEkX">
+          <rect x="689" y="186" width="22" height="48" rx="11" fill="url(#gKeyDark)"
+                stroke="rgba(0,0,0,.35)" stroke-width="1.5" transform="rotate(20 700 210)" data-page-node-id="h8D397jHArzXCJ9DudLVyr"/>
+          <g transform="rotate(20 700 210)" stroke="#aeb7c6" stroke-width="2.4" stroke-linecap="round" data-page-node-id="tDA3AabdWILYNsjNSrH3cg">
+            <line x1="694" y1="200" x2="706" y2="200" data-page-node-id="PR6T87ZnlPoiAS48GKY6wa"/>
+            <line x1="694" y1="210" x2="706" y2="210" data-page-node-id="V9fc1eAAlypem4w4GLACbU"/>
+            <line x1="694" y1="220" x2="706" y2="220" data-page-node-id="NSp996LHSf3wuHfKmo47h4"/>
+          </g>
+        </g>
+
+        <!-- ===== PS 键 ===== -->
+        <g id="btnPs" class="ctrl" data-btn="ps" data-page-node-id="Tj3lc1GdBzMjLZZ6LSgyAD">
+          <circle cx="500" cy="388" r="27" fill="url(#gKeyDark)" stroke="rgba(0,0,0,.40)" stroke-width="2" data-page-node-id="lF700Qf7mWSIi9ZF1qJsGZ"/>
+          <circle cx="500" cy="388" r="27" fill="none" stroke="rgba(255,255,255,.20)" stroke-width="1" data-page-node-id="npc6JWlfOD8YMHunCkhhMW"/>
+          <g transform="translate(482,369) scale(0.36)" fill="#e8eefb" data-page-node-id="mc3i6Lm6AQFkGlpBuWZggx">
+            <path d="M 10 8 H 52 C 66 8 76 17 76 30 C 76 43 66 52 52 52 H 28 V 92 H 10 Z" data-page-node-id="amGlmxBxBMvkt9O9yuyE0Z"/>
+            <path d="M 82 60 C 76 53 60 51 52 57 C 43 64 49 74 61 77 C 72 81 76 88 68 93 C 59 98 44 94 38 87"
+                  fill="none" stroke="#e8eefb" stroke-width="11" stroke-linecap="round" data-page-node-id="G6ZYaizrSxJf1KpS3wRQos"/>
+          </g>
+        </g>
+
+        <!-- ===== 静音键 ===== -->
+        <g id="btnMute" class="ctrl" data-btn="mute" data-page-node-id="R78fDypJgVqaIqDnhv8lrC">
+          <rect x="474" y="428" width="52" height="22" rx="11" fill="url(#gKeyDark)"
+                stroke="rgba(0,0,0,.35)" stroke-width="1.5" data-page-node-id="8tPoAQWiW024tYNZGdDkIx"/>
+          <circle cx="500" cy="439" r="6.5" fill="none" stroke="#aeb7c6" stroke-width="2" data-page-node-id="qxNgEeETkOXXGBXXAJ7Qf9"/>
+          <line x1="494.5" y1="445.5" x2="505.5" y2="432.5" stroke="#aeb7c6" stroke-width="2" stroke-linecap="round" data-page-node-id="ZW5rRbSx3M50Up9b8Jolzz"/>
+        </g>
+
+        <!-- ===== 扬声器网孔 ===== -->
+        <g id="speaker" fill="rgba(255,255,255,.20)" data-page-node-id="Ay6sHvI614zr2RMiE1xxVg">
+          <circle cx="455" cy="484" r="2.6" data-page-node-id="rLqLmWINz0AdN3LJzjANv1"/><circle cx="470" cy="484" r="2.6" data-page-node-id="Ivzj5XdhXC75ywgPqmwqaY"/><circle cx="485" cy="484" r="2.6" data-page-node-id="WD3Hr9BSitLHdqQYgoxghs"/>
+          <circle cx="500" cy="484" r="2.6" data-page-node-id="Dp0QhFvESRk1YBNj1JsVsq"/><circle cx="515" cy="484" r="2.6" data-page-node-id="6R4EcarNOroWHbG4m8DKKn"/><circle cx="530" cy="484" r="2.6" data-page-node-id="cN77owVEMcIuSk0EwBAQOt"/>
+          <circle cx="545" cy="484" r="2.6" data-page-node-id="DHZuAeAdjqc1BFND99THKo"/>
+          <circle cx="455" cy="498" r="2.6" data-page-node-id="CQonr0xFfHlUftBaZM1nAT"/><circle cx="470" cy="498" r="2.6" data-page-node-id="Zxztcwn90yMQfdFG2r4CfM"/><circle cx="485" cy="498" r="2.6" data-page-node-id="HmU1imlOLJoWvQykFPkoeG"/>
+          <circle cx="500" cy="498" r="2.6" data-page-node-id="9zpAeEmrFYfBNF3T48wZkd"/><circle cx="515" cy="498" r="2.6" data-page-node-id="n5vzl35Py7NYIQBEbJDMjg"/><circle cx="530" cy="498" r="2.6" data-page-node-id="DYOR65EQiJPE1LfECC7f7c"/>
+          <circle cx="545" cy="498" r="2.6" data-page-node-id="EjIaaPOqAT1CmmcfUBs01h"/>
+          <circle cx="470" cy="512" r="2.6" data-page-node-id="wDGj3H7vmnMO1ToBXvxjLw"/><circle cx="485" cy="512" r="2.6" data-page-node-id="xPpzPVHSH7yE9K2GFaXK21"/><circle cx="500" cy="512" r="2.6" data-page-node-id="rvc9FX8jR5aR5aWddiasgT"/>
+          <circle cx="515" cy="512" r="2.6" data-page-node-id="QQSI7OXfNqPJZ7zlR1hOI9"/><circle cx="530" cy="512" r="2.6" data-page-node-id="zlEpeqly8Jav0AMY6LD05U"/>
+        </g>
+
+        <!-- ===== 十字方向键 ===== -->
+        <g id="dpad" data-page-node-id="a6j6nFx7JXPbFFIAJV7WTC">
+          <circle cx="248" cy="330" r="86" fill="rgba(0,0,0,.055)" data-page-node-id="ASTrtMZBcEgqjdiu7dp3gj"/>
+          <g id="btnUp" class="ctrl dpad-arm" data-btn="up" data-page-node-id="A1gYI6v1LvIEwSiKkqHF58">
+            <rect x="216" y="254" width="64" height="76" rx="12" fill="url(#gKeyDark)" stroke="rgba(0,0,0,.35)" stroke-width="1.5" data-page-node-id="qr6jPWA175BdLxyJxxGtbj"/>
+            <path d="M 248 267 L 260 284 L 236 284 Z" fill="#c9d2e0" data-page-node-id="4JkXjhoT4xGKVLjjigJgyl"/>
+          </g>
+          <g id="btnDown" class="ctrl dpad-arm" data-btn="down" data-page-node-id="WGbyns2TLKhooAWozoJxH4">
+            <rect x="216" y="330" width="64" height="76" rx="12" fill="url(#gKeyDark)" stroke="rgba(0,0,0,.35)" stroke-width="1.5" data-page-node-id="FF9hoj8WILprRIROTQoMmi"/>
+            <path d="M 248 393 L 260 376 L 236 376 Z" fill="#c9d2e0" data-page-node-id="b25J5h7UHqQbmwR8ANkRla"/>
+          </g>
+          <g id="btnLeft" class="ctrl dpad-arm" data-btn="left" data-page-node-id="Wlfa1LVnXWgbAufqCtFdlS">
+            <rect x="176" y="294" width="72" height="72" rx="12" fill="url(#gKeyDark)" stroke="rgba(0,0,0,.35)" stroke-width="1.5" data-page-node-id="l7C03H0O9GAfdOFdlhJhaL"/>
+            <path d="M 187 330 L 201 319 L 201 341 Z" fill="#c9d2e0" data-page-node-id="bW7qf7kCN751HYcbSm2sb6"/>
+          </g>
+          <g id="btnRight" class="ctrl dpad-arm" data-btn="right" data-page-node-id="r1gCeFb7ETvRFf74Wy6Grh">
+            <rect x="248" y="294" width="72" height="72" rx="12" fill="url(#gKeyDark)" stroke="rgba(0,0,0,.35)" stroke-width="1.5" data-page-node-id="dOC7FMI1TCWR6DQWHGv4Kc"/>
+            <path d="M 309 330 L 295 319 L 295 341 Z" fill="#c9d2e0" data-page-node-id="Ahn9BqAXua2VFO7v0Ovnty"/>
+          </g>
+          <circle cx="248" cy="330" r="31" fill="url(#gKeyDark)" data-page-node-id="dSrtQeBdbztjCaLyFY3xfd"/>
+          <circle cx="248" cy="330" r="31" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1" data-page-node-id="bAzmYuQkLK2Ri3FzxBfE95"/>
+        </g>
+
+        <!-- ===== △○✕□ ===== -->
+        <g id="face" data-page-node-id="sFGQyFAbnJnb62x4TjfFgC">
+          <g id="btnTriangle" class="ctrl" data-btn="triangle" data-page-node-id="Tar7ImVBMFBbZrb72GJh9V">
+            <circle cx="752" cy="272" r="27" fill="url(#gKeyDark)" stroke="rgba(0,0,0,.40)" stroke-width="2" data-page-node-id="TonWIFNSFQUBDHLBqRbx69"/>
+            <circle cx="752" cy="272" r="27" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1" data-page-node-id="335EEfQk3ug7WwRNKy5lyJ"/>
+            <path d="M 752 259 L 766 283 L 738 283 Z" fill="#dbe3f0" data-page-node-id="dfcIM3mCaRFrEUJlqM8rg0"/>
+          </g>
+          <g id="btnCircle" class="ctrl" data-btn="circle" data-page-node-id="S2LETdS7rfaEnKexS3cxFJ">
+            <circle cx="810" cy="330" r="27" fill="url(#gKeyDark)" stroke="rgba(0,0,0,.40)" stroke-width="2" data-page-node-id="Hfk4vkCBQFXVH1gzEitZtF"/>
+            <circle cx="810" cy="330" r="27" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1" data-page-node-id="Uul1zhuerDH5kJtfIEm0GV"/>
+            <circle cx="810" cy="330" r="12.5" fill="#dbe3f0" data-page-node-id="LcBLPJMqOg3xOgAhUQbDlp"/>
+          </g>
+          <g id="btnCross" class="ctrl" data-btn="cross" data-page-node-id="CT81EqmcHHXNnsviCEWD5k">
+            <circle cx="752" cy="388" r="27" fill="url(#gKeyDark)" stroke="rgba(0,0,0,.40)" stroke-width="2" data-page-node-id="DCeN1dKFv58HxaUbmRAUOk"/>
+            <circle cx="752" cy="388" r="27" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1" data-page-node-id="bp0Nc23XngNjvfyjMYuTLp"/>
+            <path d="M 741 377 L 763 399 M 763 377 L 741 399" stroke="#dbe3f0" stroke-width="7" stroke-linecap="round" fill="none" data-page-node-id="rLUugC8C9Gsm8colqprnpA"/>
+          </g>
+          <g id="btnSquare" class="ctrl" data-btn="square" data-page-node-id="1mnbwryTdvG4qSPtnrfT26">
+            <circle cx="694" cy="330" r="27" fill="url(#gKeyDark)" stroke="rgba(0,0,0,.40)" stroke-width="2" data-page-node-id="AOzOV2nze9eVMg21SxmRKS"/>
+            <circle cx="694" cy="330" r="27" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1" data-page-node-id="XlqudXAW30pyeBXJOAMW9T"/>
+            <rect x="682" y="318" width="24" height="24" rx="3" fill="#dbe3f0" data-page-node-id="HPqQ8M6GcjJ64ggDTeQK2M"/>
+          </g>
+        </g>
+
+        <!-- ===== 摇杆 ===== -->
+        <g id="stickL" class="stick" data-stick="l3" data-page-node-id="nSDWKeFfKggobwbwyfgPZf">
+          <circle cx="346" cy="478" r="68" fill="url(#gWell)" data-page-node-id="b43je0UYPbik9YOcobgazf"/>
+          <circle cx="346" cy="478" r="68" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="2" data-page-node-id="y9aX5PCGyrTxnLpCDE2fWZ"/>
+          <circle id="ledL" cx="346" cy="478" r="68" fill="none" stroke="#22d3ee" stroke-width="3.5" opacity="0" filter="url(#fGlow)" data-page-node-id="jMU2MK9uDdJFH68AVVoLhA"/>
+          <g class="cap" id="capL" data-page-node-id="Ynsk62GfdXVyyx6h2x1wN5">
+            <circle cx="346" cy="478" r="47" fill="url(#gCap)" data-page-node-id="seaBhtfQkPhS9fdJxDSdMp"/>
+            <circle cx="346" cy="478" r="47" fill="none" stroke="rgba(255,255,255,.20)" stroke-width="2" data-page-node-id="0P3s2guZZioOBZ7MHhSH5G"/>
+            <circle cx="346" cy="478" r="35" fill="#14171c" data-page-node-id="NMxIDtoTrDEQ3F6fA848FE"/>
+            <circle cx="346" cy="478" r="35" fill="none" stroke="rgba(0,0,0,.75)" stroke-width="4" data-page-node-id="78se21QNiCvJT54Gbx6LHM"/>
+            <ellipse cx="333" cy="464" rx="19" ry="13" fill="rgba(255,255,255,.12)" data-page-node-id="b4Xivs5VGZA2TiCIFsF0Gp"/>
+          </g>
+        </g>
+        <g id="stickR" class="stick" data-stick="r3" data-page-node-id="9tS8szFhs0cvoUnBx24a1z">
+          <circle cx="654" cy="478" r="68" fill="url(#gWell)" data-page-node-id="l1hq2CDatCBO7Dr28HvmIO"/>
+          <circle cx="654" cy="478" r="68" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="2" data-page-node-id="MYE8mVILhF1yAEIDWhZOYT"/>
+          <circle id="ledR" cx="654" cy="478" r="68" fill="none" stroke="#22d3ee" stroke-width="3.5" opacity="0" filter="url(#fGlow)" data-page-node-id="rGenkXDceiid0Kk3mrV5Qr"/>
+          <g class="cap" id="capR" data-page-node-id="4lMtklXvxu39HXbw3orgbs">
+            <circle cx="654" cy="478" r="47" fill="url(#gCap)" data-page-node-id="lmNMXjmJaFVqfuteUXricS"/>
+            <circle cx="654" cy="478" r="47" fill="none" stroke="rgba(255,255,255,.20)" stroke-width="2" data-page-node-id="PWAcLyiEzKBhRH8DkVMhYI"/>
+            <circle cx="654" cy="478" r="35" fill="#14171c" data-page-node-id="ICVHfGf2nMB5gbVQIpQtsC"/>
+            <circle cx="654" cy="478" r="35" fill="none" stroke="rgba(0,0,0,.75)" stroke-width="4" data-page-node-id="ICKdQuklcjwKTgvgsdH1mM"/>
+            <ellipse cx="641" cy="464" rx="19" ry="13" fill="rgba(255,255,255,.12)" data-page-node-id="u6AxiImT74tOZzxvneOQJa"/>
+          </g>
+        </g>
+
+        <!-- ===== 标注 ===== -->
+        <g class="labels" fill="#93a0b3" font-size="15" font-family="Segoe UI, Microsoft YaHei, sans-serif" text-anchor="middle" font-weight="600" data-page-node-id="VGFsrEg6pTp4weo1uFy4UR">
+          <text x="300" y="46" data-page-node-id="PHF4ekUTDalzLIlWtcyOhA">L2</text>
+          <text x="700" y="46" data-page-node-id="GQ5kh9Jl1v0SOg9CDkEGkF">R2</text>
+          <text x="300" y="90" fill="#5c6676" data-page-node-id="DHQIK0Wy3J7GnyvUCjoyiX">L1</text>
+          <text x="700" y="90" fill="#5c6676" data-page-node-id="hHmFPFJT6rIKDrTadOJ4pB">R1</text>
+          <text x="300" y="168" data-page-node-id="93p6Ym09sEbTZMxb3k8iPC">Create</text>
+          <text x="700" y="168" data-page-node-id="ZswMAN4odYvgSYv1fwT4cq">Options</text>
+          <text x="248" y="432" data-page-node-id="OZDqbhEpTlCik1l6Qx8r5d">D-Pad</text>
+          <text x="752" y="432" data-page-node-id="xXGpdqHinqCY5bkUsYevGu">△ ○ ✕ □</text>
+          <text x="346" y="578" data-page-node-id="IRQo0Y4Je4aFneQsM19vv8">L3</text>
+          <text x="654" y="578" data-page-node-id="4TRStKIdASL4aSLoZ3LdkC">R3</text>
+          <text x="500" y="640" font-size="14" data-page-node-id="mVDAahwzeAmX2yEZfx1V4J">DualSense</text>
+        </g>
+      </svg>
+    </div>
+    <div class="stage-hint" data-page-node-id="FIKmQDCb3cqoPItfkcDDvF">拖动手柄空白处可旋转视角 · 双击复位 · 摇杆可直接拖动</div>
+  </main>
+
+  <aside class="hud" data-page-node-id="a4aS8BB8zgUaKQ0GUEB81F">
+    <div class="card" data-page-node-id="4GqzmgavqQJM1kYdNVd6bq">
+      <p class="title" data-page-node-id="frGSPOFOcWUcX3XrwceEXN">PS5 DualSense</p>
+      <p class="sub" data-page-node-id="bCDasgN3caBrJPo2wWnpwN">纯矢量绘制 · 零依赖单文件 · 可离线运行</p>
+    </div>
+
+    <div class="card" data-page-node-id="MIaitISlvBm0p6b0Qhq9Za">
+      <h2 data-page-node-id="22pRZbftG2piPvOb8D30tv">按键状态</h2>
+      <div class="chips" id="chips" data-page-node-id="NFULEGnEe3er1yQwihqjK1"><span class="chip dim" data-page-node-id="2gHJzymEWJi5z1TAFsC2Hv">—</span></div>
+    </div>
+
+    <div class="card" data-page-node-id="fMCqw8MyO2sXaPr7qgbR2t">
+      <h2 data-page-node-id="fskxIpyNoAWpPJLlBZnbH5">摇杆</h2>
+      <div class="grid2" data-page-node-id="rMxFixQfHJvcVyp947bHnF">
+        <div data-page-node-id="9kYH0mtilTJwne9vBHb4Bx">
+          <div class="rowlab" data-page-node-id="E81nltx7nyUTJB8qYfSeBn"><span data-page-node-id="HaxWZMSBfrHEtq4SHcMgfe">左 L3</span><span id="lTxt" data-page-node-id="W1IwyD59ArNWsXg4Jqx6mz">0, 0</span></div>
+          <div class="minipad" data-page-node-id="DOGLmYLUE1ar0e0Bf4W4d1"><div class="dot" id="lDot" data-page-node-id="ZQggRGXrFZFuxuvn14DWbi"></div></div>
+        </div>
+        <div data-page-node-id="WmWeT3ASAl5vSZiCcvCiVm">
+          <div class="rowlab" data-page-node-id="9C87kqxKDENWVYhiqW0jGk"><span data-page-node-id="g8DCHEdAuu6p4xdZPaADpE">右 R3</span><span id="rTxt" data-page-node-id="imIJ4POaFx91Si1MCk8NyX">0, 0</span></div>
+          <div class="minipad" data-page-node-id="Due45F2sAut4ECK6foEeVO"><div class="dot" id="rDot" data-page-node-id="4pdJ9wCA2P5V6XULEoVL9p"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-page-node-id="J1QD3ygB9DLT80UX50Kf1B">
+      <h2 data-page-node-id="eSmGvjERaAYTl8BJ69zqVq">扳机模拟量</h2>
+      <div class="rowlab" data-page-node-id="BPPCSrlY3jL2A0esGP5Dxn"><span data-page-node-id="weZmEntXK9NbLf1dS4W6Gt">L2</span><span id="l2Txt" data-page-node-id="5bqEgaoKZVkPTrYjGkkUcX">0%</span></div>
+      <div class="bar" data-page-node-id="4sZWMUwhgG7PDUufpN3jtl"><i id="l2Bar" data-page-node-id="6onKsf2It5ql7GnvYtBCFd"></i></div>
+      <div style="height:10px" data-page-node-id="djyDFZLuyEoh4PKRCAo3lG"></div>
+      <div class="rowlab" data-page-node-id="VkaU3ZMHkZIwolc5WEuHri"><span data-page-node-id="ouGFcTaZ1Ywmk7l1dCmjsd">R2</span><span id="r2Txt" data-page-node-id="vCHqx8lyGkzqdBnVVD2Bq7">0%</span></div>
+      <div class="bar" data-page-node-id="Xf5vKLeEQNBfoznjdWHQbl"><i id="r2Bar" data-page-node-id="V75OvqeKoWMiHMom0ZAFtR"></i></div>
+    </div>
+
+    <div class="card" data-page-node-id="iDLB0NTaJszTCmZ68ILHY6">
+      <h2 data-page-node-id="YxIR5gYUHem9NYPGQ8LuvB">灯带颜色</h2>
+      <div class="swatches" id="swatches" data-page-node-id="ZawudsUKAw9M7Hn7aZG1G7">
+        <div class="sw on" style="background:#3b82f6" data-c="#3b82f6" title="蓝" data-page-node-id="XShbO2UusDBvKnLmUydtur"></div>
+        <div class="sw" style="background:#2ee6a8" data-c="#2ee6a8" title="绿" data-page-node-id="vJhpwaZbCYAo7dgdTZO63E"></div>
+        <div class="sw" style="background:#ff5470" data-c="#ff5470" title="红" data-page-node-id="1TVUB2lu14GD7PmsmZ7Q6A"></div>
+        <div class="sw" style="background:#f5a524" data-c="#f5a524" title="琥珀" data-page-node-id="rHBA2yCSHTi1xUQ99Ec3ow"></div>
+        <div class="sw" style="background:#a78bfa" data-c="#a78bfa" title="紫" data-page-node-id="Bmv53uIEUdHfpExrcIKAj3"></div>
+        <div class="sw" style="background:#ff6fd8" data-c="#ff6fd8" title="粉" data-page-node-id="3elhjBpmuDoxnJcha3xN1u"></div>
+        <div class="sw" style="background:#22d3ee" data-c="#22d3ee" title="青" data-page-node-id="qkil5sqD2sRa9AinC6ppyE"></div>
+      </div>
+      <p class="sub" style="margin-top:9px" data-page-node-id="oTz4be6wQYeVL34UIJo8JP">按下任意按键时灯带会自动取该键的主题色。</p>
+    </div>
+
+    <div class="card" data-page-node-id="AlcynL2Qea6GKqsHMq7yVk">
+      <h2 data-page-node-id="GNXajz5Wu25nUgqbrnWLmd">真实手柄接入</h2>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap" data-page-node-id="2i8MWWaCPc34MRbhxj8C3i">
+        <span class="pill off" id="gpStatus" data-page-node-id="6vkgMKDejfAuRhKrDbiCMv">未检测到 Gamepad</span>
+      </div>
+      <p class="sub" style="margin-top:9px" data-page-node-id="gbqwvyVmTB3JSTtgyx7vP0">已为所有部件设置语义化 id（btnCross / btnUp / capL …），接入 Gamepad API 或 WebHID 后可直接驱动。</p>
+    </div>
+
+    <div class="card" data-page-node-id="PDYXZ9BNRtM31SnCoInjR6">
+      <h2 data-page-node-id="XRlmlIcN7pkdFvodIGqchy">显示与操作</h2>
+      <div class="opts" data-page-node-id="dLugfZ6I4DYPHX1Qngt2iU">
+        <label data-page-node-id="pFPj6DmZGOxmvJsQAn2Evb"><input type="checkbox" id="optLabels" data-page-node-id="YuPooEhwQFKh0j5ZsLSZ6d"> 显示部件标注</label>
+        <label data-page-node-id="WAOrvG2BnvFJ5svHtrsk8T"><input type="checkbox" id="optRotate" checked data-page-node-id="k5FTfFW3MzL6AxA8Jf1cRH"> 允许拖动旋转手柄</label>
+      </div>
+      <div class="btnline" style="margin-top:11px" data-page-node-id="ymg4fTfRTZBoKnClwvNqGU">
+        <button class="sm" id="btnReset" data-page-node-id="s2sugzwAuoyTlflUkxAtA5">复位视角</button>
+        <button class="sm" id="btnClear" data-page-node-id="GEbFqAhtTjtTqYNdu0NVq4">清空输入</button>
+      </div>
+      <p class="kbd" style="margin:11px 0 0" data-page-node-id="Y8WIL8ATmk3nCXYWo06Ud9">
+        键盘：<b data-page-node-id="Nvxw744jkzlRTLOTCRztOo">方向键</b> 十字键 · <b data-page-node-id="F8A6V3UXejEm5EG74IStza">W/A/S/D</b> △□✕○ · <b data-page-node-id="MhJeYJ3vTABCfYCFTmQvHw">Q/E</b> L1/R1 · <b data-page-node-id="4w5aqwgfiDa4Xhk2p4MS0E">1/2</b> L2/R2 · <b data-page-node-id="eeMpWo11S0ie16b0mh0TTR">Z/C</b> L3/R3 · <b data-page-node-id="4CGgjPGyNFiyI03gNbF41q">空格</b> PS
+      </p>
+    </div>
+  </aside>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var svg = document.getElementById('pad');
+  var wrap = document.getElementById('padWrap');
+  var stage = document.getElementById('stage');
+  var MAXR = 24;                 // 摇杆最大行程（用户单位）
+  var BASE = '#3b82f6';
+
+  var COLORS = {
+    up:'#f5a524', down:'#f5a524', left:'#f5a524', right:'#f5a524',
+    triangle:'#2ee6a8', circle:'#ff5470', cross:'#4d9cff', square:'#ff6fd8',
+    l1:'#a78bfa', r1:'#a78bfa', l2:'#c084fc', r2:'#c084fc',
+    l3:'#22d3ee', r3:'#22d3ee',
+    create:'#94a3b8', options:'#94a3b8', ps:'#7dd3fc', mute:'#f472b6',
+    touchpad:'#38bdf8'
+  };
+  var NAME = {
+    up:'↑', down:'↓', left:'←', right:'→',
+    triangle:'△', circle:'○', cross:'✕', square:'□',
+    l1:'L1', r1:'R1', l2:'L2', r2:'R2', l3:'L3', r3:'R3',
+    create:'Create', options:'Options', ps:'PS', mute:'静音', touchpad:'触控板'
+  };
+
+  var S = { btn:{}, lx:0, ly:0, rx:0, ry:0, l2:0, r2:0, last:null, base:BASE };
+  var held = { l2:false, r2:false };
+  var dirty = true;
+
+  /* ---------- DOM 缓存 ---------- */
+  var el = {};
+  ['touchLight','lightBar','floorGlow','capL','capR','ledL','ledR','trigL','trigR',
+   'chips','lDot','rDot','lTxt','rTxt','l2Bar','r2Bar','l2Txt','r2Txt','tpRipple','gpStatus']
+    .forEach(function(id){ el[id] = document.getElementById(id); });
+
+  var btnEls = {};
+  Array.prototype.forEach.call(svg.querySelectorAll('[data-btn]'), function(node){
+    var n = node.dataset.btn;
+    (btnEls[n] = btnEls[n] || []).push(node);
+    node.style.touchAction = 'none';
+  });
+
+  /* ---------- 输入：指针按下集合 ---------- */
+  var pointerHeld = [];
+  function press(name, on){
+    if(on){ S.btn[name] = 1; S.last = name; }
+    else  { S.btn[name] = 0; }
+    dirty = true;
+  }
+  window.addEventListener('pointerup', function(){
+    for(var i=0;i<pointerHeld.length;i++) press(pointerHeld[i], false);
+    pointerHeld.length = 0;
+    held.l2 = false; held.r2 = false;
+  });
+  window.addEventListener('pointercancel', function(){
+    for(var i=0;i<pointerHeld.length;i++) press(pointerHeld[i], false);
+    pointerHeld.length = 0;
+    held.l2 = false; held.r2 = false;
+  });
+
+  /* ---------- 普通按键 ---------- */
+  Object.keys(btnEls).forEach(function(name){
+    btnEls[name].forEach(function(node){
+      node.addEventListener('pointerdown', function(e){
+        e.preventDefault();
+        if(node.setPointerCapture){ try{ node.setPointerCapture(e.pointerId); }catch(err){} }
+        press(name, true);
+        if(pointerHeld.indexOf(name) < 0) pointerHeld.push(name);
+        if(name === 'l2') held.l2 = true;
+        if(name === 'r2') held.r2 = true;
+        if(name === 'touchpad') touchFeedback(e);
+      });
+    });
+  });
+
+  /* ---------- 触控板坐标反馈 ---------- */
+  function localPoint(e){
+    var r = svg.getBoundingClientRect();
+    var s = r.width / 1000;
+    return { x:(e.clientX - r.left) / s, y:(e.clientY - r.top) / s };
+  }
+  function touchFeedback(e){
+    var p = localPoint(e);
+    var px = Math.min(100, Math.max(0, Math.round((p.x - 350) / 300 * 100)));
+    var py = Math.min(100, Math.max(0, Math.round((p.y - 175) / 180 * 100)));
+    S.tp = { x:px, y:py };
+    el.tpRipple.setAttribute('cx', p.x);
+    el.tpRipple.setAttribute('cy', p.y);
+    if(el.tpRipple.animate){
+      el.tpRipple.animate(
+        [{ transform:'scale(.15)', opacity:.6 }, { transform:'scale(1.5)', opacity:0 }],
+        { duration:520, easing:'ease-out' }
+      );
+    }
+    dirty = true;
+  }
+  var tpNode = document.getElementById('touchpad');
+  tpNode.addEventListener('pointermove', function(e){
+    if(S.btn.touchpad) touchFeedback(e);
+  });
+  tpNode.addEventListener('pointerup', function(){ S.tp = null; dirty = true; });
+
+  /* ---------- 摇杆 ---------- */
+  function initStick(g, key){
+    var cap = g.querySelector('.cap');
+    var ax = key === 'l3' ? 'lx' : 'rx';
+    var ay = key === 'l3' ? 'ly' : 'ry';
+    var dragging = false, sx = 0, sy = 0;
+    g.style.cursor = 'grab';
+    g.addEventListener('pointerdown', function(e){
+      e.preventDefault(); e.stopPropagation();
+      dragging = true; sx = e.clientX; sy = e.clientY;
+      cap.style.transition = 'none';
+      if(g.setPointerCapture){ try{ g.setPointerCapture(e.pointerId); }catch(err){} }
+      press(key, true);
+      if(pointerHeld.indexOf(key) < 0) pointerHeld.push(key);
+      g.style.cursor = 'grabbing';
+    });
+    g.addEventListener('pointermove', function(e){
+      if(!dragging) return;
+      var r = svg.getBoundingClientRect();
+      var s = (r.width / 1000) || 1;
+      var dx = (e.clientX - sx) / s, dy = (e.clientY - sy) / s;
+      var d = Math.sqrt(dx*dx + dy*dy);
+      if(d > MAXR){ dx = dx / d * MAXR; dy = dy / d * MAXR; }
+      S[ax] = dx / MAXR; S[ay] = dy / MAXR;
+      dirty = true;
+    });
+    function end(){
+      if(!dragging) return;
+      dragging = false;
+      cap.style.transition = '';
+      S[ax] = 0; S[ay] = 0;
+      g.style.cursor = 'grab';
+      dirty = true;
+    }
+    g.addEventListener('pointerup', end);
+    g.addEventListener('pointercancel', end);
+  }
+  initStick(document.getElementById('stickL'), 'l3');
+  initStick(document.getElementById('stickR'), 'r3');
+
+  /* ---------- 键盘 ---------- */
+  var KEYMAP = {
+    ArrowUp:'up', ArrowDown:'down', ArrowLeft:'left', ArrowRight:'right',
+    w:'triangle', d:'circle', s:'cross', a:'square',
+    q:'l1', e:'r1', '1':'l2', '2':'r2', z:'l3', c:'r3', ' ':'ps',
+    Enter:'options', Shift:'create', m:'mute'
+  };
+  window.addEventListener('keydown', function(e){
+    var k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    var n = KEYMAP[k];
+    if(!n) return;
+    e.preventDefault();
+    if(n === 'l2') held.l2 = true;
+    if(n === 'r2') held.r2 = true;
+    if(!S.btn[n]) press(n, true);
+  });
+  window.addEventListener('keyup', function(e){
+    var k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    var n = KEYMAP[k];
+    if(!n) return;
+    if(n === 'l2') held.l2 = false;
+    if(n === 'r2') held.r2 = false;
+    if(n !== 'l2' && n !== 'r2') press(n, false);
+  });
+
+  /* ---------- 视角旋转 ---------- */
+  var rot = { x:-10, y:0 }, dragging = false, sx = 0, sy = 0, base = { x:0, y:0 };
+  var optRotate = document.getElementById('optRotate');
+  function applyRot(){
+    wrap.style.transform = 'rotateX(' + rot.x.toFixed(2) + 'deg) rotateY(' + rot.y.toFixed(2) + 'deg)';
+  }
+  applyRot();
+  function isControl(t){
+    return !!(t && t.closest && t.closest('[data-btn],[data-stick]'));
+  }
+  stage.addEventListener('pointerdown', function(e){
+    if(!optRotate.checked || isControl(e.target)) return;
+    dragging = true; sx = e.clientX; sy = e.clientY;
+    base.x = rot.x; base.y = rot.y;
+    wrap.style.transition = 'none';
+    if(stage.setPointerCapture){ try{ stage.setPointerCapture(e.pointerId); }catch(err){} }
+  });
+  window.addEventListener('pointermove', function(e){
+    if(!dragging) return;
+    rot.y = Math.max(-34, Math.min(34, base.y + (e.clientX - sx) * 0.34));
+    rot.x = Math.max(-30, Math.min(24, base.x - (e.clientY - sy) * 0.30));
+    applyRot();
+  });
+  window.addEventListener('pointerup', function(){
+    if(!dragging) return;
+    dragging = false; wrap.style.transition = '';
+  });
+  stage.addEventListener('dblclick', function(){ rot = { x:-10, y:0 }; applyRot(); });
+  document.getElementById('btnReset').addEventListener('click', function(){ rot = { x:-10, y:0 }; applyRot(); });
+  document.getElementById('btnClear').addEventListener('click', function(){
+    Object.keys(S.btn).forEach(function(k){ S.btn[k] = 0; });
+    S.lx = S.ly = S.rx = S.ry = 0; S.l2 = S.r2 = 0; S.last = null; S.tp = null;
+    dirty = true;
+  });
+
+  /* ---------- 灯带预设色 ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll('.sw'), function(sw){
+    sw.addEventListener('click', function(){
+      Array.prototype.forEach.call(document.querySelectorAll('.sw'), function(o){ o.classList.remove('on'); });
+      sw.classList.add('on');
+      S.base = sw.dataset.c;
+      dirty = true;
+    });
+  });
+
+  /* ---------- 标注开关 ---------- */
+  document.getElementById('optLabels').addEventListener('change', function(e){
+    document.getElementById('pad').classList.toggle('show-labels', e.target.checked);
+  });
+
+  /* ---------- Gamepad API ---------- */
+  var gpOn = false;
+  function dz(v){ return Math.abs(v) < 0.08 ? 0 : v; }
+  function pollGamepad(){
+    if(!navigator.getGamepads) return;
+    var list = navigator.getGamepads(), gp = null;
+    for(var i=0;i<list.length;i++){ if(list[i]){ gp = list[i]; break; } }
+    if(!gp){
+      if(gpOn){ gpOn = false; el.gpStatus.textContent = '未检测到 Gamepad'; el.gpStatus.className = 'pill off'; }
+      return;
+    }
+    if(!gpOn){
+      gpOn = true;
+      el.gpStatus.textContent = gp.id.slice(0, 34);
+      el.gpStatus.className = 'pill on';
+    }
+    var b = function(i){ return gp.buttons[i] && gp.buttons[i].pressed ? 1 : 0; };
+    var v = function(i){ return gp.buttons[i] && typeof gp.buttons[i].value === 'number' ? gp.buttons[i].value : (gp.buttons[i] && gp.buttons[i].pressed ? 1 : 0); };
+    S.btn.cross=b(0); S.btn.circle=b(1); S.btn.square=b(2); S.btn.triangle=b(3);
+    S.btn.l1=b(4); S.btn.r1=b(5);
+    S.btn.create=b(8); S.btn.options=b(9); S.btn.l3=b(10); S.btn.r3=b(11);
+    S.btn.up=b(12); S.btn.down=b(13); S.btn.left=b(14); S.btn.right=b(15);
+    S.btn.ps=b(16); S.btn.touchpad=b(17);
+    S.btn.l2 = v(6) > 0.05 ? 1 : 0;
+    S.btn.r2 = v(7) > 0.05 ? 1 : 0;
+    S.l2 = v(6); S.r2 = v(7);
+    S.lx = dz(gp.axes[0] || 0); S.ly = dz(gp.axes[1] || 0);
+    S.rx = dz(gp.axes[2] || 0); S.ry = dz(gp.axes[3] || 0);
+    dirty = true;
+  }
+
+  /* ---------- 渲染 ---------- */
+  function activeColor(){
+    if(S.last && S.btn[S.last] && COLORS[S.last]) return COLORS[S.last];
+    for(var k in S.btn){ if(S.btn[k] && COLORS[k]) return COLORS[k]; }
+    return S.base;
+  }
+  function render(){
+    /* 按键视觉 */
+    Object.keys(btnEls).forEach(function(n){
+      var on = !!S.btn[n];
+      btnEls[n].forEach(function(node){ node.classList.toggle('is-down', on); });
+    });
+    /* 摇杆 */
+    el.capL.style.transform = 'translate(' + (S.lx*MAXR).toFixed(2) + 'px,' + (S.ly*MAXR).toFixed(2) + 'px)';
+    el.capR.style.transform = 'translate(' + (S.rx*MAXR).toFixed(2) + 'px,' + (S.ry*MAXR).toFixed(2) + 'px)';
+    el.ledL.style.opacity = S.btn.l3 ? 1 : 0;
+    el.ledR.style.opacity = S.btn.r3 ? 1 : 0;
+    /* 扳机 */
+    el.trigL.style.transform = 'translateY(' + (S.l2 * 10).toFixed(2) + 'px)';
+    el.trigR.style.transform = 'translateY(' + (S.r2 * 10).toFixed(2) + 'px)';
+    el.trigL.style.opacity = (1 - S.l2 * 0.28).toFixed(3);
+    el.trigR.style.opacity = (1 - S.r2 * 0.28).toFixed(3);
+    /* 灯带 */
+    var c = activeColor();
+    el.touchLight.setAttribute('fill', c);
+    el.lightBar.setAttribute('fill', c);
+    el.floorGlow.setAttribute('fill', c);
+    /* HUD：按键 */
+    var out = [];
+    Object.keys(NAME).forEach(function(n){ if(S.btn[n]) out.push('<span class="chip">' + NAME[n] + '</span>'); });
+    if(S.tp) out.push('<span class="chip">触控板 ' + S.tp.x + '%, ' + S.tp.y + '%</span>');
+    el.chips.innerHTML = out.length ? out.join('') : '<span class="chip dim">—</span>';
+    /* HUD：摇杆 */
+    el.lDot.style.transform = 'translate(' + (S.lx*46) + '%,' + (S.ly*46) + '%)';
+    el.rDot.style.transform = 'translate(' + (S.rx*46) + '%,' + (S.ry*46) + '%)';
+    el.lTxt.textContent = S.lx.toFixed(2) + ', ' + S.ly.toFixed(2);
+    el.rTxt.textContent = S.rx.toFixed(2) + ', ' + S.ry.toFixed(2);
+    /* HUD：扳机 */
+    var p1 = Math.round(S.l2 * 100), p2 = Math.round(S.r2 * 100);
+    el.l2Bar.style.width = p1 + '%'; el.r2Bar.style.width = p2 + '%';
+    el.l2Txt.textContent = p1 + '%';  el.r2Txt.textContent = p2 + '%';
+  }
+
+  /* ---------- 主循环 ---------- */
+  var last = performance.now();
+  function loop(t){
+    var dt = Math.min(60, t - last); last = t;
+    if(!gpOn){ // 接入真实手柄时不覆盖模拟量
+      ['l2','r2'].forEach(function(k){
+        var target = held[k] ? 1 : 0;
+        var cur = S[k];
+        if(Math.abs(cur - target) < 0.001){ if(cur !== target){ S[k] = target; dirty = true; } return; }
+        var step = dt * (target > cur ? 1/420 : 1/200);
+        S[k] = cur < target ? Math.min(target, cur + step) : Math.max(target, cur - step);
+        S.btn[k] = S[k] > 0.06 ? 1 : 0;
+        dirty = true;
+      });
+    }
+    pollGamepad();
+    if(dirty){ dirty = false; render(); }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  /* 窗口失焦时释放 */
+  window.addEventListener('blur', function(){
+    Object.keys(S.btn).forEach(function(k){ S.btn[k] = 0; });
+    held.l2 = held.r2 = false;
+    dirty = true;
+  });
+})();
+</script>
+</body>
+</html>

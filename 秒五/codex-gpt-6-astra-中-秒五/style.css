@@ -1,0 +1,8 @@
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+body { background: linear-gradient(170deg, #dcebef 0%, #f3f4ee 52%, #f3e4e5 100%); font-family: "Yu Gothic", "Microsoft YaHei", sans-serif; }
+canvas { display: block; width: 100vw; height: 100vh; height: 100dvh; outline: none; touch-action: none; }
+#hint { position: fixed; left: 50%; bottom: max(25px, env(safe-area-inset-bottom)); transform: translateX(-50%); margin: 0; color: #536563; font-size: 11px; letter-spacing: .2em; white-space: nowrap; opacity: 0; transition: opacity 1.6s; pointer-events: none; }
+#hint.visible { opacity: .8; }
+#error { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 80%; color: #546763; font-size: 14px; line-height: 1.8; text-align: center; }
+@media (prefers-reduced-motion: reduce) { #hint { transition: none; } }

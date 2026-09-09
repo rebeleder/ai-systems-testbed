@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">A pelican's seaside bicycle ride</title>
+  <desc id="desc">An original animated illustration: a cream-white pelican with a long orange bill and a fluttering teal scarf pedals a coral bicycle along a sunlit seaside promenade. Wheels turn, feet pedal, and coastal scenery drifts past.</desc>
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#f6efdc"/><stop offset="1" stop-color="#fce1bd"/></linearGradient>
+    <linearGradient id="sea" x2="0" y2="1"><stop stop-color="#98c7bf"/><stop offset="1" stop-color="#c6d9c5"/></linearGradient>
+    <g id="wheel">
+      <circle r="111" fill="#fff4d9" fill-opacity=".25" stroke="#293f43" stroke-width="14"/>
+      <circle r="100" fill="none" stroke="#fff1d6" stroke-width="3"/>
+      <g stroke="#627b79" stroke-width="2.2" opacity=".8">
+        <path d="M-97 0H97M0-97V97M-68.6-68.6 68.6 68.6M-68.6 68.6 68.6-68.6M-89.6-37.1 89.6 37.1M-37.1-89.6 37.1 89.6M-89.6 37.1 89.6-37.1M-37.1 89.6 37.1-89.6"/>
+        <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1.8s" repeatCount="indefinite"/>
+      </g>
+      <circle r="12" fill="#f2c984" stroke="#293f43" stroke-width="5"/>
+      <g><path d="M-6-101H6" stroke="#ee8a55" stroke-width="6" stroke-linecap="round"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1.8s" repeatCount="indefinite"/></g>
+    </g>
+    <g id="wave" fill="none" stroke="#f4f0d9" stroke-width="3" stroke-linecap="round"><path d="M0 0h65m18 0h18M230 18h106m24 0h32M530-9h87M760 12h140"/></g>
+    <g id="grass" stroke="#718776" stroke-width="4" fill="none" stroke-linecap="round"><path d="M0 0q2-25-10-40M0 0q5-38 18-49M0 0q13-23 29-24"/></g>
+  </defs>
+  <style>
+    .caption{font-family:Georgia,'Times New Roman',serif;fill:#29484a}
+    .small{font-family:Arial,sans-serif;letter-spacing:4px;fill:#617b76}
+    @media(prefers-reduced-motion:reduce){.scarf{animation:none}}
+  </style>
+  <path fill="url(#sky)" d="M0 0h1200v900H0z"/>
+  <circle cx="890" cy="252" r="113" fill="#edaa68" opacity=".72"/>
+  <circle cx="890" cy="252" r="132" fill="none" stroke="#e9bc85" opacity=".4"/>
+  <text x="76" y="91" class="small" font-size="13">THE SLOW COAST CLUB</text>
+  <text x="72" y="160" class="caption" font-size="58">A little more coast.</text>
+  <text x="77" y="198" class="caption" font-size="21" font-style="italic">Two wheels. One wonderfully long beak.</text>
+  <g fill="none" stroke="#84948a" stroke-width="3" stroke-linecap="round">
+    <path d="M737 179q13-12 25 0q12-12 24 0"/><path d="M1030 321q10-10 20 0q10-10 20 0"/>
+    <animateTransform attributeName="transform" type="translate" values="0 0;-16 -7;0 0" dur="7s" repeatCount="indefinite"/>
+  </g>
+  <path d="M0 414q135-29 245-4t259-2 245 3 251-5 200 5v236H0Z" fill="url(#sea)"/>
+  <path d="M0 430q145-15 260 0t290 0 290 0 360 0" fill="none" stroke="#e2e4cd" stroke-width="3"/>
+  <g opacity=".65"><use href="#wave" x="0" y="472"/><use href="#wave" x="1200" y="472"/><animateTransform attributeName="transform" type="translate" from="0 0" to="-1200 0" dur="18s" repeatCount="indefinite"/></g>
+  <g opacity=".5"><use href="#wave" x="150" y="536"/><use href="#wave" x="1350" y="536"/><animateTransform attributeName="transform" type="translate" from="0 0" to="-1200 0" dur="12s" repeatCount="indefinite"/></g>
+  <path d="M0 608q250-25 570-5t630-3v300H0Z" fill="#efd4ab"/>
+  <path d="M0 648H1200V777H0Z" fill="#e7c89f"/>
+  <path d="M0 654H1200" stroke="#fff1d7" stroke-width="4"/>
+  <g stroke="#f8e5c8" stroke-width="4" stroke-linecap="round">
+    <path d="M0 748h100m130 0h100m130 0h100m130 0h100m130 0h100m130 0h100m130 0h100"/>
+    <animateTransform attributeName="transform" type="translate" from="0 0" to="-230 0" dur="1.8s" repeatCount="indefinite"/>
+  </g>
+  <ellipse cx="603" cy="727" rx="300" ry="17" fill="#907b5f" opacity=".17"><animate attributeName="rx" values="300;288;300" dur="1.8s" repeatCount="indefinite"/></ellipse>
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0;0 -3;0 0" dur=".9s" repeatCount="indefinite"/>
+    <use href="#wheel" x="386" y="608"/><use href="#wheel" x="800" y="608"/>
+    <!-- Far leg, behind the frame. -->
+    <path d="M552 473Q548 503 541 531L527 582" fill="none" stroke="#cf884a" stroke-width="16" stroke-linecap="round">
+      <animate attributeName="d" values="M552 473Q548 503 541 531L527 582;M552 473Q577 508 590 541L573 628;M552 473Q587 507 618 529L619 582;M552 473Q555 494 553 514L573 536;M552 473Q548 503 541 531L527 582" dur="1.8s" repeatCount="indefinite"/>
+    </path>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M386 608 497 468 573 582 386 608 470 477M497 468 728 468 573 582M728 468 800 608" stroke="#ab4b40" stroke-width="13"/>
+      <path d="M386 605 497 468 573 578M506 468H728L799 604" stroke="#e77d60" stroke-width="7"/>
+      <path d="M497 468 488 437M728 468 708 409q-4-13 12-16l48-5" stroke="#30494b" stroke-width="8"/>
+      <path d="M749 389h28" stroke="#9c654b" stroke-width="12"/>
+      <path d="M720 400q60 14 53 116" stroke="#50635d" stroke-width="2"/>
+      <path d="M452 437q34-10 65-1" stroke="#30494b" stroke-width="15"/>
+      <path d="M293 579a99 99 0 0 1 177-44M709 554a105 105 0 0 1 187 12" stroke="#f0a375" stroke-width="7"/>
+    </g>
+    <path d="M386 597 566 562a22 22 0 0 1 8 44L389 619a11 11 0 0 1-3-22Z" fill="#f2d6a9" stroke="#627672" stroke-width="3"/>
+    <circle cx="573" cy="582" r="25" fill="#324d4e"/><circle cx="573" cy="582" r="17" fill="#f2c78a"/>
+    <g transform="translate(573 582)"><g stroke="#354e4e" stroke-width="6"><path d="M-46 0H46"/><animateTransform attributeName="transform" type="rotate" values="0;-90;-180;-270;-360" dur="1.8s" repeatCount="indefinite"/></g></g>
+    <!-- Tail, rounded body and long folded neck establish the pelican silhouette. -->
+    <path d="m453 411-68-34 36 49-28 5 71 28" fill="#fff5dd" stroke="#344e4e" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M442 397q48-44 115-16l39 15q-7-53 6-95 9-28 36-26 28 1 26 30-3 31-17 70-9 28 8 54 11 23-11 43-36 40-113 18-95-5-89-93Z" fill="#fff8e5" stroke="#344e4e" stroke-width="4"/>
+    <path d="M615 314q-11 65 10 106 16 33-27 49-42 12-92-3 66 30 122 8 38-14 29-43-22-30-10-61l15-55Z" fill="#e5dec4"/>
+    <path d="M470 398q50-24 100 21l33 30q-73 26-123-8-23-16-10-43Z" fill="#e7e5cf" stroke="#344e4e" stroke-width="3"/>
+    <path d="M485 416q37 20 84 24m-71-11q25 19 48 20" fill="none" stroke="#a5b6a7" stroke-width="3" stroke-linecap="round"/>
+    <!-- A wing reaches naturally toward the handlebars. -->
+    <path d="M566 400q41 10 82 8l90-21q13-1 13 8l-94 32q-33 6-64-1" fill="#f8f0da" stroke="#344e4e" stroke-width="4" stroke-linecap="round"/>
+    <path d="M637 261q-1-18 10-27m-5 25q8-17 20-17" fill="none" stroke="#344e4e" stroke-width="4" stroke-linecap="round"/>
+    <path d="M602 290q-2-33 26-40 37-12 57 17l-6 42-44 10q-33 0-33-29Z" fill="#fff8e5" stroke="#344e4e" stroke-width="4"/>
+    <!-- Broad lower throat pouch beneath a very long, hooked bill. -->
+    <path d="M660 286 841 301q-31 51-105 62-43 1-76-60Z" fill="#efba72" stroke="#344e4e" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M674 301q31 45 70 47 48-10 80-38" fill="none" stroke="#d99656" stroke-width="3"/>
+    <path d="M660 279q89-1 184 18 19 4 7 18l-10-10-181-9Z" fill="#f39b52" stroke="#344e4e" stroke-width="4" stroke-linejoin="round"/>
+    <path d="m686 288 121 10" stroke="#ffd190" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="644" cy="278" r="11" fill="#e6c878"/><circle cx="647" cy="278" r="5.5" fill="#294649"/><circle cx="649" cy="276" r="1.8" fill="white"/>
+    <path d="M633 261q8-5 17-1" fill="none" stroke="#344e4e" stroke-width="3" stroke-linecap="round"/>
+    <g fill="#347c7c" stroke="#2b575a" stroke-width="3" stroke-linejoin="round">
+      <path d="M606 333q21 12 47 4l-3 17q-22 8-48-5Z"/>
+      <path d="M607 343q-44 1-71-21l-31 2 15 17-15 14q47-10 96 2Z"><animate attributeName="d" values="M607 343q-44 1-71-21l-31 2 15 17-15 14q47-10 96 2Z;M607 343q-44-18-71-5l-31-9 13 20-20 10q53 14 103-2Z;M607 343q-44 1-71-21l-31 2 15 17-15 14q47-10 96 2Z" dur="1.2s" repeatCount="indefinite"/></path>
+    </g>
+    <!-- Four interpolated poses keep each webbed foot attached to its crank. -->
+    <path d="M558 475Q597 509 616 529L619 582" fill="none" stroke="#efaa5e" stroke-width="17" stroke-linecap="round">
+      <animate attributeName="d" values="M558 475Q597 509 616 529L619 582;M558 475Q555 494 551 514L573 536;M558 475Q548 503 541 531L527 582;M558 475Q577 508 590 541L573 628;M558 475Q597 509 616 529L619 582" dur="1.8s" repeatCount="indefinite"/>
+    </path>
+    <g>
+      <animateTransform attributeName="transform" type="translate" values="619 582;573 536;527 582;573 628;619 582" dur="1.8s" repeatCount="indefinite"/>
+      <path d="m-6-7 16 2 18 11-42 1Z" fill="#f2b467" stroke="#344e4e" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M-15 12H29" stroke="#344e4e" stroke-width="6" stroke-linecap="round"/>
+    </g>
+    <g><animateTransform attributeName="transform" type="translate" values="527 582;573 628;619 582;573 536;527 582" dur="1.8s" repeatCount="indefinite"/><path d="m-6-5 13 1 18 10-37 1Z" fill="#d39353" stroke="#344e4e" stroke-width="3"/><path d="M-14 12H26" stroke="#344e4e" stroke-width="5" stroke-linecap="round"/></g>
+  </g>
+  <g><use href="#grass" x="145" y="806"/><use href="#grass" x="1030" y="821"/><use href="#grass" x="1345" y="806"/><animateTransform attributeName="transform" type="translate" from="0 0" to="-1200 0" dur="9.4s" repeatCount="indefinite"/></g>
+  <path d="M77 836H1123" stroke="#b79975" stroke-width="1"/>
+  <text x="77" y="868" class="small" font-size="11">PELICAN PROMENADE / NO HURRY, NO WORRIES</text>
+  <text x="1124" y="868" text-anchor="end" class="caption" font-size="15" font-style="italic">a seaside loop ↻</text>
+</svg>

@@ -7,6 +7,12 @@ window.PELICAN_RESULTS = [
   },
   {
     "harness": "Antigravity",
+    "model": "Claude-Opus-5.5",
+    "effort": "medium",
+    "file": "Antigravity-Claude-Opus-5.5-medium-pelican-riding-bicycle.svg"
+  },
+  {
+    "harness": "Antigravity",
     "model": "Claude-Sonnet-4.6-Thinking",
     "effort": "high",
     "file": "Antigravity-Claude-Sonnet-4.6-Thinking-high-pelican-riding-bicycle.svg"
